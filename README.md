@@ -26,7 +26,6 @@ This repository is the home of the AuditGuard community — a curated collection
 |---|---|
 | **Skills** | Ready-to-use audit checks you can plug into any workflow |
 | **Scripts** | Standalone automation scripts for common compliance tasks |
-| **Templates** | Pre-built workflow templates for ISO 27001, SOC 2, and more |
 
 ---
 
