@@ -1,0 +1,7 @@
+# Mintlify
+.mintlify/
+
+# Node
+node_modules/
+.npm
+

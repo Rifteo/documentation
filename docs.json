@@ -21,8 +21,8 @@
           {
             "group": "Getting Started",
             "pages": [
-              "introduction",
-              "quickstart"
+              "docs/introduction",
+              "docs/quickstart"
             ]
           },
           {
@@ -31,6 +31,13 @@
               "skills/overview",
               "skills/find-skills",
               "skills/skill-template"
+            ]
+          },
+          {
+            "group": "Scripts",
+            "pages": [
+              "scripts/overview",
+              "scripts/script-template"
             ]
           },
           {
@@ -44,8 +51,8 @@
           {
             "group": "Community",
             "pages": [
-              "contributing",
-              "style-guide"
+              "docs/contributing",
+              "docs/style-guide"
             ]
           }
         ]
