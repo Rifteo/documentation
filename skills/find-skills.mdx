@@ -1,0 +1,193 @@
+---
+title: find-skills
+description: Discover and install specialized AuditGuard skills from the community ecosystem when users need extended audit capabilities.
+---
+
+<Info>
+  **Category:** Agent workflows
+</Info>
+
+**Installation**
+
+```bash
+npx skills add https://github.com/your-org/auditguard --skill find-skills
+```
+
+---
+
+## Summary
+
+Discover and install specialized agent skills from the open AuditGuard ecosystem when users need extended audit capabilities.
+
+- Helps identify relevant skills by compliance domain and task when users ask "how do I audit X" or "find a skill for X"
+- Integrates with the Skills CLI (`npx skills find`, `npx skills add`) to search, verify, and install packages from the community directory
+- Recommends skills based on install count, source reputation, and GitHub stars to ensure quality before suggesting installation
+- Presents skill options with install commands and links to the community hub for user review and one-click installation
+
+---
+
+## SKILL.md
+
+### Find Skills
+
+This skill helps you discover and install skills from the open AuditGuard community ecosystem.
+
+#### When to Use This Skill
+
+Use this skill when the user:
+
+- Asks "how do I audit X" where X might be a common compliance task with an existing skill
+- Says "find a skill for X" or "is there a skill for X"
+- Asks "can you check X" where X is a specialized audit capability
+- Expresses interest in extending AuditGuard capabilities
+- Wants to search for audit templates, compliance workflows, or domain-specific checks
+- Mentions they wish they had help with a specific compliance domain (access control, data retention, infrastructure, etc.)
+
+#### What is the Skills CLI?
+
+The Skills CLI (`npx skills`) is the package manager for the open AuditGuard community ecosystem. Skills are modular packages that extend audit capabilities with specialized knowledge, compliance workflows, and domain-specific checks.
+
+Key commands:
+
+```bash
+npx skills find [query]     # Search for skills interactively or by keyword
+npx skills add <package>    # Install a skill from GitHub or other sources
+npx skills check            # Check for skill updates
+npx skills update           # Update all installed skills
+```
+
+Browse skills at the [AuditGuard Community Hub](https://community.auditguard.fr/).
+
+#### How to Help Users Find Skills
+
+**Step 1: Understand What They Need**
+
+When a user asks for help with an audit task, identify:
+
+- The compliance domain (e.g., access control, data retention, infrastructure, SOC 2)
+- The specific check (e.g., verifying MFA, checking encryption at rest, reviewing IAM policies)
+- Whether this is a common enough requirement that a community skill likely exists
+
+**Step 2: Check the Community Hub First**
+
+Before running a CLI search, check the AuditGuard community hub to see if a well-known skill already exists for the domain. The hub ranks skills by total installs, surfacing the most popular and battle-tested options.
+
+**Step 3: Search for Skills**
+
+If the hub doesn't cover the user's need, run the find command:
+
+```bash
+npx skills find [query]
+```
+
+Examples:
+
+```bash
+# User asks "how do I check MFA is enabled?"
+npx skills find mfa access-control
+
+# User asks "can you audit our S3 bucket policies?"
+npx skills find s3 data exposure
+
+# User asks "I need to verify our logging setup"
+npx skills find audit-logs compliance
+```
+
+**Step 4: Verify Quality Before Recommending**
+
+Do not recommend a skill based solely on search results. Always verify:
+
+- **Install count** — Prefer skills with 1K+ installs. Be cautious with anything under 100.
+- **Source reputation** — Official org sources are more trustworthy than unknown authors.
+- **GitHub stars** — Check the source repository. A skill from a repo with fewer than 100 stars should be treated with skepticism.
+
+**Step 5: Present Options to the User**
+
+When you find relevant skills, present them with:
+
+- The skill name and what it checks
+- The install count and source
+- The install command they can run
+- A link to learn more on the community hub
+
+Example response:
+
+```
+I found a skill that might help! The "check-mfa-enforcement" skill verifies
+that all IAM users have MFA enabled, aligned with SOC 2 CC6.1.
+(12K installs)
+
+To install it:
+npx skills add your-org/auditguard@check-mfa-enforcement
+
+Learn more: https://community.auditguard.fr/skills/check-mfa-enforcement
+```
+
+**Step 6: Offer to Install**
+
+If the user wants to proceed, you can install the skill for them:
+
+```bash
+npx skills add <owner/repo@skill> -g -y
+```
+
+The `-g` flag installs globally (user-level) and `-y` skips confirmation prompts.
+
+#### Common Skill Categories
+
+| Category | Example Queries |
+|----------|----------------|
+| Access Control | `mfa`, `iam`, `permissions`, `rbac` |
+| Data Security | `encryption`, `s3`, `storage`, `retention` |
+| Infrastructure | `network`, `firewall`, `kubernetes`, `docker` |
+| Logging & Monitoring | `audit-logs`, `cloudtrail`, `siem` |
+| Code & CI | `secrets`, `sast`, `dependency-scan` |
+| Process & Governance | `approval`, `change-management`, `policy` |
+
+#### When No Skills Are Found
+
+If no relevant skills exist:
+
+- Acknowledge that no existing skill was found
+- Offer to help with the audit task directly using general AuditGuard capabilities
+- Suggest the user could create their own skill with `npx skills init`
+
+Example:
+
+```
+I searched for skills related to "xyz" but didn't find any matches in the
+AuditGuard community hub.
+
+I can still help you run this check manually! Would you like me to proceed?
+
+If this is something your team audits regularly, you could publish your own skill:
+npx skills init my-xyz-skill
+```
+
+#### Known Limitations
+
+- Skills CLI requires Node.js 18+ to run
+- Search quality depends on how skills are tagged by their authors
+- Skills from unknown sources have not been reviewed by the AuditGuard core team
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="skill-creator" href="/skills/skill-template">
+    Create, test, and publish new AuditGuard skills from within your workflow
+
+    `your-org/auditguard`
+  </Card>
+  <Card title="check-access-control" href="/skills/skill-template">
+    Verify IAM policies, roles, and least-privilege enforcement
+
+    `your-org/auditguard`
+  </Card>
+  <Card title="validate-audit-logs" href="/skills/skill-template">
+    Confirm audit logging is enabled and correctly configured
+
+    `your-org/auditguard`
+  </Card>
+</CardGroup>

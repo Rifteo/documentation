@@ -1,0 +1,125 @@
+---
+title: Examples
+description: Common AuditGuard usage patterns and real-world scenarios.
+---
+
+## Run a single skill
+
+The simplest use case — run one skill against a local project:
+
+```bash
+auditguard run --skill check-access-control --target ./my-project
+```
+
+Expected output:
+```
+[AuditGuard] Running skill: check-access-control
+[AuditGuard] Target: ./my-project
+[AuditGuard] Status: PASS
+[AuditGuard] Report written to: ./audit-reports/report_20260512_1430.json
+```
+
+---
+
+## Run a full workflow
+
+Run all skills defined in `auditguard.yml`:
+
+```bash
+auditguard run
+```
+
+To override the target at runtime:
+```bash
+auditguard run --target ./other-project
+```
+
+---
+
+## Generate an HTML report
+
+By default, reports are written as JSON. To generate an HTML report instead:
+
+```bash
+auditguard run --output-format html
+```
+
+The report will be saved at `./audit-reports/report_<timestamp>.html`.
+
+---
+
+## Enable strict mode
+
+In strict mode, any `warning` result is treated as a failure. Useful for CI pipelines:
+
+```bash
+auditguard run --strict
+```
+
+If any skill returns `warning` or `fail`, the exit code will be non-zero — allowing your CI system to block on it.
+
+---
+
+## Use in a CI pipeline (GitHub Actions)
+
+```yaml
+name: AuditGuard
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install AuditGuard
+        run: pip install -r requirements.txt
+
+      - name: Run audit
+        run: python auditguard.py run --strict
+```
+
+---
+
+## Run with verbose logging
+
+To see detailed output during a run, use `--verbose`:
+
+```bash
+auditguard run --verbose
+```
+
+To debug skill execution step by step:
+
+```bash
+auditguard run --verbose --log-level debug
+```
+
+---
+
+## List available skills
+
+Show all skills installed and available in the current environment:
+
+```bash
+auditguard skills list
+```
+
+---
+
+## Validate your configuration
+
+Check that `auditguard.yml` is valid before running:
+
+```bash
+auditguard configure --validate
+```

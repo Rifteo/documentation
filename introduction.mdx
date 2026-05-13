@@ -1,0 +1,48 @@
+---
+title: Introduction
+description: What is AuditGuard and what problem does it solve?
+---
+
+## What is AuditGuard?
+
+AuditGuard is a compliance and audit automation tool that helps teams streamline, enforce, and document their internal audit workflows. Instead of manual checklists and scattered spreadsheets, AuditGuard brings structure, repeatability, and visibility to the entire compliance process.
+
+## Why AuditGuard?
+
+- **Automated** — Run audit checks on demand or on a schedule, eliminating repetitive manual work
+- **Consistent** — Every audit follows the same process every time, reducing human error
+- **Traceable** — Every result is logged and versioned, giving teams a reliable audit trail
+- **Extensible** — Build domain-specific skills on top of the core engine to cover any compliance framework
+
+## Core concepts
+
+| Concept | Description |
+|---------|-------------|
+| **Skill** | A reusable, self-contained automation unit that performs a specific audit check |
+| **Workflow** | An ordered sequence of skills executed together as a single audit run |
+| **Report** | The structured output produced after a workflow run |
+| **Configuration** | The settings file that defines targets, rules, and output formats |
+
+## How it works
+
+1. You define **skills** — small, focused automation scripts that check one specific compliance requirement
+2. You group skills into **workflows** tailored to your audit scope
+3. AuditGuard runs the workflow, collects results, and produces a structured **report**
+4. Reports are versioned and stored for traceability and review
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Set up AuditGuard and run your first audit in minutes
+  </Card>
+  <Card title="Skills" icon="puzzle-piece" href="/skills/overview">
+    Learn what skills are and how to contribute one
+  </Card>
+  <Card title="Commands" icon="terminal" href="/usage/commands">
+    Full reference for all CLI commands and flags
+  </Card>
+  <Card title="Contributing" icon="users" href="/contributing">
+    Style guide and contribution process
+  </Card>
+</CardGroup>

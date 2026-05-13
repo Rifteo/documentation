@@ -1,0 +1,105 @@
+---
+title: Configuration
+description: Configure AuditGuard with auditguard.yml to define targets, workflows, and output settings.
+---
+
+## Overview
+
+AuditGuard reads its settings from a `auditguard.yml` file at the root of your project. This file controls which skills run, what they target, and how results are reported.
+
+## Minimal configuration
+
+```yaml
+version: "1"
+
+target:
+  path: ./
+
+workflow:
+  skills:
+    - check-access-control
+    - validate-user-permissions
+
+output:
+  format: json
+  dir: ./audit-reports
+```
+
+## Full configuration reference
+
+```yaml
+version: "1"
+
+# Target defines what AuditGuard will audit
+target:
+  path: ./                    # Local path or remote resource identifier
+  exclude:                    # Paths to skip
+    - node_modules/
+    - .git/
+
+# Workflow defines which skills run and in what order
+workflow:
+  name: my-audit-workflow     # Optional — used in report headers
+  skills:
+    - skill-name-1
+    - skill-name-2
+  strict: false               # Treat warnings as failures (default: false)
+
+# Output controls report format and destination
+output:
+  format: json                # "json" | "html" | "markdown"
+  dir: ./audit-reports        # Directory where reports are written
+  filename: report            # Base filename (timestamp appended automatically)
+
+# Logging controls verbosity
+logging:
+  level: info                 # "debug" | "info" | "warn" | "error"
+```
+
+## Configuration fields
+
+### `target`
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `path` | string | Yes | The local directory or resource to audit |
+| `exclude` | list | No | Glob patterns for paths to skip |
+
+### `workflow`
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `name` | string | No | — | Human-readable name shown in reports |
+| `skills` | list | Yes | — | Ordered list of skill names to execute |
+| `strict` | boolean | No | `false` | Fail the run if any skill returns `warning` |
+
+### `output`
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `format` | string | No | `json` | Report format: `json`, `html`, or `markdown` |
+| `dir` | string | No | `./audit-reports` | Directory to write reports into |
+| `filename` | string | No | `report` | Base name for the report file |
+
+### `logging`
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `level` | string | No | `info` | Log verbosity level |
+
+## Overriding configuration via CLI
+
+All configuration values can be overridden at runtime using CLI flags. CLI flags take precedence over `auditguard.yml`.
+
+```bash
+# Override the target path
+auditguard run --target ./other-project
+
+# Override the output format
+auditguard run --output-format html
+
+# Enable strict mode
+auditguard run --strict
+```
+
+See [Commands](/usage/commands) for the full list of flags.

@@ -1,0 +1,119 @@
+---
+title: <Skill Name>
+description: <One sentence — shown in search results and navigation previews.>
+---
+
+{/* ── HEADER BLOCK ─────────────────────────────────────────────────── */}
+
+<Info>
+  **Category:** \<e.g. Compliance workflows / Data auditing / Access control\>
+</Info>
+
+**Installation**
+
+```bash
+npx skills add https://github.com/your-org/auditguard --skill <skill-name>
+```
+
+---
+
+## Summary
+
+\<2–3 sentences describing what this skill does and when to use it.\>
+
+- \<Key behaviour 1 — what the skill detects or automates\>
+- \<Key behaviour 2 — how it integrates with AuditGuard workflows\>
+- \<Key behaviour 3 — what output or action it produces\>
+- \<Key behaviour 4 — any quality/threshold logic it applies\>
+
+---
+
+## SKILL.md
+
+### \<Skill Name\>
+
+\<One sentence summary of the skill.\>
+
+#### When to Use This Skill
+
+Use this skill when the user:
+
+- \<Trigger scenario 1 — e.g. "asks to verify X"\>
+- \<Trigger scenario 2\>
+- \<Trigger scenario 3\>
+- \<Trigger scenario 4\>
+
+#### What Does It Check?
+
+\<2–4 sentences explaining the specific compliance rule, standard, or requirement this skill verifies. Reference the framework if applicable (e.g. SOC 2 CC6.1, ISO 27001 A.9.2).\>
+
+**In scope:**
+- \<What this skill covers\>
+
+**Out of scope:**
+- \<What this skill does NOT cover\>
+
+#### How It Works
+
+**Step 1: \<Step title\>**
+
+\<Description of what happens in this step.\>
+
+**Step 2: \<Step title\>**
+
+\<Description.\>
+
+**Step 3: \<Step title\>**
+
+\<Description.\>
+
+#### Output
+
+| Status | Condition |
+|--------|-----------|
+| `pass` | \<When all checks succeed\> |
+| `warning` | \<When non-blocking issues are found\> |
+| `fail` | \<When a compliance violation is detected\> |
+
+Example output:
+
+```json
+{
+  "status": "fail",
+  "message": "<Short summary of what failed>",
+  "details": [
+    {
+      "rule": "<rule-id>",
+      "finding": "<Description of the specific issue found>",
+      "severity": "high"
+    }
+  ]
+}
+```
+
+#### Known Limitations
+
+- \<Limitation 1\>
+- \<Limitation 2\>
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="\<Related Skill 1\>" href="/skills/\<slug\>">
+    \<One line description\>
+    
+    `your-org/auditguard`
+  </Card>
+  <Card title="\<Related Skill 2\>" href="/skills/\<slug\>">
+    \<One line description\>
+    
+    `your-org/auditguard`
+  </Card>
+  <Card title="\<Related Skill 3\>" href="/skills/\<slug\>">
+    \<One line description\>
+    
+    `your-org/auditguard`
+  </Card>
+</CardGroup>

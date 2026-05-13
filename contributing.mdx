@@ -1,0 +1,99 @@
+---
+title: Contributing
+description: How to contribute a new skill or improve existing documentation.
+---
+
+## Welcome
+
+AuditGuard is a community-driven project. Contributions — new skills, bug fixes, documentation improvements — are all welcome. This page explains the process.
+
+## What you can contribute
+
+| Type | Description |
+|------|-------------|
+| **New skill** | A new audit check that doesn't exist yet |
+| **Skill improvement** | Fix a bug or extend an existing skill |
+| **Documentation** | Fix errors, improve clarity, add examples |
+| **Bug report** | Open an issue with reproduction steps |
+
+## Process for contributing a skill
+
+<Steps>
+  <Step title="Open an issue first">
+    Before writing code, open a GitHub issue describing:
+    - What the skill checks
+    - Which compliance framework or requirement it covers
+    - Any known edge cases or limitations
+
+    This avoids duplicate work and lets the team give early feedback.
+  </Step>
+
+  <Step title="Fork and branch">
+    ```bash
+    git clone https://github.com/your-org/auditguard.git
+    cd auditguard
+    git checkout -b skill/your-skill-name
+    ```
+  </Step>
+
+  <Step title="Build the skill">
+    Follow the structure defined in [Skills Overview](/skills/overview):
+    ```
+    skills/
+    └── your-skill-name/
+        ├── skill.yml
+        ├── main.py
+        └── README.md
+    ```
+  </Step>
+
+  <Step title="Write documentation">
+    Create `skills/your-skill-name.mdx` using the [skill template](/skills/skill-template). No skill ships without documentation.
+  </Step>
+
+  <Step title="Add to docs.json">
+    Add your skill page to the `Skills` group in `docs.json`:
+    ```json
+    {
+      "group": "Skills",
+      "pages": [
+        "skills/overview",
+        "skills/skill-template",
+        "skills/your-skill-name"
+      ]
+    }
+    ```
+  </Step>
+
+  <Step title="Submit a pull request">
+    Open a PR against `main`. The PR description should include:
+    - What the skill does
+    - How to test it
+    - A link to the open issue
+  </Step>
+
+  <Step title="Review and approval">
+    A team member will review both the code and the documentation. All feedback must be addressed before merge. No skill merges without at least one approval.
+  </Step>
+</Steps>
+
+## Review checklist
+
+Before submitting, verify:
+
+- [ ] `skill.yml` has all required fields (`name`, `version`, `description`, `author`, `inputs`)
+- [ ] `main.py` implements `run(inputs) -> dict` and returns a valid status
+- [ ] Documentation follows the [skill template](/skills/skill-template) exactly
+- [ ] No section in the documentation is left empty
+- [ ] Examples use realistic, not trivial, inputs
+- [ ] Known limitations are documented honestly
+
+## Code of conduct
+
+- Be respectful in reviews and issues
+- Give feedback on the work, not the person
+- Assume good intent
+
+## Questions?
+
+Open a GitHub issue with the `question` label or reach out via the team's internal channel.

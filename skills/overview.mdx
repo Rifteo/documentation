@@ -1,0 +1,114 @@
+---
+title: Skills Overview
+description: What skills are, how they fit into AuditGuard, and how to create one.
+---
+
+## What is a skill?
+
+A **skill** is a self-contained automation unit that performs one specific audit check. Each skill:
+
+- Has a single, well-defined responsibility
+- Accepts a standard set of inputs (target, configuration)
+- Produces a structured result (pass / fail / warning + details)
+- Can be used independently or composed into a workflow
+
+Think of skills as building blocks. Individually they verify one rule. Combined in a workflow, they cover an entire compliance framework.
+
+## Skill anatomy
+
+Every skill is made up of three parts:
+
+```
+skills/
+└── my-skill/
+    ├── skill.yml       # Metadata and configuration schema
+    ├── main.py         # Execution logic
+    └── README.md       # Documentation (follows the skill template)
+```
+
+### `skill.yml`
+
+Defines the skill's identity and expected inputs:
+
+```yaml
+name: my-skill
+version: 1.0.0
+description: One sentence describing what this skill checks.
+author: your-name
+tags:
+  - compliance
+  - security
+inputs:
+  target:
+    type: string
+    required: true
+    description: Path or identifier of the resource to audit
+  strict:
+    type: boolean
+    required: false
+    default: false
+    description: Treat warnings as failures
+```
+
+### `main.py`
+
+Contains the audit logic. Must implement the `run(inputs)` function and return a result object:
+
+```python
+def run(inputs: dict) -> dict:
+    target = inputs["target"]
+    strict = inputs.get("strict", False)
+
+    # ... your audit logic here ...
+
+    return {
+        "status": "pass",   # "pass" | "fail" | "warning"
+        "message": "All checks passed.",
+        "details": []
+    }
+```
+
+### `README.md`
+
+Human-readable documentation. Use the [skill template](/skills/skill-template) to keep all skills consistent.
+
+## Status values
+
+| Status | Meaning |
+|--------|---------|
+| `pass` | The check succeeded — no issues found |
+| `warning` | The check found non-blocking issues worth reviewing |
+| `fail` | The check found a compliance violation |
+
+## Skill lifecycle
+
+<Steps>
+  <Step title="Design">
+    Define what the skill checks, its inputs, and expected output format
+  </Step>
+  <Step title="Implement">
+    Write `skill.yml` and `main.py` following the conventions above
+  </Step>
+  <Step title="Document">
+    Fill in the `README.md` using the [skill template](/skills/skill-template)
+  </Step>
+  <Step title="Review">
+    Submit for peer review — another team member spot-checks logic and documentation
+  </Step>
+  <Step title="Publish">
+    Merge to main and the skill appears in the community hub automatically
+  </Step>
+</Steps>
+
+## Naming conventions
+
+| Rule | Example |
+|------|---------|
+| Use kebab-case for skill names | `check-access-control` |
+| Start the name with a verb | `validate-`, `check-`, `audit-`, `verify-` |
+| Keep names under 40 characters | `validate-user-permissions` |
+| Use descriptive tags from the approved list | `security`, `compliance`, `data`, `access` |
+
+## Next step
+
+Ready to write a skill? Start with the [skill template](/skills/skill-template).

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "AuditGuard",
+  "theme": "mint",
+  "colors": {
+    "primary": "#EEC12A",
+    "light": "#EEC12A",
+    "dark": "#EEC12A"
+  },
+  "logo": {
+    "light": "https://storage.auditguard.fr/public/full_logo.svg",
+    "dark": "https://storage.auditguard.fr/public/full_logo_white.svg"
+  },
+  "favicon": "/favicon.svg",
+  "url": "https://community.auditguard.fr",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "introduction",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Skills",
+            "pages": [
+              "skills/overview",
+              "skills/find-skills",
+              "skills/skill-template"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "usage/commands",
+              "usage/configuration",
+              "usage/examples"
+            ]
+          },
+          {
+            "group": "Community",
+            "pages": [
+              "contributing",
+              "style-guide"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/your-org/auditguard"
+    }
+  }
+}

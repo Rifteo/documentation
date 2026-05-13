@@ -1,0 +1,68 @@
+---
+title: Quickstart
+description: Install AuditGuard and run your first audit workflow in under 5 minutes.
+---
+
+## Prerequisites
+
+Before you begin, make sure you have the following installed:
+
+- Python 3.10 or higher
+- Git
+- A terminal (bash, zsh, or PowerShell)
+
+## Installation
+
+<Steps>
+  <Step title="Clone the repository">
+    ```bash
+    git clone https://github.com/your-org/auditguard.git
+    cd auditguard
+    ```
+  </Step>
+
+  <Step title="Install dependencies">
+    ```bash
+    pip install -r requirements.txt
+    ```
+  </Step>
+
+  <Step title="Verify the installation">
+    ```bash
+    python auditguard.py --version
+    ```
+
+    Expected output:
+    ```
+    AuditGuard v1.0.0
+    ```
+  </Step>
+
+  <Step title="Run your first audit">
+    ```bash
+    python auditguard.py run --target ./my-project
+    ```
+
+    AuditGuard will scan the target directory, execute the default workflow, and produce a report in `./audit-reports/`.
+  </Step>
+</Steps>
+
+## What happens during a run?
+
+When you execute `auditguard run`, the tool:
+
+1. Loads the configuration file (default: `auditguard.yml`)
+2. Resolves which skills are included in the selected workflow
+3. Executes each skill sequentially against the target
+4. Collects all results and writes a structured report
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Commands reference" icon="terminal" href="/usage/commands">
+    Explore all available commands and flags
+  </Card>
+  <Card title="Configuration" icon="sliders" href="/usage/configuration">
+    Customize AuditGuard with your own settings
+  </Card>
+</CardGroup>

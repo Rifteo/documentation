@@ -1,0 +1,130 @@
+---
+title: Commands
+description: Full reference for all AuditGuard CLI commands and flags.
+---
+
+## Global flags
+
+These flags work with any command:
+
+| Flag | Description | Default |
+|------|-------------|---------|
+| `--help` | Show help message and exit | — |
+| `--version` | Show current version | — |
+| `--verbose` | Enable verbose output | `false` |
+| `--log-level` | Set log verbosity: `debug`, `info`, `warn`, `error` | `info` |
+| `--config` | Path to a custom config file | `./auditguard.yml` |
+
+---
+
+## `run`
+
+Execute an audit workflow against a target.
+
+```bash
+auditguard run [options]
+```
+
+**Options:**
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--target` | Path or identifier of the resource to audit | Value from config |
+| `--skill` | Run a single skill by name instead of the full workflow | — |
+| `--output-format` | Report format: `json`, `html`, `markdown` | `json` |
+| `--output-dir` | Directory to write the report into | `./audit-reports` |
+| `--strict` | Treat warnings as failures | `false` |
+
+**Examples:**
+
+```bash
+# Run the full workflow defined in auditguard.yml
+auditguard run
+
+# Run a single skill
+auditguard run --skill check-access-control --target ./my-project
+
+# Generate an HTML report in strict mode
+auditguard run --output-format html --strict
+```
+
+---
+
+## `configure`
+
+Validate or display the current configuration.
+
+```bash
+auditguard configure [options]
+```
+
+**Options:**
+
+| Option | Description |
+|--------|-------------|
+| `--validate` | Validate `auditguard.yml` and exit with status 0 if valid |
+| `--show` | Print the resolved configuration (after merging CLI overrides) |
+
+**Examples:**
+
+```bash
+# Validate the config file
+auditguard configure --validate
+
+# Show the resolved config
+auditguard configure --show
+```
+
+---
+
+## `skills`
+
+Manage and inspect available skills.
+
+```bash
+auditguard skills <subcommand>
+```
+
+**Subcommands:**
+
+| Subcommand | Description |
+|------------|-------------|
+| `list` | List all installed skills with their version and status |
+| `info <name>` | Show full details for a specific skill |
+
+**Examples:**
+
+```bash
+# List all available skills
+auditguard skills list
+
+# Show details for a specific skill
+auditguard skills info check-access-control
+```
+
+---
+
+## `report`
+
+Inspect previously generated reports.
+
+```bash
+auditguard report <subcommand>
+```
+
+**Subcommands:**
+
+| Subcommand | Description |
+|------------|-------------|
+| `list` | List all reports in the output directory |
+| `show <filename>` | Print a report to stdout |
+
+**Examples:**
+
+```bash
+# List all saved reports
+auditguard report list
+
+# Print a specific report
+auditguard report show report_20260512_1430.json
+```
