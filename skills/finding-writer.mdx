@@ -1,0 +1,135 @@
+---
+title: Finding Writer
+description: Converts raw pentest notes, logs, or observations into a structured audit finding ready for a security report.
+---
+
+<Info>
+  **Category:** Pentest & reporting
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add finding-writer
+```
+
+---
+
+## Summary
+
+Turn any raw pentest note, tool output, or quick observation into a complete, client-deliverable security finding  severity-rated, CVSS-scored, CWE-tagged, and with a specific remediation recommendation.
+
+- Parses unstructured input (notes, HTTP snippets, log lines) and identifies the vulnerability class, affected component, and available evidence
+- Scores severity based on actual exploitability and business impact in context, not just the vulnerability class
+- Runs the CVSS v3.1 scorer and CWE tagger automatically to produce a vector string, base score, and OWASP category
+- Marks any field with insufficient evidence as `[TO BE ADDED]`  never invents proof
+
+---
+
+## SKILL.md
+
+### Finding Writer
+
+Convert raw pentest notes, logs, or observations into a fully structured, report-ready audit finding.
+
+#### When to Use This Skill
+
+Use this skill when the user:
+
+- Pastes raw notes, tool output, or a quick observation from a pentest
+- Describes a vulnerability and needs it structured for a client report
+- Has a log snippet or HTTP request/response that reveals a security issue
+- Wants to turn a single-line note into a deliverable write-up
+
+#### What Does It Check?
+
+The skill takes unstructured security observations and normalizes them into a standardized finding format. It identifies the vulnerability class, assesses severity in context (not just by class), produces a CVSS v3.1 vector and score, tags the correct CWE and OWASP category, and writes a specific remediation recommendation  one concrete enough for a developer to implement without follow-up questions.
+
+**In scope:**
+- Any vulnerability class describable in plain language, raw notes, HTTP snippets, or log output
+- CVSS v3.1 scoring via the bundled `scripts/cvss-scorer.py`
+- CWE and OWASP Top 10 tagging via `scripts/cwe-search.py`
+
+**Out of scope:**
+- Automated scanning or evidence collection  the skill works with what the user provides
+- Generating a full pentest report  use this skill per finding, then assemble the report separately
+
+#### How It Works
+
+**Step 1: Parse Input**
+
+Identify the vulnerability class, affected component, and any evidence in the user's input.
+
+**Step 2: Clarify If Needed**
+
+If the input is ambiguous or missing critical context, ask exactly one clarifying question  never stall with multiple questions.
+
+**Step 3: Assess Severity**
+
+Score based on actual exploitability and impact in this specific context using the severity guide in `references/severity-guide.md`. Run `scripts/cvss-scorer.py` to produce the CVSS v3.1 vector and base score.
+
+**Step 4: Tag the Finding**
+
+Run `scripts/cwe-search.py <keyword>` to identify the correct CWE ID and OWASP Top 10 category for the vulnerability type.
+
+**Step 5: Write the Finding**
+
+Fill every field using only information provided or derivable from the input. Flag any field without sufficient evidence as `[TO BE ADDED]`.
+
+#### Output
+
+| Status | Condition |
+|--------|-----------|
+| Complete finding | Sufficient input provided to fill all fields |
+| Partial finding | Some fields marked `[TO BE ADDED]`  evidence not provided |
+| Clarification request | Input too ambiguous to proceed  one question asked |
+
+Example output structure:
+
+```
+Title: Unauthenticated Access to Admin Endpoint
+
+Severity: High
+Justification: ...
+
+CVSS: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N  9.1 (Critical)
+
+Description: ...
+
+Evidence: [URL / HTTP request snippet / reproduction steps]
+
+Impact: ...
+
+Recommendation: Validate object ownership server-side on every request
+to /api/resource/{id} before returning data.
+
+References: CWE-285, OWASP A01:2021
+```
+
+#### Known Limitations
+
+- Evidence is never invented  if not provided, the field is marked `[TO BE ADDED]`
+- Ask at most one clarifying question per finding; the skill does not stall for completeness
+- No legal boilerplate or disclaimers are added to the output
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="risk-assessor" href="/skills/risk-assessor">
+    Score a vulnerability using likelihood × impact with SLA-bound remediation urgency
+
+    `your-org/auditguard`
+  </Card>
+  <Card title="idor-hunter" href="/skills/idor-hunter">
+    Systematic IDOR/BOLA detection methodology with recon, testing, and bypass techniques
+
+    `your-org/auditguard`
+  </Card>
+  <Card title="compliance-gap-analyzer" href="/skills/compliance-gap-analyzer">
+    Aggregate findings into a gap report across ISO 27001, NIST CSF, PCI-DSS, and OWASP
+
+    `your-org/auditguard`
+  </Card>
+</CardGroup>

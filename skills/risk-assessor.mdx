@@ -1,0 +1,151 @@
+---
+title: Risk Assessor
+description: Scores a vulnerability using likelihood × impact, CIA triad analysis, CVSS correlation, and SLA-bound remediation urgency.
+---
+
+<Info>
+  **Category:** Risk management
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add risk-assessor
+```
+
+---
+
+## Summary
+
+Produce a structured, defensible risk assessment for any described vulnerability  from likelihood and impact scoring through residual risk calculation and SLA-bound treatment recommendations.
+
+- Scores likelihood (1–3) using attack vector, exploit availability, authentication requirements, and active exploitation status  with a hard override to High if actively exploited in the wild
+- Scores impact (1–3) across the CIA triad, accounting for scope change (lateral movement) and business system criticality
+- Calculates inherent and residual risk via a 3×3 matrix, then cross-checks against CVSS and explains any divergence
+- Outputs a complete risk report: attack surface, scores with justification, existing controls, residual risk, remediation SLA, treatment recommendation, and escalation triggers
+
+---
+
+## SKILL.md
+
+### Risk Assessor
+
+Score a vulnerability's likelihood and impact, calculate inherent and residual risk, and produce an SLA-bound treatment recommendation.
+
+#### When to Use This Skill
+
+Use this skill when the user:
+
+- Describes a vulnerability and wants to know how serious it is
+- Asks "what's the risk level?" or "how urgent is this to fix?"
+- Has a CVSS score but wants it contextualized with compensating controls and business impact
+- Needs to assign a remediation SLA (24h / 7 days / 30 days / next cycle) to a finding
+- Wants to document risk treatment (mitigate, accept, transfer, avoid) with justification
+
+#### What Does It Check?
+
+The skill applies a likelihood × impact matrix informed by real environmental context  compensating controls, business criticality, and actual threat intelligence  rather than relying solely on CVSS. The final residual risk score accounts for existing controls and drives the remediation SLA. If CVSS and the matrix diverge by more than one level, the skill explains why and the matrix score takes precedence for production decisions.
+
+**In scope:**
+- Any described vulnerability with enough context to determine attack vector, authentication requirements, and data in scope
+- CVSS v3.x correlation when a score is provided
+- Chained vulnerabilities (scored as the combined attack chain, not individually)
+- Escalation triggers: active exploitation, regulatory data in scope, lateral movement possibility
+
+**Out of scope:**
+- Producing CVSS vectors from scratch  use `finding-writer` which runs `cvss-scorer.py`
+- Compliance gap analysis  use `compliance-gap-analyzer` for that
+
+#### How It Works
+
+**Step 1: Gather Context**
+
+Confirm affected component, network exposure, authentication required, exploit availability, data in scope, existing controls, and CVSS score if available.
+
+**Step 2: Score Likelihood (1–3)**
+
+Base score from attacker capability and exposure. Apply modifiers: +0.5 for network attack vector, +0.5 for no authentication, −0.5 for physical access only, −0.5 for user interaction required, +0.5 if no patch available. Override to 3 if actively exploited in the wild.
+
+**Step 3: Score Impact (1–3)**
+
+Evaluate Confidentiality, Integrity, and Availability independently (0–3 each). Take the highest axis as the overall impact. Apply +0.5 for changed scope (lateral movement possible) and ±0.5 for business criticality.
+
+**Step 4: Risk Matrix**
+
+Multiply Likelihood × Impact. Thresholds: 1–2 = Low, 3–4 = Medium, 6 = High, 9 = Critical.
+
+**Step 5: CVSS Correlation**
+
+If a CVSS score is provided, map it to a level and compare. Divergences of more than one level are flagged and explained.
+
+**Step 6: Residual Risk**
+
+Recalculate explicitly after applying existing controls. Never assume controls are 100% effective.
+
+#### Output
+
+| Residual Risk | Remediation SLA |
+|---------------|-----------------|
+| Critical | Escalate within 24h; patch or mitigate within 48h |
+| High | Remediate within 7 days; notify security lead |
+| Medium | Remediate within 30 days |
+| Low | Schedule in next maintenance cycle |
+
+Example output structure:
+
+```
+Vulnerability: SQL injection in /api/search  internet-facing endpoint
+
+Attack Surface: Internet-facing REST API, unauthenticated, no WAF
+
+Likelihood: High  Score: 3
+Impact: High  Score: 3
+  Confidentiality: High (3)  full database read possible
+  Integrity: High (3)  arbitrary write/delete
+  Availability: Medium (2)  service disruption possible
+  Dominant axis: C
+
+Inherent Risk: 9 → Critical
+
+CVSS Correlation: 9.8 (Critical) | Aligned
+
+Existing Controls:
+  - Read replica DB: reduces availability impact slightly
+
+Residual Risk: Critical
+
+Remediation SLA: Escalate within 24h; patch within 48h
+Recommended Treatment: Mitigate  parameterize all queries immediately
+
+Escalation Triggers:
+  ✅ Regulatory data confirmed in scope (PII)
+  ✅ Actively exploited class
+```
+
+#### Known Limitations
+
+- Accept treatment is only valid for Low residual risk  the skill will not recommend Accept for Medium, High, or Critical
+- Chained vulnerabilities must be described together  the chain score governs, not individual scores
+- Requires enough context to infer likelihood factors; if critical inputs are missing, the skill asks before scoring
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="finding-writer" href="/skills/finding-writer">
+    Convert raw pentest notes into structured audit findings ready for reporting
+
+    `your-org/auditguard`
+  </Card>
+  <Card title="compliance-gap-analyzer" href="/skills/compliance-gap-analyzer">
+    Aggregate findings into a gap report across ISO 27001, NIST CSF, PCI-DSS, and OWASP
+
+    `your-org/auditguard`
+  </Card>
+  <Card title="control-lookup" href="/skills/control-lookup">
+    Look up any control ID and map it across ISO 27001, NIST CSF, PCI-DSS, and OWASP
+
+    `your-org/auditguard`
+  </Card>
+</CardGroup>

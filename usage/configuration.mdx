@@ -39,7 +39,7 @@ target:
 
 # Workflow defines which skills run and in what order
 workflow:
-  name: my-audit-workflow     # Optional — used in report headers
+  name: my-audit-workflow     # Optional  used in report headers
   skills:
     - skill-name-1
     - skill-name-2
@@ -69,8 +69,8 @@ logging:
 
 | Field | Type | Required | Default | Description |
 |-------|------|----------|---------|-------------|
-| `name` | string | No | — | Human-readable name shown in reports |
-| `skills` | list | Yes | — | Ordered list of skill names to execute |
+| `name` | string | No |  | Human-readable name shown in reports |
+| `skills` | list | Yes |  | Ordered list of skill names to execute |
 | `strict` | boolean | No | `false` | Fail the run if any skill returns `warning` |
 
 ### `output`

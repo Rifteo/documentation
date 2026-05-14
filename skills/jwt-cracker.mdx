@@ -1,0 +1,144 @@
+---
+title: JWT Cracker
+description: Full JWT attack methodology  alg:none, RS256 to HS256 confusion, weak secret brute-force, kid injection, jku/jwk injection, and claim tampering.
+---
+
+<Info>
+  **Category:** Pentest & security testing
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add jwt-cracker
+```
+
+---
+
+## Summary
+
+Work through a complete 11-attack JWT exploitation methodology  from decoding the token to forging one with admin claims  covering every known attack class against HMAC and asymmetric JWT implementations.
+
+- Decodes and inspects the header (`alg`, `kid`, `jku`, `x5u`, `jwk`) to select the highest-impact attacks first
+- Covers `alg:none`, RS256 → HS256 algorithm confusion, weak HMAC secret brute-force, `kid` SQL injection, `kid` path traversal, `jku`/`x5u` header injection, and embedded `jwk` injection
+- Tests claim validation issues: expired token acceptance, missing `iss`/`aud` validation, and cross-service token relay
+- Includes ready-to-run Python snippets and `jwt_tool` shortcuts for each attack
+
+---
+
+## SKILL.md
+
+### JWT Cracker
+
+Execute a structured JWT attack sequence against a target, working from token decode through signature bypass and claim tampering.
+
+#### When to Use This Skill
+
+Use this skill when the user:
+
+- Asks to test JWT tokens, authentication bypass, or token forgery
+- Wants to try `alg:none`, algorithm confusion, or weak secret brute-force
+- Needs to test `kid` injection, `jku`/`x5u` header injection, or embedded `jwk` injection
+- Asks to check if `exp`, `iss`, or `aud` claims are validated
+- Is trying to bypass authentication on an API or web app
+- Provides a string that looks like a JWT (`xxxxx.yyyyy.zzzzz`)
+
+#### What Does It Check?
+
+JWT vulnerabilities occur when the server accepts a token it should reject  because the signature check is weak, skipped, or bypassable. The skill decodes the token header, identifies the algorithm and any key-reference fields, then selects and executes the relevant attacks in priority order.
+
+**In scope:**
+- All HMAC algorithms: HS256, HS384, HS512
+- Asymmetric algorithms: RS256, ES256
+- All JWT header fields: `alg`, `kid`, `jku`, `x5u`, `jwk`
+- Claim validation: `exp`, `iss`, `aud`, `sub`, `role`, `org_id`
+- Cross-service token relay (shared key without `aud` validation)
+
+**Out of scope:**
+- OAuth 2.0 flows (authorization code, PKCE)  JWT signing is only one component
+- Refresh token attacks  separate class of vulnerability
+
+#### How It Works
+
+**Pre-attack: Decode the Token**
+
+Split the JWT and base64url-decode the header and payload to read `alg`, `kid`, `jku`, `x5u`, and `jwk` fields. These drive which attacks to try first.
+
+**Attack 1: `alg:none`**
+
+Set the header algorithm to `"none"` (and all case variants: `None`, `NONE`, `nOnE`) and strip the signature. If the server accepts it, full token forgery is confirmed.
+
+**Attack 2: RS256 → HS256 Algorithm Confusion**
+
+If `alg: RS256`, obtain the public key from `/.well-known/jwks.json` or similar endpoints. Re-sign the token using HS256 with the PEM-encoded public key as the HMAC secret.
+
+**Attack 3: Weak HMAC Secret Brute-Force**
+
+Run the full JWT against `hashcat` (GPU), `john`, or `jwt_tool -C` using common defaults and the bundled `references/jwt-secrets.txt` wordlist.
+
+**Attack 4: `kid` SQL Injection**
+
+If a `kid` field is present, inject a UNION SELECT payload to make the database return a known value as the signing key, then sign the token with that value.
+
+**Attack 5: `kid` Path Traversal**
+
+Point `kid` to `/dev/null` or a file with known content (e.g. `../../public/logo.png`) and sign with that file's content as the HMAC secret.
+
+**Attack 6: `jku` / `x5u` Header Injection**
+
+Generate a key pair, host the JWKS at an attacker-controlled URL, inject that URL into `jku`, and sign the token with the private key.
+
+**Attack 7: Embedded `jwk` Injection**
+
+Inject a self-generated key pair as the `jwk` header field and sign the token with the corresponding private key.
+
+**Attacks 8–11: Claim and Validation Checks**
+
+After any successful forgery: tamper with `sub`, `role`, `is_admin`, `org_id`, and privilege-related claims. Also test expired token acceptance, missing `iss`/`aud` validation, and cross-service token relay.
+
+#### Output
+
+| Status | Condition |
+|--------|-----------|
+| Attack confirmed | Server accepts forged token and returns data / elevated access |
+| Attack failed | Server rejects forged token  move to next attack |
+| Claim tamper result | Modified claim accepted or rejected by target endpoint |
+
+Example confirmation:
+
+```bash
+# alg:none attack confirmed
+curl https://target.com/api/admin/users \
+  -H "Authorization: Bearer eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.\
+eyJzdWIiOiIxIiwicm9sZSI6ImFkbWluIn0."
+# → 200 OK with admin data
+```
+
+#### Known Limitations
+
+- `jwt_tool` and `hashcat` must be installed separately  see `references/tools.md`
+- `jku`/`x5u` attacks require a publicly reachable server to host the JWKS
+- Algorithm confusion attacks require the public key to be accessible (JWKS endpoint or certificate)
+- This skill is for authorized testing only  always confirm scope before use
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="idor-hunter" href="/skills/idor-hunter">
+    Systematic IDOR/BOLA detection methodology with recon, testing, and bypass techniques
+
+    `your-org/auditguard`
+  </Card>
+  <Card title="finding-writer" href="/skills/finding-writer">
+    Convert raw pentest notes into structured audit findings ready for reporting
+
+    `your-org/auditguard`
+  </Card>
+  <Card title="risk-assessor" href="/skills/risk-assessor">
+    Score a vulnerability using likelihood × impact with SLA-bound remediation urgency
+
+    `your-org/auditguard`
+  </Card>
+</CardGroup>

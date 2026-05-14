@@ -1,4 +1,4 @@
-# AuditGuard Documentation — Developer Guide
+# AuditGuard Documentation  Developer Guide
 
 This repo hosts the official AuditGuard community documentation, built with [Mintlify](https://mintlify.com).
 It contains structured guides, reusable skill templates, and script references for contributors.

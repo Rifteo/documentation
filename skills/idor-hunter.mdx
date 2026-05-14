@@ -1,0 +1,144 @@
+---
+title: IDOR Hunter
+description: Systematic IDOR/BOLA detection methodology  recon, multi-account testing, bypass techniques, and report structure.
+---
+
+<Info>
+  **Category:** Pentest & security testing
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add idor-hunter
+```
+
+---
+
+## Summary
+
+Apply a structured, six-phase methodology to discover and confirm Insecure Direct Object Reference (IDOR) and Broken Object Level Authorization (BOLA) vulnerabilities  the #1 finding in bug bounty programs.
+
+- Phase 1 maps every object reference in the target across URL paths, query strings, request bodies, headers, cookies, GraphQL, WebSockets, and encoded/hidden IDs
+- Phases 2–4 run systematic tests across horizontal IDOR, vertical IDOR, unauthenticated access, second-order IDOR, and a full set of bypass techniques (encoding, HTTP method manipulation, parameter pollution, path traversal, version switching)
+- Phase 5 confirms findings with reproducible evidence before reporting
+- Phase 6 produces a structured report with reproduction steps, impact assessment, and server-side remediation guidance
+
+---
+
+## SKILL.md
+
+### IDOR Hunter
+
+Systematically detect and confirm IDOR/BOLA vulnerabilities across all object reference surfaces in a target application.
+
+#### When to Use This Skill
+
+Use this skill when the user:
+
+- Asks to test authorization controls or object-level access restrictions
+- Wants to hunt for IDOR or BOLA vulnerabilities on an API or web application
+- Needs a structured methodology for multi-account access control testing
+- Is doing a bug bounty or pentest engagement and wants to maximize IDOR coverage
+- Asks "can I access another user's data?" or "is the authorization enforced server-side?"
+
+#### What Does It Check?
+
+IDOR occurs when an application exposes a reference to an internal object without verifying the requester's authorization. The skill maps all object references (numeric IDs, UUIDs, slugs, encoded values, JWT claims), sets up the required test accounts, and runs controlled tests to confirm unauthorized access or modification.
+
+**In scope:**
+- Horizontal privilege escalation (same role, different user)
+- Vertical privilege escalation (low privilege → admin endpoints)
+- Unauthenticated access tests
+- State-change operations (write, delete, financial actions)
+- Second-order IDOR (server-side reference resolution)
+- All bypass techniques: encoding, HTTP method manipulation, parameter pollution, path traversal, version switching, content-type switching
+
+**Out of scope:**
+- SQL injection, XSS, or other vulnerability classes  these require separate skills
+- Automated scanning  this is a guided methodology, not a scanner
+
+#### How It Works
+
+**Phase 1: Reconnaissance**
+
+Map all object references across URL path parameters, query strings, request bodies, headers, cookies, GraphQL queries/mutations, WebSocket messages, and hidden or encoded references (Base64, hashed IDs, JWT claims).
+
+**Phase 2: Set Up Test Accounts**
+
+Prepare at least two distinct principals: a victim account and an attacker account. For vertical testing, add a low-privilege and a high-privilege account. Capture separate session tokens for each before testing.
+
+**Phase 3: Systematic Testing**
+
+For each reference discovered in Phase 1, run horizontal IDOR, vertical IDOR, unauthenticated access, state-change operation, and second-order IDOR tests using the attacker's session against the victim's objects.
+
+**Phase 4: Bypass Techniques**
+
+If a direct ID swap is blocked, try: integer manipulation (increment, decrement, negative, zero, overflow), encoding bypasses (URL encode, Base64, double-encode), HTTP method switching, parameter pollution, path traversal hybrid, API version switching, and content-type switching.
+
+**Phase 5: Confirm the Finding**
+
+A true IDOR requires reproducible evidence that unauthorized data was accessed or modified using only the attacker's session. Compare the attacker's response body to the victim's to rule out false positives.
+
+**Phase 6: Report**
+
+Produce a structured finding with title, severity, affected endpoint, step-by-step reproduction, impact, evidence (redacted request + relevant response snippet), and server-side remediation guidance.
+
+#### Output
+
+| Status | Condition |
+|--------|-----------|
+| Confirmed finding | Unauthorized access reproducibly demonstrated with attacker session |
+| Not confirmed | 200 response observed but response body matches attacker's own data |
+| Blocked  bypass needed | Direct ID swap returns 403; Phase 4 techniques queued |
+
+Example finding structure:
+
+```
+Title: IDOR on /api/invoices/{id} allows horizontal privilege escalation
+
+Severity: High
+
+Affected endpoint: GET /api/invoices/{id}
+
+Steps to reproduce:
+1. Log in as Account A (victim). Note invoice_id = 9981.
+2. Log in as Account B (attacker).
+3. Send: GET /api/invoices/9981 with attacker's session token.
+4. Observe: Response returns victim's invoice data.
+
+Impact: Any authenticated user can read another user's invoices.
+
+Evidence: [HTTP request] / [Response snippet]
+
+Remediation: Validate invoice ownership server-side on every request
+before returning data. Never rely on client-supplied IDs alone.
+```
+
+#### Known Limitations
+
+- Requires at least two test accounts with separate sessions  cannot test IDOR without multiple principals
+- Second-order IDOR may require understanding of server-side reference resolution logic, which depends on application-specific context
+- Does not automate testing  the methodology guides manual or semi-automated steps
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="finding-writer" href="/skills/finding-writer">
+    Convert raw pentest notes into structured audit findings ready for reporting
+
+    `your-org/auditguard`
+  </Card>
+  <Card title="jwt-cracker" href="/skills/jwt-cracker">
+    Full JWT attack methodology  alg:none, algorithm confusion, weak secret brute-force, and more
+
+    `your-org/auditguard`
+  </Card>
+  <Card title="risk-assessor" href="/skills/risk-assessor">
+    Score a vulnerability using likelihood × impact with SLA-bound remediation urgency
+
+    `your-org/auditguard`
+  </Card>
+</CardGroup>

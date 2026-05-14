@@ -2,7 +2,7 @@
 
 <br/>
 
-# AuditGuard — Community Hub
+# AuditGuard  Community Hub
 
 **A growing library of skills and scripts to automate your compliance & audit workflows.**
 
@@ -20,7 +20,7 @@
 
 ### What's coming
 
-This repository is the home of the AuditGuard community — a curated collection of reusable **skills** and **scripts** built by auditors, for auditors.
+This repository is the home of the AuditGuard community  a curated collection of reusable **skills** and **scripts** built by auditors, for auditors.
 
 | Coming soon | Description |
 |---|---|
@@ -33,7 +33,7 @@ This repository is the home of the AuditGuard community — a curated collection
 
 Have a check you've automated? A script your team relies on? Share it.
 
-Read the [contribution guide](contributing.mdx) — it takes 10 minutes.
+Read the [contribution guide](contributing.mdx)  it takes 10 minutes.
 
 ---
 
