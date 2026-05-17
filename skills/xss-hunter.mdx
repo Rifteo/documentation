@@ -1,0 +1,153 @@
+---
+title: XSS Hunter
+description: Complete XSS testing methodology — reflected, stored, DOM-based, blind, and mutation XSS, CSP bypass, DOM clobbering, filter/WAF evasion, and impact escalation.
+---
+
+<Info>
+  **Category:** Pentest & security testing
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add xss-hunter
+```
+
+---
+
+## Summary
+
+Execute a complete Cross-Site Scripting (XSS) testing methodology across all attack types — from reconnaissance to impact escalation.
+
+- Covers 9 attack types: reflected XSS, stored XSS, DOM-based XSS, blind XSS, filter and WAF evasion, CSP bypass, mutation XSS (mXSS), DOM clobbering, and impact escalation
+- Identifies the injection context (HTML body, attribute, JS string, template literal, href, CSS) before selecting the right payload
+- Provides bypass techniques for WAF rules, blacklists, and Content-Security-Policy, including JSONP/AngularJS CDN abuse and nonce leak detection
+- Impact escalation covers session hijack via cookie theft, credential harvesting, keylogging, CSRF bypass, account takeover, and internal network scanning
+
+---
+
+## SKILL.md
+
+### XSS Hunter
+
+Complete XSS testing methodology — reflected, stored, DOM-based, blind, mutation XSS, CSP bypass, DOM clobbering, filter/WAF evasion, and impact escalation.
+
+#### When to Use This Skill
+
+Use this skill when the user:
+
+- Asks to test for XSS, cross-site scripting, reflected XSS, stored XSS, DOM-based XSS, blind XSS, mutation XSS, or DOM clobbering
+- Wants to bypass XSS filters, WAF rules, or a Content-Security-Policy
+- Identifies a reflection point and needs the right payload for the context
+- Pastes HTML/JS that reflects user input and wants to know if it's exploitable
+- Asks "can I steal cookies here?", "test input fields for injection", or "check if the app sanitizes output"
+- Needs to demonstrate XSS impact (session hijack, account takeover, CSRF bypass)
+- Is writing a pentest finding and needs evidence or remediation guidance
+
+#### What Does It Check?
+
+XSS occurs when user-controlled input is rendered in a browser without proper sanitization or encoding, allowing arbitrary JavaScript execution in the victim's context. The skill first identifies the injection context, then selects the matching payload and technique.
+
+**In scope:**
+- All XSS types: reflected, stored, DOM-based, blind, mutation (mXSS), DOM clobbering
+- All input surfaces: URL parameters, form fields, HTTP headers, JSON/API responses, file uploads, WebSocket messages
+- CSP bypass: unsafe directives, whitelisted CDN JSONP/AngularJS abuse, base-uri injection, nonce leak
+- Impact escalation: cookie theft, credential harvesting, keylogging, CSRF, account takeover, internal network scanning
+
+**Out of scope:**
+- SQL injection, SSTI, or other vulnerability classes — use dedicated skills
+- Automated mass scanning — this is a guided methodology
+
+#### How It Works
+
+**Phase 1: Reconnaissance**
+
+Map all input surfaces: URL parameters, form fields, HTTP headers (Referer, User-Agent, X-Forwarded-For), JSON/API response fields rendered in the UI, file upload names, and DOM sources (location.hash, document.referrer, postMessage, localStorage).
+
+**Injection Context Identification**
+
+Always inject a canary string (`xsstest123`) and view source to locate where it appears before selecting a payload:
+
+```
+HTML body:       → <script> or <img onerror>
+HTML attribute:  → " onmouseover= or ">
+JS string:       → ";alert(1)//
+JS template:     → ${alert(1)}
+URL/href:        → javascript:alert(1)
+```
+
+**Attack 1: Reflected XSS**
+
+Inject canary → locate context → choose payload for context → confirm with `alert(document.domain)`.
+
+**Attack 2: Stored XSS**
+
+Inject into persistent fields (comments, profile, bio, support tickets), view as a different user, confirm execution. Check all consumers: public page, admin panel, email notifications.
+
+**Attack 3: DOM-Based XSS**
+
+Find parameters consumed by client-side JS (hash, search, name). Inject into URL fragment (not sent to server, bypasses server WAF). Search JS bundles for dangerous sinks (`innerHTML`, `eval`, `location.href`, jQuery).
+
+**Attack 4: Blind XSS**
+
+Use OOB payloads that capture URL, cookies, DOM, and UA when executed. Tools: XSS Hunter (xsshunter.trufflesecurity.com), Burp Collaborator, interactsh. Target: support forms, admin panels, log viewers, audit dashboards.
+
+**Attack 5: Filter & WAF Evasion**
+
+Systematic bypass techniques: case variation, tag alternatives (when `<script>` is blocked), HTML/URL encoding, JavaScript obfuscation (avoid `alert`, avoid parentheses), polyglot payloads, WAF-specific bypasses (Cloudflare, ModSecurity).
+
+**Attack 6: CSP Bypass**
+
+Check CSP header → identify weak directives (`unsafe-inline`, wildcard) → abuse whitelisted CDN JSONP endpoints or AngularJS → test `base-uri` injection → check nonce for static/predictable values.
+
+**Attack 7: Mutation XSS (mXSS)**
+
+Test when the app uses DOMPurify ≤ 2.0.x or any HTML sanitizer. Browser mutation can reconstruct executable HTML from "safe" input via namespace confusion, table context mutation, or SVG/math tags.
+
+**Attack 8: DOM Clobbering**
+
+Identify JS globals or properties that can be overwritten via named HTML elements (`id`, `name`). Inject `<img id=isAdmin>` or `<form id=config><input id=config name=token>` to clobber security decisions or URL construction.
+
+**Attack 9: Impact Escalation**
+
+Demonstrate real-world impact: cookie theft via `fetch`, credential harvesting via injected fake login overlay, keylogging via `keydown` event listener, CSRF bypass by reading CSRF token from DOM, account takeover via authenticated API call, internal network scanning via fetch to internal IPs.
+
+#### Output
+
+| Severity | Condition |
+|----------|-----------|
+| Critical | Stored XSS reaching admin panel |
+| High | Stored XSS affecting all users |
+| Medium | Reflected XSS |
+| Low | Self-XSS (no realistic attack vector) |
+
+Report structure follows: `Title: [Stored/Reflected/DOM] XSS on [endpoint/feature]`, affected endpoint, steps to reproduce, impact, evidence (alert screenshot + HTTP request/response).
+
+#### Known Limitations
+
+- Blind XSS requires an OOB server (XSS Hunter, Burp Collaborator, or interactsh) to receive callbacks
+- DOM clobbering requires understanding JS variable usage in the target application — read JS source first
+- mXSS effectiveness depends on the browser version and sanitizer version — test in multiple browsers
+- Always use `document.domain` (not `alert(1)`) to prove execution origin in findings
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="ssti-hunter" href="/skills/ssti-hunter">
+    Complete SSTI detection and exploitation methodology across all major template engines
+
+    `your-org/auditguard`
+  </Card>
+  <Card title="idor-hunter" href="/skills/idor-hunter">
+    Systematic IDOR/BOLA detection methodology with recon, testing, and bypass techniques
+
+    `your-org/auditguard`
+  </Card>
+  <Card title="nuclei-template-writer" href="/skills/nuclei-template-writer">
+    Convert a vulnerability into a ready-to-run Nuclei YAML template for large-scale detection
+
+    `your-org/auditguard`
+  </Card>
+</CardGroup>

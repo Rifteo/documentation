@@ -1,0 +1,170 @@
+---
+title: Cloud Audit
+description: AWS, Azure, and GCP security audit — IAM, storage exposure, networking, secrets, and logging misconfigurations.
+---
+
+<Info>
+  **Category:** Audit
+</Info>
+
+**Load this context**
+
+```bash
+auditguard-context load cloud-audit
+```
+
+---
+
+## Summary
+
+A cloud security audit methodology covering AWS, Azure, and GCP — from IAM review to compliance mapping.
+
+- Phase 1 reviews IAM: wildcard permissions, unused access keys, MFA enforcement, overly permissive roles (AWS), Owner/Contributor assignments (Azure), and primitive roles on service accounts (GCP)
+- Phase 2 checks storage exposure: public S3 buckets, Azure Blob containers with public access, and GCS buckets with `allUsers` bindings
+- Phase 3 audits network security: security groups open to `0.0.0.0/0`, VPC flow logs, private resources with public IPs
+- Phase 4 verifies logging and monitoring: CloudTrail/Activity Log coverage, retention periods, alerting on critical events, and detection service status
+- Phase 5 reviews secrets management: hardcoded secrets in Lambda/Cloud Functions, plaintext config files, and key rotation policies
+- Each finding maps to a CIS Benchmark control or compliance framework (ISO 27001, SOC2, PCI-DSS)
+
+---
+
+## CONTEXT.md
+
+### When to Use This Context
+
+Load this context when:
+
+- Auditing AWS, Azure, or GCP environments
+- Reviewing IAM policies and permissions
+- Checking for publicly exposed storage (S3, Blob, GCS)
+- Assessing network security groups and firewall rules
+- Reviewing logging, monitoring, and incident response readiness
+
+**Key focus areas:** IAM least privilege, public exposure, encryption at rest/transit, logging gaps, network segmentation, secrets management.
+
+---
+
+### Phase 1 — IAM Review
+
+**AWS:**
+```bash
+# List all IAM users, roles, policies
+aws iam get-account-authorization-details
+
+# Check for wildcard (*) permissions in policies
+aws iam list-policies --scope Local | jq '.Policies[].PolicyName'
+
+# Credential report (unused access keys)
+aws iam generate-credential-report
+aws iam get-credential-report --output text | base64 --decode
+
+# MFA status
+aws iam get-account-summary | grep MFAEnabled
+```
+
+Check for:
+- Wildcard permissions (`*`) in inline or managed policies
+- MFA not enforced on root and IAM users
+- Access keys unused for >90 days
+- Overly permissive roles attached to EC2/Lambda
+
+**Azure:**
+- Review role assignments at subscription level
+- Check for Owner/Contributor roles assigned to external users
+- Privileged Identity Management (PIM) — are privileged roles time-bound?
+
+**GCP:**
+- Check for primitive roles (Owner, Editor) on service accounts
+- Review workload identity federation configuration
+
+---
+
+### Phase 2 — Storage Exposure
+
+**AWS S3:**
+```bash
+# List buckets
+aws s3api list-buckets
+
+# Check public access block settings
+aws s3api get-public-access-block --bucket <name>
+
+# Check ACL
+aws s3api get-bucket-acl --bucket <name>
+
+# Check bucket policy
+aws s3api get-bucket-policy --bucket <name>
+```
+
+**Azure Blob:**
+- Check containers with `PublicAccessLevel = Blob or Container`
+
+**GCP Cloud Storage:**
+```bash
+# Check for allUsers bindings
+gsutil iam get gs://bucket-name
+```
+
+---
+
+### Phase 3 — Network Security
+
+- Security groups with `0.0.0.0/0` on sensitive ports (22, 3389, 1433, 5432)
+- VPC flow logs enabled on all VPCs?
+- Private resources exposed via public IPs
+- Unused open ports on compute instances
+- Network segmentation between environments (dev/staging/prod)
+
+---
+
+### Phase 4 — Logging & Monitoring
+
+| Check | AWS | Azure | GCP |
+|-------|-----|-------|-----|
+| Audit logging | CloudTrail (all regions) | Activity Log | Cloud Audit Logs |
+| Log retention | ≥ 90 days recommended | ≥ 90 days | ≥ 90 days |
+| Threat detection | GuardDuty enabled? | Microsoft Defender? | Security Command Center? |
+| Critical alerts | Root login, IAM changes, SG changes | Admin changes, login anomalies | Project IAM changes |
+
+---
+
+### Phase 5 — Secrets Management
+
+- Hardcoded secrets in Lambda/Cloud Functions environment variables
+- Secrets in EC2 user data scripts
+- Use of secrets manager (AWS Secrets Manager / Azure Key Vault / GCP Secret Manager) vs plaintext config files
+- Key rotation policy for KMS/Key Vault keys — are keys rotated at least annually?
+
+---
+
+### Phase 6 — Reporting
+
+Map each finding to a CIS Benchmark control or relevant compliance framework:
+- **CIS AWS Foundations Benchmark** / **CIS Azure Benchmark** / **CIS GCP Benchmark**
+- ISO 27001: A.9 (Access Control), A.12 (Operations), A.13 (Communications)
+- SOC2 CC6, CC7
+- PCI-DSS Requirement 7 (access control), 10 (logging)
+
+Use `finding-writer` skill for structured output. Use `compliance-gap-analyzer` skill to aggregate findings into a gap report.
+
+---
+
+## Related contexts
+
+<CardGroup cols={3}>
+  <Card title="api-security-review" href="/contexts/api-security-review">
+    REST and GraphQL API security — authentication, BOLA, input validation, and rate limiting
+
+    `AuditGuard-Community/contexts`
+  </Card>
+  <Card title="web-app-pentest" href="/contexts/web-app-pentest">
+    Full web application pentest methodology — recon, auth, authorization, injection, business logic
+
+    `AuditGuard-Community/contexts`
+  </Card>
+  <Card title="mobile-pentest" href="/contexts/mobile-pentest">
+    Android and iOS testing — static analysis, traffic interception, local storage, and authentication
+
+    `AuditGuard-Community/contexts`
+  </Card>
+</CardGroup>

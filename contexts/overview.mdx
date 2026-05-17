@@ -1,0 +1,106 @@
+---
+title: Contexts Overview
+description: What AuditGuard contexts are, how the 3-tier loading system works, and how to create one.
+---
+
+## What is a context?
+
+A **context** is a security knowledge bundle the agent loads before starting an engagement. It gives the agent domain expertise — methodology, techniques, tools, and reporting guidance — for a specific type of security work.
+
+Contexts are served to agents via the `auditguard-context-mcp` MCP server and retrieved on demand using the `get_context` tool.
+
+Unlike skills (which define a specific technique), contexts define the **full engagement methodology** — the phases to follow, what to test, how to validate findings, and how to report.
+
+## Context anatomy
+
+Every context lives in its own directory with a single required file:
+
+```
+contexts/
+└── web-app-pentest/
+    └── CONTEXT.md
+```
+
+### `CONTEXT.md`
+
+The core of every context. It has a **frontmatter block** and a **body** structured in three levels:
+
+```yaml
+---
+name: my-context
+l0: One sentence describing what this context covers.
+license: MIT
+metadata:
+  version: "1.0.0"
+  author: AuditGuard
+  tags: ["pentest", "web", "owasp"]
+---
+
+## L1 — Overview
+
+When to use this context and what it covers at a high level.
+
+---
+
+## L2 — Full Methodology
+
+Complete detailed content the agent uses during the engagement.
+```
+
+## The 3-tier loading system
+
+Each context has three levels of detail. The MCP server loads the right level based on what the agent needs — keeping token usage low.
+
+| Level | What it contains | When used |
+|-------|-----------------|-----------|
+| **L0** | One sentence from the `l0` frontmatter field | Listings, quick discovery |
+| **L1** | Overview — when to use, key focus areas, high-level scope | Default load at session start |
+| **L2** | Full methodology — phases, techniques, tools, commands, reporting | Loaded when the agent needs deep detail |
+
+## Available contexts
+
+| Context | What it covers | Category |
+|---------|---------------|----------|
+| [Web App Pentest](/contexts/web-app-pentest) | Recon, authentication, authorization, injection, session, and business logic testing | Pentest |
+| [API Security Review](/contexts/api-security-review) | REST and GraphQL API security — authentication, BOLA, input validation, and rate limiting | Pentest |
+| [Mobile Pentest](/contexts/mobile-pentest) | Android and iOS testing — static analysis, traffic interception, local storage, and authentication | Pentest |
+| [Cloud Audit](/contexts/cloud-audit) | AWS, Azure, and GCP security — IAM, storage exposure, networking, secrets, and logging | Audit |
+
+## Loading a context
+
+Contexts are loaded automatically when using `auditguard-context-mcp`. You can also load one explicitly:
+
+```bash
+# Load a context at session start
+auditguard-context load web-app-pentest
+
+# List all available contexts
+auditguard-context list
+
+# Load a specific level
+auditguard-context load web-app-pentest --level L2
+```
+
+## Context vs skill
+
+| | Context | Skill |
+|--|---------|-------|
+| **Scope** | Full engagement methodology | Single technique or workflow |
+| **When loaded** | At session start | When the user's request matches a trigger |
+| **Content** | Phases, tools, reporting guidance | Step-by-step instructions, output format, rules |
+| **Example** | `web-app-pentest` | `xss-hunter`, `jwt-cracker` |
+
+Contexts and skills work together — a context defines the engagement methodology and references relevant skills at each phase.
+
+## Naming conventions
+
+| Rule | Good | Avoid |
+|------|------|-------|
+| Use kebab-case | `web-app-pentest`, `cloud-audit` | `WebAppPentest`, `cloud_audit` |
+| Name by engagement type, not tool | `api-security-review` | `burp-scan` |
+| Keep names under 40 characters | `mobile-pentest` | `android-and-ios-mobile-pentest-full` |
+| Use descriptive tags | `pentest`, `audit`, `cloud`, `mobile` | `misc`, `general` |
+
+## Next step
+
+Ready to write a context? Follow the [CONTEXT_GUIDE.md](https://github.com/AuditGuard-Community/contexts/blob/main/CONTEXT_GUIDE.md) in the community repo.

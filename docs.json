@@ -9,8 +9,8 @@
     "dark": "#EEC12A"
   },
   "logo": {
-    "light": "https://private-user-images.githubusercontent.com/102323883/592549639-4bd52cda-1950-458e-b0b0-471dec1cab55.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Nzg3Njg1MzYsIm5iZiI6MTc3ODc2ODIzNiwicGF0aCI6Ii8xMDIzMjM4ODMvNTkyNTQ5NjM5LTRiZDUyY2RhLTE5NTAtNDU4ZS1iMGIwLTQ3MWRlYzFjYWI1NS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwNTE0JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDUxNFQxNDE3MTZaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1iMWQwY2I1NmNjYzg0ZDAyNGY0MWMwYTBlNGQ1ZjgwMTRkZmRlZmFhODk1YzYyYWY4NTA1NjMxNjZhYjA1ZTBlJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZyZXNwb25zZS1jb250ZW50LXR5cGU9aW1hZ2UlMkZwbmcifQ.59bo4-L0rVnKi90_zeaxTFMBWJltH4KO2tC27ssp9jQ",
-    "dark": "https://private-user-images.githubusercontent.com/102323883/592549388-969a27b2-6e39-4c17-8520-83f8f027c68c.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Nzg3Njg1OTYsIm5iZiI6MTc3ODc2ODI5NiwicGF0aCI6Ii8xMDIzMjM4ODMvNTkyNTQ5Mzg4LTk2OWEyN2IyLTZlMzktNGMxNy04NTIwLTgzZjhmMDI3YzY4Yy5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwNTE0JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDUxNFQxNDE4MTZaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1lMjVlNzNmM2U0MDBjY2VkY2ExYTVkZTI4OGJkMTg3Mjc2MmVhYzFlZGE0MGMzOWFkZDhiNzNmMTBjNGEyZWE0JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZyZXNwb25zZS1jb250ZW50LXR5cGU9aW1hZ2UlMkZwbmcifQ.JK9wFJ0ahx6fTAp4Tj5-WZSpvg_fgH2GEm-wIC1t6DE"
+    "light": "/logos/black.png",
+    "dark": "/logos/white.png"
   },
   "favicon": "/favicon.svg",
   "url": "https://community.auditguard.fr",
@@ -69,7 +69,22 @@
               "skills/idor-hunter",
               "skills/jwt-cracker",
               "skills/risk-assessor",
-              "skills/skill-benchmark"
+              "skills/skill-benchmark",
+              "skills/check-exploit",
+              "skills/nuclei-template-writer",
+              "skills/remediation-planner",
+              "skills/ssti-hunter",
+              "skills/xss-hunter"
+            ]
+          },
+          {
+            "group": "Contexts",
+            "pages": [
+              "contexts/overview",
+              "contexts/web-app-pentest",
+              "contexts/api-security-review",
+              "contexts/mobile-pentest",
+              "contexts/cloud-audit"
             ]
           },
           {
