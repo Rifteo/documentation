@@ -12,7 +12,6 @@
     "light": "/logos/black.png",
     "dark": "/logos/white.png"
   },
-  "favicon": "/favicon.svg",
   "appearance": {
     "default": "dark",
     "strict": false
