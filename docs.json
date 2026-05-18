@@ -13,7 +13,6 @@
     "dark": "/logos/white.png"
   },
   "favicon": "/favicon.svg",
-  "url": "https://community.auditguard.fr",
   "appearance": {
     "default": "dark",
     "strict": false
