@@ -1,0 +1,130 @@
+---
+title: CVSS Scorer
+description: Computes an exact CVSS v3.1 base score and vector from a vulnerability description — infers metrics from context, asks one sharp question only when ambiguity would change the severity level.
+---
+
+<Info>
+  **Category:** Scoring & assessment
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add cvss-scorer
+```
+
+---
+
+## Summary
+
+Produce an exact CVSS v3.1 vector and score from a vulnerability description — decisive, accurate, and concise.
+
+- Infers all eight base metrics aggressively from the vulnerability description without flooding the auditor with scenarios
+- Only asks a clarifying question when the answer would change the severity bucket (e.g., Medium vs. High) or shift the score by ≥1.0
+- When asking, shows one sharp question with 2–3 short conditional scores, then stops
+- Covers a built-in reference of common vulnerability patterns (RCE, SQLi, IDOR, XSS, SSRF, CSRF, XXE, SSTI, open redirect) with typical vectors and scores
+- Never explains metric definitions or shows formula math unless asked
+
+---
+
+## SKILL.md
+
+### CVSS Scorer
+
+Produce an exact CVSS v3.1 vector and score from a vulnerability description. Be decisive. Be accurate. Be short.
+
+#### When to Use This Skill
+
+Use this skill when the user:
+
+- Needs a CVSS score for a vulnerability finding
+- Is writing a bug bounty report or pentest finding and needs a severity vector
+- Says "score this", "what's the CVSS?", "give me the vector"
+- Has a vulnerability description and wants a severity level
+
+#### What Does It Check?
+
+The skill infers all eight CVSS v3.1 base metrics:
+
+- **AV** (Attack Vector) — Network / Adjacent / Local / Physical
+- **AC** (Attack Complexity) — Low / High
+- **PR** (Privileges Required) — None / Low / High
+- **UI** (User Interaction) — None / Required
+- **S** (Scope) — Unchanged / Changed
+- **C** (Confidentiality) — None / Low / High
+- **I** (Integrity) — None / Low / High
+- **A** (Availability) — None / Low / High
+
+#### How It Works
+
+**Metric Inference Rules:**
+
+| Metric | Rule |
+|---|---|
+| AV:N | Web app, API, internet-reachable |
+| AV:A | Same LAN/WiFi/Bluetooth required |
+| AV:L | Local OS session required |
+| AC:H | UUID-based IDOR, race condition, MitM required |
+| PR:N | Pre-auth / unauthenticated |
+| UI:N | Stored XSS, server-side vulns (SQLi, SSRF, RCE, IDOR) |
+| S:C | XSS (any type), SSRF, SSTI/RCE |
+| C:H | Full read of sensitive data (PII, creds, tokens) |
+| C:L | Blind variants (blind SQLi, blind SSRF, blind XXE) |
+
+**When to Ask:**
+
+Only when the ambiguity would change the severity bucket or shift the score by ≥1.0. Format: one question + 2–3 short conditional scores.
+
+**Chained Vulnerabilities:**
+
+Use the entry point's AV/AC/PR/UI and the final step's C/I/A/S.
+
+#### Output
+
+```
+CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N
+Score: 9.1 — Critical
+```
+
+A short note only for metrics that are non-obvious, were assumed, or could surprise the auditor.
+
+#### Common Patterns Reference
+
+| Vulnerability | Typical Vector | Score |
+|---|---|---|
+| Unauth RCE (web) | AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H | 10.0 Critical |
+| SQLi full dump pre-auth | AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N | 9.1 Critical |
+| Stored XSS → ATO | AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:L/A:N | 8.7 High |
+| IDOR numeric pre-auth PII | AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N | 7.5 High |
+| Reflected XSS | AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N | 6.1 Medium |
+| CSRF state change | AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:N | 6.5 Medium |
+| Open redirect | AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:N | 4.3 Medium |
+
+#### Known Limitations
+
+- Self-XSS is not a valid standalone finding — the skill will flag it rather than score it
+- Blind variants (blind SQLi, blind SSRF, blind XXE) use C:L not C:H — data is inferred, not read
+- Never explains what CVSS metrics mean unless asked
+- Never shows the score formula or intermediate math
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="finding-writer" href="/skills/finding-writer">
+    Convert raw pentest notes into structured audit findings ready for reporting
+
+    
+  </Card>
+  <Card title="risk-assessor" href="/skills/risk-assessor">
+    Score a vulnerability using likelihood × impact with SLA-bound remediation urgency
+
+    
+  </Card>
+  <Card title="bugbounty-reporter" href="/skills/bugbounty-reporter">
+    Converts raw bug bounty findings into a complete, triage-ready report
+
+    
+  </Card>
+</CardGroup>

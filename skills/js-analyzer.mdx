@@ -1,0 +1,150 @@
+---
+title: JS Analyzer
+description: Full JavaScript analysis methodology for pentesting and bug bounty — JS file discovery, secret extraction, endpoint mapping, DOM XSS, prototype pollution, postMessage abuse, client-side logic flaws, source map extraction, and hardcoded credential hunting.
+---
+
+<Info>
+  **Category:** Pentest & security testing
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add js-analyzer
+```
+
+---
+
+## Summary
+
+JS files are often the most information-rich attack surface in a web application — a thorough review routinely yields hidden API endpoints, hardcoded secrets, client-side authorization logic to bypass, and vulnerable third-party libraries.
+
+- Phase 1 discovers all JS files via automated crawling (katana, gau, waybackurls) and framework-specific paths (React, Next.js, Angular, Vue, Vite)
+- Phase 2 extracts source maps from minified bundles to recover the original unminified source code
+- Phase 3 hunts for secrets and credentials using trufflehog, gitleaks, secretfinder, and entropy scanning with regex patterns for AWS, Stripe, Slack, GitHub, Firebase, JWTs, database connection strings, and more
+- Phase 4 maps all API endpoints, GraphQL operations, and hidden parameters
+- Phases 5–8 cover DOM XSS source-to-sink tracing, prototype pollution detection and escalation, postMessage handler abuse, and client-side authorization bypasses
+- Phases 9–18 cover insecure storage, vulnerable third-party libraries, JSONP endpoints, WebSocket analysis, CSP bypass, deobfuscation, open redirect via JS, and webpack-specific techniques
+
+---
+
+## SKILL.md
+
+### JS Analyzer — JavaScript Security Analysis
+
+#### When to Use This Skill
+
+Use this skill when the user:
+
+- Wants to analyze JavaScript files from a target web application
+- Asks to find endpoints, API routes, or hidden parameters in JS bundles
+- Wants to hunt for secrets, API keys, or credentials in JS source
+- Asks to test for DOM XSS, prototype pollution, or postMessage vulnerabilities
+- Wants to deobfuscate or extract source maps from minified JS
+- Asks about client-side logic flaws, authorization bypass, or insecure storage
+- Mentions webpack, React, Angular, Vue, Next.js, or similar JS frameworks
+
+#### What Does It Check?
+
+**In scope:**
+- JS file discovery across all common paths and frameworks
+- Source map extraction and original source recovery
+- Hardcoded secrets: AWS keys, Stripe, Slack, GitHub PATs, JWTs, database URLs, passwords
+- API endpoint and parameter extraction
+- DOM XSS: sources (`location.search`, `location.hash`, `document.referrer`, `postMessage`) to sinks (`innerHTML`, `eval`, `location.href`)
+- Prototype pollution: vulnerable merge/extend/clone patterns, PP → XSS gadget chains
+- postMessage handlers: missing or weak origin validation
+- Client-side role/admin checks and feature flags that can be bypassed
+- Insecure storage: sensitive data in localStorage, sessionStorage, cookies set without flags
+- Vulnerable third-party libraries: jQuery, lodash, Handlebars, DOMPurify, next.js, axios
+- JSONP endpoints, WebSocket analysis, CSP bypass techniques
+
+**Out of scope:**
+- Server-side vulnerabilities — JS analysis is client-side focused
+- Automated mass scanning — this is a guided methodology
+
+#### How It Works
+
+**Phase 1: JS File Discovery**
+
+```bash
+katana -u https://target.com -jc -d 5 -o js-urls.txt
+gau target.com | grep "\.js$" | sort -u
+```
+
+Framework-specific paths: `/static/js/main.*.chunk.js` (CRA), `/_next/static/chunks/*.js` (Next.js), `/main.*.js` (Angular).
+
+**Phase 2: Source Map Extraction**
+
+Check for `.map` files and extract original source using `sourcemapper` or `unwebpack-sourcemap`.
+
+**Phase 3: Secret & Credential Hunting**
+
+```bash
+trufflehog filesystem ./sourcemap-out/ --only-verified
+jsluice secrets https://target.com/main.js
+```
+
+Regex patterns for AWS (`AKIA[0-9A-Z]{16}`), Stripe (`sk_live_`), GitHub PATs (`ghp_`), JWTs (`eyJ`), database connection strings, and more.
+
+**Phase 4: Endpoint & API Route Mapping**
+
+```bash
+jsluice urls -R https://target.com/main.js | jq .
+linkfinder.py -i https://target.com/main.js -o cli
+```
+
+**Phase 5: DOM-Based XSS**
+
+Identify dangerous sinks (`innerHTML`, `eval`, `document.write`, `location.href`) and trace from controllable sources (`location.search`, `location.hash`, `document.referrer`, `postMessage`).
+
+**Phase 6: Prototype Pollution**
+
+Find vulnerable merge patterns → test with `?__proto__[polluted]=1` → escalate via PP → XSS gadget chains (jQuery, DOMPurify).
+
+**Phase 7: postMessage Vulnerabilities**
+
+Find handlers without origin validation → send payloads via iframe from attacker page.
+
+**Phase 8: Client-Side Logic & Authorization Flaws**
+
+Search for `isAdmin`, `hasPermission`, feature flags, hidden SPA routes, and token storage in localStorage.
+
+#### Output
+
+Findings structured as: file path, line number, vulnerable pattern, confirmed impact, and remediation guidance.
+
+Priority triage order:
+1. Source maps exposed → full source code leak
+2. Hardcoded secrets → immediate credential leak
+3. Dangerous sinks reading URL/hash → DOM XSS
+4. postMessage handlers without origin check → XSS/data theft
+5. Client-side role/admin checks → test backend separately
+
+#### Known Limitations
+
+- Minified JS without source maps requires manual deobfuscation — results depend on obfuscation complexity
+- Prototype pollution gadget chains are framework-specific and require manual verification
+- DOM XSS source-to-sink tracing can be complex in bundled/transpiled code — use Burp DOM Invader for browser-assisted tracing
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="xss-hunter" href="/skills/xss-hunter">
+    Complete XSS testing methodology — reflected, stored, DOM-based, blind, and mutation XSS
+
+    
+  </Card>
+  <Card title="attack-surface" href="/skills/attack-surface">
+    Maps every entry point, component, and trust boundary of a target before testing begins
+
+    
+  </Card>
+  <Card title="ssrf-hunter" href="/skills/ssrf-hunter">
+    Complete SSRF detection and exploitation methodology — cloud metadata, internal network enumeration, and bypass techniques
+
+    
+  </Card>
+</CardGroup>

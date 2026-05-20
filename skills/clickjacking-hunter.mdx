@@ -1,0 +1,126 @@
+---
+title: Clickjacking Hunter
+description: Complete clickjacking (UI redressing) methodology — framing protection detection, single-click and multi-step PoC construction, JS frame-busting bypass, drag-and-drop and OAuth consent variants, and report structure.
+---
+
+<Info>
+  **Category:** Pentest & security testing
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add clickjacking-hunter
+```
+
+---
+
+## Summary
+
+Detect and exploit UI redressing vulnerabilities across sensitive endpoints — from header checks to a fully functional PoC page.
+
+- Phase 1 checks framing protections via `X-Frame-Options` and `Content-Security-Policy: frame-ancestors` across all sensitive endpoints
+- Phase 2 confirms that the target page actually loads inside an iframe before building the full PoC
+- Phases 3–4 produce single-click and multi-step PoC HTML pages with an opacity slider for alignment screenshots; includes JS frame-busting bypass via `sandbox` attribute and double-framing
+- Phase 5 identifies the highest-impact targets: account deletion, email change, 2FA disable, OAuth consent screens, and financial actions
+- Includes automation script and a complete report structure with remediation guidance
+
+---
+
+## SKILL.md
+
+### Clickjacking Hunter
+
+Clickjacking (UI redressing) tricks a victim into clicking elements on a hidden target page by overlaying invisible iframes on top of decoy content. Impact ranges from account deletion and fund transfer to OAuth authorization and 2FA disable — any one-click sensitive action is a candidate.
+
+#### When to Use This Skill
+
+Use this skill when the user:
+
+- Asks to test for clickjacking or UI redressing vulnerabilities
+- Wants to check if a sensitive endpoint (account delete, 2FA disable, OAuth consent) is frameable
+- Needs to build a clickjacking PoC for a report
+- Wants to bypass JavaScript frame-busting protections
+
+#### What Does It Check?
+
+**In scope:**
+- `X-Frame-Options` (DENY, SAMEORIGIN, ALLOW-FROM, missing)
+- `Content-Security-Policy: frame-ancestors` directive
+- JavaScript frame-busting (`top.location`, `window.top`, `parent.frames`)
+- All high-impact endpoints: account delete, email/password change, 2FA disable, fund transfer, OAuth consent, admin actions
+- OAuth consent clickjacking and drag-and-drop variants
+
+**Out of scope:**
+- Low-value pages with no sensitive action reachable — clickjacking on a marketing page is not reportable
+
+#### How It Works
+
+**Phase 1: Check Framing Protections**
+
+```bash
+curl -sI https://target.com/account/settings | grep -i "x-frame-options\|content-security-policy"
+```
+
+Scan all sensitive endpoints and identify which have no protection.
+
+**Phase 2: Confirm Embedding**
+
+Serve a quick iframe test page locally and verify the target loads before investing in a full PoC.
+
+**Phase 3: Build the PoC**
+
+Generate a single-click PoC HTML page that positions an invisible iframe over a visible decoy button. An opacity slider allows visual alignment for the report screenshot.
+
+For actions requiring multiple clicks (Settings → Disable 2FA → Confirm), generate a multi-step PoC that sequences iframe interactions.
+
+**Phase 4: Frame-Busting Bypass**
+
+If JavaScript frame-busting is detected, bypass it using the `sandbox` attribute (omitting `allow-top-navigation`) or double-framing techniques.
+
+**Phase 5: High-Value Targets**
+
+Priority order:
+1. Account deletion / email change — one click → ATO or permanent loss
+2. 2FA disable — security downgrade, enables ATO
+3. OAuth consent screens — grants attacker app access to victim account
+4. Financial actions (transfer, checkout) — direct financial impact
+5. Admin actions — high impact if victim is an admin
+
+#### Output
+
+| Severity | Condition |
+|---|---|
+| High | Sensitive action (account delete, 2FA disable, fund transfer) frameable |
+| Medium | Moderately sensitive action (settings change, app authorization) frameable |
+| Low | Low-value page frameable with no sensitive action reachable |
+
+Report includes: affected endpoints, reproduction steps, two screenshots (opacity 0 and 0.5), and CSP/XFO remediation guidance.
+
+#### Known Limitations
+
+- Requires a browser where the victim is logged into the target to demonstrate the PoC
+- CSP `frame-ancestors` takes precedence over `X-Frame-Options` in modern browsers — both must be checked
+- `ALLOW-FROM` is deprecated and ignored by modern browsers — pages using only this directive are vulnerable
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="xss-hunter" href="/skills/xss-hunter">
+    Complete XSS testing methodology — reflected, stored, DOM-based, blind, and mutation XSS
+
+    
+  </Card>
+  <Card title="redirect-forge" href="/skills/redirect-forge">
+    Complete open redirect detection and exploitation methodology including OAuth token theft
+
+    
+  </Card>
+  <Card title="bugbounty-reporter" href="/skills/bugbounty-reporter">
+    Converts raw bug bounty findings into a complete, triage-ready report
+
+    
+  </Card>
+</CardGroup>

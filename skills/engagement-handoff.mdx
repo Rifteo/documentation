@@ -1,0 +1,139 @@
+---
+title: Engagement Handoff
+description: Documents the current state of an active pentest engagement so the next agent session can continue without losing context — findings, coverage, next steps, and open threads.
+---
+
+<Info>
+  **Category:** Pentest & security testing
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add engagement-handoff
+```
+
+---
+
+## Summary
+
+Create a compact handoff document that captures exactly where a pentest engagement stands — a fresh agent session reading it should be able to continue without asking any questions.
+
+- Scans the session to capture all findings, tools run, targets tested, and open threads
+- References existing artifacts (`ENGAGEMENT.md`, findings files) rather than duplicating them — kept under 100 lines
+- Maps coverage: what was tested, what was skipped, what was partially tested
+- Lists open threads (suspected vulnerabilities not yet confirmed, areas needing deeper testing)
+- Writes an ordered list of next steps specific enough for a fresh session to start immediately
+- Saves to `HANDOFF.md` in the current directory
+
+---
+
+## SKILL.md
+
+### Engagement Handoff
+
+Create a compact handoff document that captures exactly where the current engagement stands. A fresh agent session reading this file should be able to continue without asking any questions.
+
+#### When to Use This Skill
+
+Use this skill when the user:
+
+- Says "handoff", "save progress", "pick this up next session", "summarize the engagement"
+- The context window is getting long and work needs to continue in a fresh session
+- At the end of a testing day or shift change
+
+#### What Does It Check?
+
+**Coverage captured:**
+- Findings identified (title + severity, not full text — references the finding file)
+- Targets tested and which were skipped or partially tested
+- Tools run and what they produced
+- Open threads: suspected vulnerabilities not yet confirmed
+- Areas flagged for deeper testing
+- Follow-up requests from the client or scope document
+
+#### How It Works
+
+**Step 1: Scan the Session**
+
+Review all findings identified, tools run, targets tested, and threads opened in the current session.
+
+**Step 2: Check for ENGAGEMENT.md**
+
+If it exists, reference it — do not repeat scope/target info already there. Open the handoff with: "Continue from: see ENGAGEMENT.md for scope and target details."
+
+**Step 3: Capture Findings**
+
+List each finding by title + severity. Do not rewrite the full finding — reference the finding file.
+
+**Step 4: Map Coverage**
+
+What was tested, what was skipped, what was partially tested.
+
+**Step 5: List Open Threads**
+
+Suspected vulnerabilities not yet confirmed, areas that need deeper testing, follow-up requests.
+
+**Step 6: Write Next Steps**
+
+An ordered list of what to do first in the next session — specific enough to start without additional context.
+
+**Step 7: Save**
+
+Write to `HANDOFF.md` in the current directory unless the user specifies otherwise.
+
+#### Output
+
+A `HANDOFF.md` file under 100 lines, using the template in `references/handoff-template.md`:
+
+```markdown
+# Engagement Handoff — [Target] — [Date]
+
+Continue from: see ENGAGEMENT.md for scope and target details.
+
+## Findings (confirmed)
+- [F-01] SQL Injection in /api/search — Critical
+- [F-02] IDOR on /api/invoices/{id} — High
+
+## Coverage
+- Tested: /api/v2/*, /admin/*, auth flows
+- Skipped: /legacy/*, mobile API (out of time)
+- Partial: /api/v3/* (only GET endpoints tested)
+
+## Open Threads
+- Suspected SSRF in /api/webhook — OOB callback received, needs confirmation
+- Admin panel at /admin/dashboard — needs auth bypass testing
+
+## Next Steps
+1. Confirm SSRF on /api/webhook — send payload to Collaborator, check for HTTP callback
+2. Test admin panel — try JWT alg:none and role parameter manipulation
+3. Complete /api/v3/* coverage for POST/PUT endpoints
+```
+
+#### Known Limitations
+
+- Keep it under 100 lines — longer means you're duplicating instead of referencing
+- Never include credentials, tokens, or sensitive evidence in the handoff file
+- Next steps must be specific enough that the next agent can start without any additional context
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="scope-grill" href="/skills/scope-grill">
+    Interviews the user about a pentest engagement before any testing begins
+
+    
+  </Card>
+  <Card title="pentest-report" href="/skills/pentest-report">
+    Generates a complete, client-ready penetration test report from all findings
+
+    
+  </Card>
+  <Card title="finding-writer" href="/skills/finding-writer">
+    Convert raw pentest notes into structured audit findings ready for reporting
+
+    
+  </Card>
+</CardGroup>

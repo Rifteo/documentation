@@ -1,0 +1,140 @@
+---
+title: Scope Grill
+description: Interviews the user about a pentest or audit engagement before any testing begins — captures target, scope, rules of engagement, auth, and deliverables into a structured brief.
+---
+
+<Info>
+  **Category:** Pentest & security testing
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add scope-grill
+```
+
+---
+
+## Summary
+
+Capture every critical engagement parameter before a single test is run — an untested assumption about scope or authorization invalidates findings and creates legal risk.
+
+- Asks 10 targeted questions one at a time in a fixed sequence, providing a recommended answer or example for each
+- Covers target, authorization confirmation, scope boundaries, test type (black/grey/white box), available accounts, rules of engagement, known tech stack, prior work, deliverables, and deadline
+- Will not proceed if written authorization is not confirmed — flags the legal risk explicitly
+- Produces a filled **Engagement Brief** saved as `ENGAGEMENT.md` in the current directory
+
+---
+
+## SKILL.md
+
+### Scope Grill
+
+Before any testing begins, interview the user to build a complete engagement brief. An untested assumption about scope or authorization invalidates findings and creates legal risk.
+
+Ask one question at a time. Wait for the answer before moving on. Provide a recommended answer or example for each question.
+
+#### When to Use This Skill
+
+Use this skill when the user:
+
+- Says "start a pentest", "begin an engagement", "test this target"
+- Describes a target without mentioning scope, authorization, or deliverables
+- Wants to structure an engagement before diving in
+
+#### What Does It Check?
+
+**Information captured in sequence:**
+
+1. **Target** — What is the exact target? (domain, IP range, application name, cloud account)
+2. **Authorization** — Do you have written authorization to test this target? (required — does not proceed if no)
+3. **Scope** — What is explicitly in scope? What is explicitly out of scope?
+4. **Test type** — Black-box (no credentials, no source), grey-box (credentials only), or white-box (full access + source)?
+5. **Accounts** — Test accounts available? What roles? (admin, user, guest, API key?)
+6. **Rules of engagement** — Any restrictions? (no DoS, no phishing, no persistence, time windows?)
+7. **Known stack** — Any known technologies? (framework, language, cloud provider, WAF, CDN?)
+8. **Prior work** — Previous pentest reports, known issues, or areas to re-verify?
+9. **Deliverables** — What's expected? (findings list, full report, executive summary?) Who is the audience?
+10. **Deadline** — When are findings due?
+
+#### How It Works
+
+**One Question at a Time**
+
+Ask each question in sequence. Wait for the answer before moving to the next. Skip a question only if the answer is already obvious from context.
+
+**Authorization Gate**
+
+If the user cannot confirm written authorization to test the target, the skill stops and explains the legal and professional risk. Testing without authorization is out of scope.
+
+**Scope Ambiguity Flagging**
+
+If scope is vague (e.g., "test the application"), flag it — an unclear scope is itself a risk. Ask for explicit in-scope and out-of-scope items.
+
+**Output**
+
+After all questions are answered, produce a filled **Engagement Brief** and save it as `ENGAGEMENT.md` in the current directory.
+
+```markdown
+# Engagement Brief — [Client] — [Date]
+
+## Target
+[exact target — domains, IPs, application names]
+
+## Authorization
+Written authorization confirmed: YES
+Contact: [name, email]
+
+## Scope
+In scope: [list]
+Out of scope: [list]
+
+## Test Type
+[Black-box / Grey-box / White-box]
+
+## Accounts
+[available roles and credentials]
+
+## Rules of Engagement
+[restrictions and time windows]
+
+## Known Stack
+[technologies identified]
+
+## Prior Work
+[previous reports or known issues]
+
+## Deliverables
+[expected output and audience]
+
+## Deadline
+[date]
+```
+
+#### Known Limitations
+
+- Will not begin testing until authorization is confirmed
+- If scope is vague, flags it rather than proceeding with assumptions
+- One question at a time — does not dump the full list at once
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="attack-surface" href="/skills/attack-surface">
+    Maps every entry point, component, and trust boundary of a target before testing begins
+
+    
+  </Card>
+  <Card title="pentest-report" href="/skills/pentest-report">
+    Generates a complete, client-ready penetration test report from all findings
+
+    
+  </Card>
+  <Card title="engagement-handoff" href="/skills/engagement-handoff">
+    Documents the current engagement state so the next session can continue without losing context
+
+    
+  </Card>
+</CardGroup>

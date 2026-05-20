@@ -1,0 +1,126 @@
+---
+title: Bug Bounty Reporter
+description: Converts raw bug bounty findings into a complete, triage-ready report — clear description, numbered reproduction steps, self-contained PoC, risk, and remediation.
+---
+
+<Info>
+  **Category:** Reporting & documentation
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add bugbounty-reporter
+```
+
+---
+
+## Summary
+
+Turn raw findings into a report that gets triaged, not closed — covering all vulnerability classes and major platforms (HackerOne, Bugcrowd, Intigriti, YesWeHack).
+
+- Parses the finding and infers vulnerability class, endpoint, auth state, and observed behavior from raw notes or a request/response
+- Flags likely N/A findings (self-XSS, low-value clickjacking, missing headers with no exploit path) before writing
+- Produces a complete report with title, description, numbered reproduction steps, PoC, risk, remediation, and severity
+- Marks any missing evidence `[TO ADD]` — never invents data
+
+---
+
+## SKILL.md
+
+### Bug Bounty Reporter
+
+Turn raw findings into a report that gets triaged, not closed. Bug bounty reports fail for two reasons: the triager can't reproduce it, or can't understand why it matters. This skill fixes both.
+
+#### When to Use This Skill
+
+Use this skill when the user:
+
+- Has a confirmed bug bounty finding and needs to write it up
+- Says "write this up", "report this", "format this for H1/Bugcrowd/Intigriti"
+- Has raw notes, a request/response, or a PoC and needs a submission-ready report
+
+#### What Does It Check?
+
+**In scope:**
+- All vulnerability classes: IDOR, XSS, SSRF, SQLi, auth bypass, business logic, privilege escalation, and more
+- All major platforms: HackerOne, Bugcrowd, Intigriti, YesWeHack
+- Severity assessment with CVSS guidance
+
+**Out of scope:**
+- Reports for active competitions where sharing is prohibited
+- Unconfirmed findings — use `vuln-diagnose` first
+
+#### How It Works
+
+**Step 1: Parse the Finding**
+
+Extract vulnerability class, endpoint, parameter, auth state, and observed behavior from whatever the user provides.
+
+**Step 2: Ask One Question (if needed)**
+
+If critical context is missing, ask exactly one question before writing. Never stall with multiple questions.
+
+**Step 3: Flag Low-Value Findings**
+
+Check if the issue is self-XSS, clickjacking on a low-value page, or a missing header with no exploit path. If yes, flag it as likely N/A before writing.
+
+**Step 4: Write the Report**
+
+Generate a complete report following this structure:
+
+- **Title:** `{Bug class} in {scope/endpoint} through {parameter} Leads To {impact}`
+- **Description:** 2–4 sentences starting with the finding, no filler
+- **Steps to Reproduce:** numbered, exact, reproducible by someone unfamiliar with the app
+- **Proof of Concept:** HTTP request/response, curl command, or payload + trigger location
+- **Risk:** named outcomes — no vague statements
+- **Remediation:** specific and actionable
+- **Severity:** CVSS vector and score
+
+#### Output
+
+A submission-ready report for the specified platform, with all fields populated or marked `[TO ADD]`.
+
+```
+Title: IDOR in api.target.com/invoices/{id} through integer ID Leads To Full Customer Data Exposure
+
+Description:
+An Insecure Direct Object Reference exists in the invoice retrieval endpoint...
+
+Steps to Reproduce:
+1. Log in as Account A (victim)...
+
+Proof of Concept:
+GET /invoices/9981 HTTP/1.1
+Authorization: Bearer <attacker_token>
+...
+```
+
+#### Known Limitations
+
+- Never invents evidence — missing fields are marked `[TO ADD]`
+- Do not overstate impact to chase a higher bounty — it damages credibility
+- If HttpOnly blocks cookie theft in an XSS, state what's actually achievable
+- Self-XSS with no escalation path is not reportable — the skill will flag it and suggest a chain if one exists
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="vuln-diagnose" href="/skills/vuln-diagnose">
+    Builds a deterministic, reproducible proof-of-concept for a suspected vulnerability before writing a finding
+
+    
+  </Card>
+  <Card title="cvss-scorer" href="/skills/cvss-scorer">
+    Computes an exact CVSS v3.1 base score and vector from a vulnerability description
+
+    
+  </Card>
+  <Card title="finding-writer" href="/skills/finding-writer">
+    Convert raw pentest notes into structured audit findings ready for reporting
+
+    
+  </Card>
+</CardGroup>

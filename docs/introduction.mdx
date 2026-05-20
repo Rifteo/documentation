@@ -1,48 +1,52 @@
 ---
 title: Introduction
-description: What is AuditGuard and what problem does it solve?
+description: What is AuditGuard Community and what problem does it solve?
 ---
 
-## What is AuditGuard?
+## What is AuditGuard Community?
 
-AuditGuard is a compliance and audit automation tool that helps teams streamline, enforce, and document their internal audit workflows. Instead of manual checklists and scattered spreadsheets, AuditGuard brings structure, repeatability, and visibility to the entire compliance process.
+**AuditGuard Community** is the open community hub built around AuditGuard — a place where security professionals contribute, share, and maintain skills, scripts, and compliance workflows.
 
-## Why AuditGuard?
+While **AuditGuard** is the core engine that runs skills and produces structured audit outputs, **AuditGuard Community** is where those skills live, grow, and get peer-reviewed. Anyone can contribute a skill, report an issue, or propose improvements. The goal is a shared, high-quality library that covers every phase of a security engagement — from scoping and recon through exploitation, scoring, and reporting.
 
-- **Automated**  Run audit checks on demand or on a schedule, eliminating repetitive manual work
-- **Consistent**  Every audit follows the same process every time, reducing human error
-- **Traceable**  Every result is logged and versioned, giving teams a reliable audit trail
-- **Extensible**  Build domain-specific skills on top of the core engine to cover any compliance framework
+## What's in the Community Hub?
 
-## Core concepts
+| Resource | Description |
+|---|---|
+| **Skills** | Reusable, self-contained methodology units for pentesting, bug bounty, compliance, and reporting |
+| **Scripts** | Automation scripts that support skill execution — scanners, payload generators, report parsers |
+| **Contexts** | Pre-configured skill bundles for specific engagement types (web app pentest, API review, cloud audit) |
+| **Workflows** | Ordered sequences of skills executed together as a single audit or engagement run |
 
-| Concept | Description |
-|---------|-------------|
-| **Skill** | A reusable, self-contained automation unit that performs a specific audit check |
-| **Workflow** | An ordered sequence of skills executed together as a single audit run |
-| **Report** | The structured output produced after a workflow run |
-| **Configuration** | The settings file that defines targets, rules, and output formats |
+## AuditGuard vs. AuditGuard Community
 
-## How it works
+| | AuditGuard | AuditGuard Community |
+|---|---|---|
+| **What it is** | The core platform and CLI | The open skill and script library |
+| **Who maintains it** | AuditGuard team | Community contributors |
+| **Where it lives** | The AuditGuard platform | This documentation hub + GitHub |
+| **What you do with it** | Run skills, generate reports | Contribute skills, find methodologies, benchmark quality |
 
-1. You define **skills**  small, focused automation scripts that check one specific compliance requirement
-2. You group skills into **workflows** tailored to your audit scope
-3. AuditGuard runs the workflow, collects results, and produces a structured **report**
-4. Reports are versioned and stored for traceability and review
+## How Skills Work
+
+1. A **skill** is a self-contained methodology — it defines what to test, how to test it, and how to report the result
+2. Skills are installed via the CLI: `auditguard-skills add <skill-name>`
+3. Skills are run inside an AuditGuard engagement context, producing structured findings
+4. Community skills are peer-reviewed and benchmarked before being listed here
 
 ## Next steps
 
 <CardGroup cols={2}>
-  <Card title="Quickstart" icon="rocket" href="/quickstart">
-    Set up AuditGuard and run your first audit in minutes
+  <Card title="Quickstart" icon="rocket" href="/docs/quickstart">
+    Set up AuditGuard and run your first skill in minutes
   </Card>
   <Card title="Skills" icon="puzzle-piece" href="/skills/overview">
-    Learn what skills are and how to contribute one
+    Browse the full skill library
   </Card>
   <Card title="Commands" icon="terminal" href="/usage/commands">
     Full reference for all CLI commands and flags
   </Card>
-  <Card title="Contributing" icon="users" href="/contributing">
-    Style guide and contribution process
+  <Card title="Contributing" icon="users" href="/docs/contributing">
+    Style guide and contribution process for new skills
   </Card>
 </CardGroup>

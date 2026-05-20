@@ -1,0 +1,115 @@
+---
+title: Attack Surface Mapper
+description: Maps every entry point, component, and trust boundary of a target before testing begins — prevents missed coverage and prioritizes the highest-value attack paths.
+---
+
+<Info>
+  **Category:** Pentest & security testing
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add attack-surface
+```
+
+---
+
+## Summary
+
+Produce a structured attack surface map before any testing begins — untested components are unfound vulnerabilities.
+
+- Phase 1 enumerates every entry point: web pages, APIs, auth flows, network services, cloud resources, third-party integrations, and client-side surfaces
+- Phase 2 identifies trust boundaries where privilege levels or network zones transition
+- Phase 3 fingerprints the tech stack and version for each component, feeding directly into `check-exploit`
+- Phase 4 ranks attack paths by value and produces a **Recommended Testing Order** so effort goes to the highest-impact targets first
+
+---
+
+## SKILL.md
+
+### Attack Surface Mapper
+
+Before testing individual vulnerabilities, map the full attack surface. Untested components are unfound vulnerabilities. This skill produces a structured map that drives testing coverage.
+
+#### When to Use This Skill
+
+Use this skill when the user:
+
+- Provides a target and wants to know where to start
+- Says "map the attack surface", "what should I test", "where do I begin"
+- Is starting any engagement after `scope-grill` is complete
+
+#### What Does It Check?
+
+**Entry points enumerated:**
+- **Web** — domains, subdomains, ports 80/443, login pages, API endpoints, file upload, search, export
+- **APIs** — REST, GraphQL, SOAP, WebSocket, mobile API backends
+- **Auth flows** — login, registration, password reset, OAuth/SSO, MFA bypass paths
+- **Network** — open ports, admin interfaces (SSH, RDP, Telnet), VPNs, exposed management panels
+- **Cloud** — S3 buckets, blob storage, exposed functions/lambdas, public AMIs, metadata endpoints
+- **Third-party integrations** — webhooks, OAuth providers, embedded iframes, CDN-served content
+- **Client-side** — JavaScript source, local storage, service workers, postMessage handlers
+
+**Trust boundaries mapped:**
+- Unauthenticated → authenticated
+- User role → admin role
+- External network → internal network
+- Client-controlled input → server-side processing
+
+#### How It Works
+
+**Phase 1: Enumerate Entry Points**
+
+Systematically identify every place an attacker could interact with the target across all surfaces listed above.
+
+**Phase 2: Identify Trust Boundaries**
+
+Mark where the system transitions between trust levels — each boundary is a potential bypass target.
+
+**Phase 3: Tech Stack Fingerprint**
+
+For each component, note the language/framework, version (if visible), authentication mechanism, and known CVEs. Cross-reference with `check-exploit` for every identified version.
+
+**Phase 4: Prioritize**
+
+Rank attack paths by attacker value. Produce a **Recommended Testing Order** — highest-value targets first.
+
+#### Output
+
+A **Surface Map** table:
+
+| Component | Type | Auth Required | Tech Stack | Priority | Notes |
+|---|---|---|---|---|---|
+| `/api/v2/users` | REST API | Bearer token | Node.js/Express | High | Returns PII |
+| `admin.target.com` | Web app | Basic auth | Apache/PHP | Critical | Exposed to internet |
+
+Followed by a **Recommended Testing Order** — an ordered list of highest-value targets.
+
+#### Known Limitations
+
+- Do not start testing until Phase 1 is complete — partial maps lead to missed coverage
+- If the scope is large, timebox Phase 1 and note what was not mapped
+- Tech stack fingerprinting relies on visible version indicators; hidden versions require deeper recon
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="scope-grill" href="/skills/scope-grill">
+    Interviews the user about a pentest engagement before any testing begins — captures target, scope, and rules of engagement
+
+    
+  </Card>
+  <Card title="check-exploit" href="/skills/check-exploit">
+    Check a software version or CVE for known public exploits and assess exploitability
+
+    
+  </Card>
+  <Card title="js-analyzer" href="/skills/js-analyzer">
+    Full JavaScript analysis methodology — secret extraction, endpoint mapping, DOM XSS, prototype pollution, and more
+
+    
+  </Card>
+</CardGroup>

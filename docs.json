@@ -61,27 +61,107 @@
             "group": "Skills",
             "pages": [
               "skills/overview",
-              "skills/find-skills",
-              "skills/compliance-gap-analyzer",
-              "skills/control-lookup",
-              "skills/finding-writer",
-              "skills/idor-hunter",
-              "skills/jwt-cracker",
-              "skills/risk-assessor",
-              "skills/skill-benchmark",
-              "skills/check-exploit",
-              "skills/nuclei-template-writer",
-              "skills/remediation-planner",
-              "skills/ssti-hunter",
-              "skills/xss-hunter"
+              {
+                "group": "Planning",
+                "pages": [
+                  {
+                    "group": "Reconnaissance",
+                    "pages": [
+                      "skills/scope-grill",
+                      "skills/attack-surface"
+                    ]
+                  },
+                  "skills/engagement-handoff"
+                ]
+              },
+              {
+                "group": "Discovery",
+                "pages": [
+                  "skills/find-skills",
+                  "skills/js-analyzer",
+                  "skills/check-exploit"
+                ]
+              },
+              {
+                "group": "Attack Skills",
+                "pages": [
+                  {
+                    "group": "Injection",
+                    "pages": [
+                      "skills/ssrf-hunter",
+                      "skills/xxe-phantom",
+                      "skills/ssti-hunter"
+                    ]
+                  },
+                  {
+                    "group": "Client-Side",
+                    "pages": [
+                      "skills/xss-hunter",
+                      "skills/clickjacking-hunter",
+                      "skills/redirect-forge",
+                      "skills/hpp-hunter"
+                    ]
+                  },
+                  {
+                    "group": "Auth & Access",
+                    "pages": [
+                      "skills/idor-hunter",
+                      "skills/jwt-cracker"
+                    ]
+                  },
+                  "skills/nuclei-template-writer"
+                ]
+              },
+              {
+                "group": "Compliance & Audit",
+                "pages": [
+                  "skills/compliance-gap-analyzer",
+                  "skills/control-lookup"
+                ]
+              },
+              {
+                "group": "Scoring & Reporting",
+                "pages": [
+                  {
+                    "group": "Scoring",
+                    "pages": [
+                      "skills/vuln-diagnose",
+                      "skills/cvss-scorer",
+                      "skills/risk-assessor"
+                    ]
+                  },
+                  {
+                    "group": "Reporting",
+                    "pages": [
+                      "skills/finding-writer",
+                      "skills/bugbounty-reporter",
+                      "skills/pentest-report",
+                      "skills/remediation-planner"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Utilities",
+                "pages": [
+                  "skills/caveman",
+                  "skills/ctf-writeup",
+                  "skills/skill-benchmark"
+                ]
+              }
             ]
           },
           {
             "group": "Contexts",
             "pages": [
               "contexts/overview",
-              "contexts/web-app-pentest",
-              "contexts/api-security-review",
+              {
+                "group": "Web & API",
+                "pages": [
+                  "contexts/web-app-pentest",
+                  "contexts/api-security-review"
+                ]
+              },
               "contexts/mobile-pentest",
               "contexts/cloud-audit"
             ]
@@ -116,6 +196,9 @@
     "socials": {
       "github": "https://github.com/AuditGuard-Community"
     }
+  },
+  "contextual": {
+    "options": ["copy", "chatgpt", "claude"]
   },
   "search": {
     "prompt": "Search or ask AuditGuard AI..."
