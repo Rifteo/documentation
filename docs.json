@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "name": "AuditGuard",
   "description": "The open community hub for AuditGuard skills, scripts, and compliance workflows.",
-  "theme": "linden",
+  "theme": "aspen",
   "colors": {
     "primary": "#EEC12A",
     "light": "#EEC12A",
@@ -10,12 +10,23 @@
   },
   "logo": {
     "light": "/logos/black.png",
-    "dark": "/logos/white.png"
+    "dark": "/logos/white.png",
+    "href": "/"
   },
   "favicon": "/logos/favicon.png",
   "appearance": {
     "default": "dark",
     "strict": false
+  },
+  "fonts": {
+    "heading": {
+      "family": "Space Mono",
+      "weight": 700
+    },
+    "body": {
+      "family": "Space Mono",
+      "weight": 400
+    }
   },
   "icons": {
     "library": "fontawesome"
@@ -27,6 +38,9 @@
     "eyebrows": "breadcrumbs",
     "codeblocks": "system"
   },
+  "thumbnails": {
+    "appearance": "dark"
+  },
   "navbar": {
     "links": [
       {
@@ -34,7 +48,7 @@
         "href": "mailto:support@auditguard.fr"
       },
       {
-        "label": "github",
+        "label": "GitHub",
         "href": "https://github.com/AuditGuard-Community",
         "icon": "github"
       }
@@ -42,151 +56,121 @@
   },
   "banner": {
     "content": "AuditGuard Community Hub is now live — [explore skills →](/skills/overview)",
-    "dismissible": true,
-    "type": "info"
+    "dismissible": true
   },
   "navigation": {
     "tabs": [
       {
-        "tab": "Home",
+        "tab": "Getting Started",
         "groups": [
           {
-            "group": "Getting Started",
+            "group": "Overview",
+            "pages": ["docs/introduction", "docs/quickstart"]
+          },
+          {
+            "group": "Community",
+            "pages": ["docs/contributing", "docs/style-guide"]
+          }
+        ]
+      },
+      {
+        "tab": "Skills",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": ["skills/overview"]
+          },
+          {
+            "group": "Planning",
             "pages": [
-              "docs/introduction",
-              "docs/quickstart"
+              {
+                "group": "Reconnaissance",
+                "pages": ["skills/scope-grill", "skills/attack-surface"]
+              },
+              "skills/engagement-handoff"
             ]
           },
           {
-            "group": "Skills",
+            "group": "Discovery",
+            "pages": ["skills/find-skills", "skills/js-analyzer", "skills/check-exploit"]
+          },
+          {
+            "group": "Attack Skills",
             "pages": [
-              "skills/overview",
               {
-                "group": "Planning",
-                "pages": [
-                  {
-                    "group": "Reconnaissance",
-                    "pages": [
-                      "skills/scope-grill",
-                      "skills/attack-surface"
-                    ]
-                  },
-                  "skills/engagement-handoff"
-                ]
+                "group": "Injection",
+                "pages": ["skills/ssrf-hunter", "skills/xxe-phantom", "skills/ssti-hunter"]
               },
               {
-                "group": "Discovery",
-                "pages": [
-                  "skills/find-skills",
-                  "skills/js-analyzer",
-                  "skills/check-exploit"
-                ]
+                "group": "Client-Side",
+                "pages": ["skills/xss-hunter", "skills/clickjacking-hunter", "skills/redirect-forge", "skills/hpp-hunter"]
               },
               {
-                "group": "Attack Skills",
-                "pages": [
-                  {
-                    "group": "Injection",
-                    "pages": [
-                      "skills/ssrf-hunter",
-                      "skills/xxe-phantom",
-                      "skills/ssti-hunter"
-                    ]
-                  },
-                  {
-                    "group": "Client-Side",
-                    "pages": [
-                      "skills/xss-hunter",
-                      "skills/clickjacking-hunter",
-                      "skills/redirect-forge",
-                      "skills/hpp-hunter"
-                    ]
-                  },
-                  {
-                    "group": "Auth & Access",
-                    "pages": [
-                      "skills/idor-hunter",
-                      "skills/jwt-cracker"
-                    ]
-                  },
-                  "skills/nuclei-template-writer"
-                ]
+                "group": "Auth & Access",
+                "pages": ["skills/idor-hunter", "skills/jwt-cracker"]
+              },
+              "skills/nuclei-template-writer"
+            ]
+          },
+          {
+            "group": "Compliance & Audit",
+            "pages": ["skills/compliance-gap-analyzer", "skills/control-lookup"]
+          },
+          {
+            "group": "Scoring & Reporting",
+            "pages": [
+              {
+                "group": "Scoring",
+                "pages": ["skills/vuln-diagnose", "skills/cvss-scorer", "skills/risk-assessor"]
               },
               {
-                "group": "Compliance & Audit",
-                "pages": [
-                  "skills/compliance-gap-analyzer",
-                  "skills/control-lookup"
-                ]
-              },
-              {
-                "group": "Scoring & Reporting",
-                "pages": [
-                  {
-                    "group": "Scoring",
-                    "pages": [
-                      "skills/vuln-diagnose",
-                      "skills/cvss-scorer",
-                      "skills/risk-assessor"
-                    ]
-                  },
-                  {
-                    "group": "Reporting",
-                    "pages": [
-                      "skills/finding-writer",
-                      "skills/bugbounty-reporter",
-                      "skills/pentest-report",
-                      "skills/remediation-planner"
-                    ]
-                  }
-                ]
-              },
-              {
-                "group": "Utilities",
-                "pages": [
-                  "skills/caveman",
-                  "skills/ctf-writeup",
-                  "skills/skill-benchmark"
-                ]
+                "group": "Reporting",
+                "pages": ["skills/finding-writer", "skills/bugbounty-reporter", "skills/pentest-report", "skills/remediation-planner"]
               }
             ]
           },
           {
-            "group": "Contexts",
-            "pages": [
-              "contexts/overview",
-              {
-                "group": "Web & API",
-                "pages": [
-                  "contexts/web-app-pentest",
-                  "contexts/api-security-review"
-                ]
-              },
-              "contexts/mobile-pentest",
-              "contexts/cloud-audit"
-            ]
+            "group": "Utilities",
+            "pages": ["skills/caveman", "skills/ctf-writeup", "skills/skill-benchmark"]
+          }
+        ]
+      },
+      {
+        "tab": "Contexts",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": ["contexts/overview"]
           },
           {
-            "group": "Scripts",
-            "pages": [
-              "scripts/overview",
-              "scripts/script-template"
-            ]
+            "group": "Web & API",
+            "pages": ["contexts/web-app-pentest", "contexts/api-security-review"]
           },
           {
-            "group": "Reference",
-            "pages": [
-              "usage/commands",
-              "usage/configuration",
-              "usage/examples"
-            ]
+            "group": "Mobile",
+            "pages": ["contexts/mobile-pentest"]
           },
           {
-            "group": "Community",
-            "pages": [
-              "docs/contributing",
-              "docs/style-guide"
-            ]
+            "group": "Cloud",
+            "pages": ["contexts/cloud-audit"]
+          }
+        ]
+      },
+      {
+        "tab": "Scripts",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": ["scripts/overview", "scripts/script-template"]
+          }
+        ]
+      },
+      {
+        "tab": "Reference",
+        "groups": [
+          {
+            "group": "Usage",
+            "pages": ["usage/commands", "usage/configuration", "usage/examples"]
           }
         ]
       }
@@ -195,10 +179,39 @@
   "footer": {
     "socials": {
       "github": "https://github.com/AuditGuard-Community"
-    }
+    },
+    "links": [
+      {
+        "header": "Documentation",
+        "items": [
+          { "label": "Introduction", "href": "/docs/introduction" },
+          { "label": "Quickstart", "href": "/docs/quickstart" },
+          { "label": "Skills Overview", "href": "/skills/overview" }
+        ]
+      },
+      {
+        "header": "Resources",
+        "items": [
+          { "label": "Scripts", "href": "/scripts/overview" },
+          { "label": "Contexts", "href": "/contexts/overview" },
+          { "label": "Examples", "href": "/usage/examples" }
+        ]
+      },
+      {
+        "header": "Community",
+        "items": [
+          { "label": "Contributing", "href": "/docs/contributing" },
+          { "label": "Style Guide", "href": "/docs/style-guide" },
+          { "label": "Support", "href": "mailto:support@auditguard.fr" }
+        ]
+      }
+    ]
   },
   "contextual": {
-    "options": ["copy", "chatgpt", "claude"]
+    "options": ["copy", "view", "chatgpt", "claude", "assistant"]
+  },
+  "interaction": {
+    "drilldown": false
   },
   "search": {
     "prompt": "Search or ask AuditGuard AI..."
@@ -212,7 +225,9 @@
   },
   "errors": {
     "404": {
-      "redirect": true
+      "redirect": true,
+      "title": "Page Not Found",
+      "description": "The page you're looking for doesn't exist. Try searching or browse the [skills library](/skills/overview)."
     }
   },
   "redirects": [],
