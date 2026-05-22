@@ -9,11 +9,11 @@
     "dark": "#EEC12A"
   },
   "logo": {
-    "light": "/logos/black.png",
-    "dark": "/logos/white.png",
+    "light": "/images/black.png",
+    "dark": "/images/white.png",
     "href": "/"
   },
-  "favicon": "/logos/favicon.png",
+  "favicon": "/images/favicon.png",
   "appearance": {
     "default": "dark",
     "strict": false
