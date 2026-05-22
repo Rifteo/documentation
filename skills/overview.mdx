@@ -7,12 +7,12 @@ description: What AuditGuard skills are, how they work, and how to create one.
 
 A **skill** is a self-contained instruction file that teaches an AI agent a specific security or compliance methodology. Each skill:
 
-- Defines precise **trigger conditions**  when the agent should activate it
+- Defines precise **trigger conditions**: when the agent should activate it
 - Provides a **step-by-step methodology** the agent follows
 - Specifies the **exact output format** to produce
 - Includes **rules and guardrails** to prevent incorrect behavior
 
-Skills are not code modules  they are structured prompts that encode expert knowledge. The agent reads the `SKILL.md`, understands when to apply it, and executes the methodology against whatever the user provides.
+Skills are not code modules, they are structured prompts that encode expert knowledge. The agent reads the `SKILL.md`, understands when to apply it, and executes the methodology against whatever the user provides.
 
 ## Skill anatomy
 
@@ -21,10 +21,10 @@ Every skill lives in its own directory:
 ```
 skills/
 └── my-skill/
-    ├── SKILL.md          # Required  agent instructions
-    ├── references/       # Optional  context files the skill reads at runtime
+    ├── SKILL.md          # Required, agent instructions
+    ├── references/       # Optional, context files the skill reads at runtime
     │   └── guide.md
-    └── scripts/          # Optional  Python or bash scripts the skill runs
+    └── scripts/          # Optional, Python or bash scripts the skill runs
         └── my-tool.py
 ```
 
@@ -51,7 +51,7 @@ metadata:
 ```markdown
 # Skill Title
 
-Brief intro  what this skill does and why it matters.
+Brief intro: what this skill does and why it matters.
 
 ## When to Use
 
@@ -60,11 +60,11 @@ Activate this skill when the user:
 - provides Y and wants it structured as Z
 - says "check X" or "find X"
 
-## Step 1  Title
+## Step 1: Title
 
 What the agent does in this step.
 
-## Step 2  Title
+## Step 2: Title
 
 ...
 
@@ -80,17 +80,17 @@ Produce exactly this structure. Do not omit any section.
 
 ## Rules
 
-- Rule 1  hard constraint
-- Rule 2  behavior guardrail
+- Rule 1: hard constraint
+- Rule 2: behavior guardrail
 ```
 
 ### `references/`
 
-Static context documents the skill reads during execution  severity guides, CWE/OWASP maps, known-secrets wordlists, ID pattern references, rubrics, and agent profiles. Checked into the skill directory so they are always available offline.
+Static context documents the skill reads during execution: severity guides, CWE/OWASP maps, known-secrets wordlists, ID pattern references, rubrics, and agent profiles. Checked into the skill directory so they are always available offline.
 
 ### `scripts/`
 
-Python or shell scripts the skill invokes directly. Used for deterministic tasks that should not be left to the agent's judgment  CVSS scoring, CWE lookup, report generation.
+Python or shell scripts the skill invokes directly. Used for deterministic tasks that should not be left to the agent's judgment: CVSS scoring, CWE lookup, report generation.
 
 ## Available skills
 
@@ -100,14 +100,14 @@ Python or shell scripts the skill invokes directly. Used for deterministic tasks
 | [Compliance Gap Analyzer](/skills/compliance-gap-analyzer) | Aggregate findings into a gap report across ISO 27001, NIST CSF, PCI-DSS, and OWASP | Compliance |
 | [Control Lookup](/skills/control-lookup) | Look up any control ID with cross-framework mappings and testing hints | Compliance |
 | [Finding Writer](/skills/finding-writer) | Convert raw pentest notes into a structured, report-ready finding | Pentest |
-| [IDOR Hunter](/skills/idor-hunter) | Systematic IDOR/BOLA detection  recon, testing, bypass techniques, and report structure | Pentest |
-| [JWT Cracker](/skills/jwt-cracker) | Full JWT attack methodology  alg:none, algorithm confusion, weak secrets, header injection | Pentest |
-| [XSS Hunter](/skills/xss-hunter) | Complete XSS methodology — reflected, stored, DOM, blind, CSP bypass, WAF evasion | Pentest |
+| [IDOR Hunter](/skills/idor-hunter) | Systematic IDOR/BOLA detection: recon, testing, bypass techniques, and report structure | Pentest |
+| [JWT Cracker](/skills/jwt-cracker) | Full JWT attack methodology: alg:none, algorithm confusion, weak secrets, header injection | Pentest |
+| [XSS Hunter](/skills/xss-hunter) | Complete XSS methodology, reflected, stored, DOM, blind, CSP bypass, WAF evasion | Pentest |
 | [SSTI Hunter](/skills/ssti-hunter) | SSTI detection and exploitation across 13 template engines with RCE payloads per engine | Pentest |
 | [Check Exploit](/skills/check-exploit) | Search known exploit databases for a service, version, or CVE across 9 sources | Pentest |
 | [Nuclei Template Writer](/skills/nuclei-template-writer) | Convert a vulnerability or HTTP request into a ready-to-run Nuclei YAML template | Automation |
 | [Remediation Planner](/skills/remediation-planner) | Convert a security finding into a prioritized remediation plan with effort estimates | Reporting |
-| [Risk Assessor](/skills/risk-assessor) | Score a vulnerability using likelihood × impact with SLA-bound treatment recommendations | Risk |
+| [Risk Assessor](/skills/risk-assessor) | Score a vulnerability using likelihood x impact with SLA-bound treatment recommendations | Risk |
 | [Skill Benchmark](/skills/skill-benchmark) | Score any SKILL.md across 5 quality dimensions and run a 54-agent compatibility check | Skill dev |
 
 ## Installing a skill
@@ -130,22 +130,22 @@ auditguard-skills available
 
 <Steps>
   <Step title="Define">
-    Identify the methodology to encode  what triggers it, what steps it follows, and what output it produces
+    Identify the methodology to encode: what triggers it, what steps it follows, and what output it produces
   </Step>
   <Step title="Write SKILL.md">
-    Author the `SKILL.md` following the [skill template](/skills/skill-template)  frontmatter, trigger conditions, step-by-step instructions, output format, and rules
+    Author the `SKILL.md` following the [Style Guide](/docs/style-guide): frontmatter, trigger conditions, step-by-step instructions, output format, and rules
   </Step>
   <Step title="Add references and scripts">
     Bundle any reference documents or helper scripts the skill needs into `references/` and `scripts/`
   </Step>
   <Step title="Benchmark">
-    Run `skill-benchmark` to score quality and check compatibility across agents  fix any issues before publishing
+    Run `skill-benchmark` to score quality and check compatibility across agents, fix any issues before publishing
   </Step>
   <Step title="Document">
-    Write the `.mdx` documentation page using the [skill template](/skills/skill-template)
+    Write the `.mdx` documentation page following the [Style Guide](/docs/style-guide)
   </Step>
   <Step title="Publish">
-    Open a pull request  the skill appears in the community hub after review and merge
+    Open a pull request, the skill appears in the community hub after review and merge
   </Step>
 </Steps>
 
@@ -160,4 +160,4 @@ auditguard-skills available
 
 ## Next step
 
-Ready to write a skill? Start with the [skill template](/skills/skill-template).
+Ready to write a skill? Follow the [Style Guide](/docs/style-guide) and the [contribution process](/docs/contributing).

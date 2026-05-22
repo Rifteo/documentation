@@ -5,7 +5,7 @@ description: How to contribute a new skill or improve existing documentation.
 
 ## Welcome
 
-AuditGuard is a community-driven project. Contributions  new skills, bug fixes, documentation improvements  are all welcome. This page explains the process.
+AuditGuard is a community-driven project. Contributions (new skills, bug fixes, documentation improvements) are all welcome. This page explains the process.
 
 ## What you can contribute
 
@@ -30,7 +30,7 @@ AuditGuard is a community-driven project. Contributions  new skills, bug fixes, 
 
   <Step title="Fork and branch">
     ```bash
-    git clone https://github.com/your-org/auditguard.git
+    git clone https://github.com/AuditGuard-Community/auditguard.git
     cd auditguard
     git checkout -b skill/your-skill-name
     ```
@@ -48,7 +48,7 @@ AuditGuard is a community-driven project. Contributions  new skills, bug fixes, 
   </Step>
 
   <Step title="Write documentation">
-    Create `skills/your-skill-name.mdx` using the [skill template](/skills/skill-template). No skill ships without documentation.
+    Create `skills/your-skill-name.mdx` following the [Style Guide](/docs/style-guide). No skill ships without documentation.
   </Step>
 
   <Step title="Add to docs.json">
@@ -83,7 +83,7 @@ Before submitting, verify:
 
 - [ ] `skill.yml` has all required fields (`name`, `version`, `description`, `author`, `inputs`)
 - [ ] `main.py` implements `run(inputs) -> dict` and returns a valid status
-- [ ] Documentation follows the [skill template](/skills/skill-template) exactly
+- [ ] Documentation follows the [Style Guide](/docs/style-guide) exactly
 - [ ] No section in the documentation is left empty
 - [ ] Examples use realistic, not trivial, inputs
 - [ ] Known limitations are documented honestly

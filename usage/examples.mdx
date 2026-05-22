@@ -5,7 +5,7 @@ description: Common AuditGuard usage patterns and real-world scenarios.
 
 ## Run a single skill
 
-The simplest use case  run one skill against a local project:
+The simplest use case: run one skill against a local project:
 
 ```bash
 auditguard run --skill check-access-control --target ./my-project
@@ -56,7 +56,7 @@ In strict mode, any `warning` result is treated as a failure. Useful for CI pipe
 auditguard run --strict
 ```
 
-If any skill returns `warning` or `fail`, the exit code will be non-zero  allowing your CI system to block on it.
+If any skill returns `warning` or `fail`, the exit code will be non-zero, allowing your CI system to block on it.
 
 ---
 
@@ -85,7 +85,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run audit
-        run: python auditguard.py run --strict
+        run: auditguard run --strict
 ```
 
 ---

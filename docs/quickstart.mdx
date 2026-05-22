@@ -16,7 +16,7 @@ Before you begin, make sure you have the following installed:
 <Steps>
   <Step title="Clone the repository">
     ```bash
-    git clone https://github.com/your-org/auditguard.git
+    git clone https://github.com/AuditGuard-Community/auditguard.git
     cd auditguard
     ```
   </Step>
@@ -29,7 +29,7 @@ Before you begin, make sure you have the following installed:
 
   <Step title="Verify the installation">
     ```bash
-    python auditguard.py --version
+    auditguard --version
     ```
 
     Expected output:
@@ -40,7 +40,7 @@ Before you begin, make sure you have the following installed:
 
   <Step title="Run your first audit">
     ```bash
-    python auditguard.py run --target ./my-project
+    auditguard run --target ./my-project
     ```
 
     AuditGuard will scan the target directory, execute the default workflow, and produce a report in `./audit-reports/`.

@@ -19,7 +19,7 @@ auditguard-skills add skill-benchmark
 
 Read any `SKILL.md`, score it across five weighted quality dimensions (100 pts total), run a static compatibility analysis against 50+ AI agent profiles, and get a ranked fix list before publishing.
 
-- Scores Trigger quality (25 pts), Instruction clarity (25 pts), Agent-agnostic design (20 pts), Self-containment (15 pts), and Output definition (15 pts)  a score of 70+ means publishable; below 50 means silent failures on most agents
+- Scores Trigger quality (25 pts), Instruction clarity (25 pts), Agent-agnostic design (20 pts), Self-containment (15 pts), and Output definition (15 pts). A score of 70+ means publishable; below 50 means silent failures on most agents
 - Maps the skill to 7 agent profile types (covering 54 named agents) and assigns Compatible / Partial / Likely broken for each
 - Returns a ranked fix list with one specific, actionable improvement per dimension
 - Offers to auto-fix the top issue and re-score immediately, or export the report as `skill-benchmark-report.md`
@@ -44,7 +44,7 @@ Use this skill when the user:
 
 #### What Does It Check?
 
-The skill performs purely static analysis  no agents are installed or called. It reads the target SKILL.md, applies the scoring rubric from `references/rubric.md`, checks the skill against agent compatibility signals from `references/agent-profiles.md`, and produces the report using `references/report-template.md`.
+The skill performs purely static analysis, no agents are installed or called. It reads the target SKILL.md, applies the scoring rubric from `references/rubric.md`, checks the skill against agent compatibility signals from `references/agent-profiles.md`, and produces the report using `references/report-template.md`.
 
 **In scope:**
 - Any SKILL.md in the local project or at a specified path
@@ -86,7 +86,7 @@ After presenting the report, offer three options: auto-fix the top-ranked issue 
 
 | Score | Meaning |
 |-------|---------|
-| 70–100 | Publishable  skill is ready for the community repo |
+| 70–100 | Publishable, skill is ready for the community repo |
 | 50–69 | Needs work  some agents will degrade or skip steps |
 | < 50 | Not publishable  will silently fail on most agents |
 
@@ -109,14 +109,14 @@ Compatibility:
   Likely broken (4 agents): ...
 
 Top fixes (ranked):
-  1. [Output definition] Add an explicit output format section  ...
+  1. [Output definition] Add an explicit output format section: ...
   2. [Self-containment] Reference is missing: scripts/cvss-scorer.py  ...
   3. [Agent-agnostic] Remove IDE-specific path assumption  ...
 ```
 
 #### Known Limitations
 
-- Scoring is strict  70 is the publishable threshold, not 60 or 65
+- Scoring is strict: 70 is the publishable threshold, not 60 or 65
 - Compatibility results reflect static signals; a skill rated Partial may still work on some agents depending on their current version
 - The auto-fix option applies only the single top-ranked fix per run  re-run to address the next issue
 
