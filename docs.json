@@ -87,7 +87,8 @@
                 "group": "Reconnaissance",
                 "pages": ["skills/scope-grill", "skills/attack-surface"]
               },
-              "skills/engagement-handoff"
+              "skills/engagement-handoff",
+              "skills/hexstrike-forge"
             ]
           },
           {

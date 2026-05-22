@@ -1,0 +1,146 @@
+---
+title: HexStrike Forge
+description: A 5-phase structured pentest methodology for the hexstrike-ai MCP server, covering passive recon through finding delivery with triage gates, parallel execution, and tool failure recovery.
+---
+
+<Info>
+  **Category:** Pentest & security testing
+  **Requires:** hexstrike-ai MCP server v6.0.0+
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add hexstrike-forge
+```
+
+---
+
+## Summary
+
+Turn a four-word prompt into a complete, triage-clean, report-ready penetration test. HexStrike Forge is the methodology layer on top of the hexstrike-ai MCP server: it tells the agent which tools to run, in what order, in parallel, what to do when tools fail, and how to triage raw flags into confirmed findings.
+
+- Runs 5 structured phases from passive recon to finding delivery, with a hard triage gate between each phase
+- Executes tools in parallel batches to maximize coverage without sequential bottlenecks
+- Recovers from tool failures automatically by logging the gap and substituting an equivalent tool
+- Filters raw scanner output through triage rules to discard noise before writing any finding
+- Produces findings with CVSS score, evidence block, and remediation, ready for `pentest-report` or `remediation-planner`
+
+---
+
+## How It Works
+
+### Phase 1: Passive Recon
+
+Runs in parallel: `subfinder`, `dnsenum`, `waybackurls`, `wafw00f`.
+
+Captures: subdomain inventory, DNS records, historical endpoints, WAF presence. WAF detection is a critical signal that shapes Phase 2 tool selection.
+
+If a tool binary is missing, it is logged as a tool gap and skipped without stalling the phase.
+
+### Phase 2: Active Recon
+
+Runs in parallel: `nmap -sV -sC`, `gobuster dir`, `dirsearch`, `nikto`.
+
+Captures: open ports and service versions, directory and file enumeration, server misconfigurations, missing security headers.
+
+**Triage gate:** every flag from Phase 2 is classified as INVESTIGATE or DISCARD before Phase 3 begins. Only INVESTIGATE flags carry forward.
+
+| Decision | Criteria |
+|----------|----------|
+| INVESTIGATE | Unknown directory, EOL software, potential source exposure |
+| DISCARD | Missing header with no exploitable context, informational only |
+
+### Phase 3: Vulnerability Scan
+
+Runs targeted `nuclei` scans using tags derived from Phase 2 findings (apache, cve, exposure, ssh, etc.), plus manual verification of each INVESTIGATE flag via `curl` or `nmap` scripts.
+
+**Triage gate:** each flag is either CONFIRM (becomes a finding) or DISCARD (documented as cleared). False positive discard target: below 20% confirm rate is acceptable.
+
+### Phase 4: Forge
+
+Writes a structured finding for each confirmed flag:
+
+```
+[F-XX] Title
+Severity: Critical / High / Medium / Low
+CVSS: score (vector)
+Host: target:port
+
+Description: what the vulnerability is and why it matters.
+
+Evidence:
+[tool output verbatim]
+
+Remediation: specific fix action.
+```
+
+No finding is written without evidence. No finding is written without a remediation.
+
+### Phase 5: Delivery
+
+After findings are forged, the skill presents a delivery menu:
+
+```
+→ pentest-report        full formatted client report
+→ remediation-planner   prioritized fix guidance per finding
+→ engagement-handoff    save state for follow-up session
+```
+
+---
+
+## Benchmark Results
+
+Tested on `scanme.nmap.org` (authorized). Same prompt. Same model. Same MCP server. Skill on vs skill off.
+
+| Metric | Without Skill | With Skill |
+|--------|--------------|------------|
+| Phases executed | 1 (ad hoc) | 5 (structured) |
+| Tool calls made | 7 | 18 |
+| Parallel execution | No | Yes (3 batches) |
+| Tool failures recovered | 0 / 2 | 3 / 3 |
+| Raw flags produced | 2 | 8 |
+| Confirmed findings | 0 structured | 2 with CVSS + remediation |
+| False positives reported | unmeasured | 0 (6 discarded) |
+| Output | Raw JSON blobs | Report-ready findings |
+
+Time increases with the skill (+144%) because it runs more tools across more phases with triage between each. This is intentional: it trades speed for completeness and accuracy.
+
+---
+
+## Known Tool Bugs
+
+Surfaced during benchmarking. The skill works around these automatically.
+
+| Tool | Bug | Workaround |
+|------|-----|------------|
+| `httpx_probe` | Passes `-l` flag for URL input instead of direct argument | Logged and skipped |
+| `dirsearch_scan` | `pkg_resources` module missing | Substituted with `gobuster` |
+| `nmap_advanced_scan` | Runs broadcast pre-scan scripts, scans local subnet instead of target | Avoided in favor of targeted `nmap -sV -sC` |
+| `waybackurls_discovery` | Binary not installed on MCP server | Logged as tool gap, skipped |
+| `bugbounty_reconnaissance_workflow` | Returns a plan JSON, does not execute tools | Skill handles execution manually |
+
+---
+
+## Known Limitations
+
+- Requires the hexstrike-ai MCP server to be running and reachable
+- Phase timings depend on target responsiveness and tool availability
+- Static analysis only for some checks, dynamic exploitation is out of scope
+- Tool bugs listed above may be fixed in future MCP server releases
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="scope-grill" href="/skills/scope-grill">
+    Interview the user about scope, authorization, and rules of engagement before testing begins
+  </Card>
+  <Card title="finding-writer" href="/skills/finding-writer">
+    Convert raw pentest notes into structured audit findings ready for reporting
+  </Card>
+  <Card title="pentest-report" href="/skills/pentest-report">
+    Generate a complete, client-ready penetration test report from all confirmed findings
+  </Card>
+</CardGroup>
