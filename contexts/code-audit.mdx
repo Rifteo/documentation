@@ -1,0 +1,392 @@
+---
+title: Code Audit
+description: Source code audit covering quality, architecture, maintainability, and security across any language, combining manual review with static analysis tooling.
+---
+
+<Info>
+  **Category:** Audit
+</Info>
+
+**Load this context**
+
+```bash
+auditguard-context load code-audit
+```
+
+---
+
+## Summary
+
+A code audit reviews source code across four dimensions: quality, architecture, maintainability, and security. It combines manual review with static analysis tooling across the full codebase or a targeted module.
+
+- Phase 1 establishes scope, maps entry points and trust boundaries, and runs automated scanners (bandit, semgrep, gosec, gitleaks) before any manual review begins
+- Phase 1b runs STRIDE threat modeling to identify design-level vulnerabilities before reading a single line of code
+- Phases 2–8 cover secrets, authentication/authorization/business logic, injection sinks, cryptography, error handling, dependencies and supply chain, and race conditions
+- Phase 9 measures code quality metrics (cyclomatic complexity, duplication, coupling) against objective thresholds
+- Phase 10 reviews architecture for SOLID violations, layering issues, circular dependencies, and anti-patterns
+- A validation gate and false positive filter enforce evidence quality before any finding is reported
+- Phase 11 defines the full report structure including executive summary, per-finding fields, and a remediation plan
+
+---
+
+## Finding Types
+
+Every finding must be assigned exactly one of these four types:
+
+| Type | What it covers |
+|------|---------------|
+| **Code Quality** | Correctness and reliability issues at the implementation level: dead code, off-by-one errors, unchecked return values, logic errors, misused APIs |
+| **Code Architecture** | Structural and design flaws across modules or layers: circular dependencies, business logic in controllers, missing abstraction boundaries, God objects |
+| **Code Maintainability** | Issues that make code hard to understand, modify, or test: high cyclomatic complexity, magic numbers, inconsistent naming, large functions, missing error context |
+| **Code Security** | Exploitable vulnerabilities: injection sinks, hardcoded secrets, broken auth, insecure crypto, IDOR, missing authorization checks, vulnerable dependencies |
+
+---
+
+## CONTEXT.md
+
+### When to Use This Context
+
+Load this context when:
+
+- Reviewing a codebase for security vulnerabilities, design issues, or quality problems
+- Auditing a pull request or feature branch before merge
+- Assessing a third-party or open-source component
+- Performing a pre-release or compliance-driven review
+- Investigating a suspected vulnerability or systemic code problem
+
+**Key focus areas:** authentication and authorization logic, input validation, secrets in code, cryptography misuse, dependency vulnerabilities, error handling, injection sinks, insecure deserialization, race conditions, coupling, cohesion, complexity, test coverage.
+
+---
+
+### Phase 1: Scope and Setup
+
+- Identify languages, frameworks, and build system in use
+- Locate entry points: HTTP handlers, CLI argument parsers, message queue consumers, file parsers
+- Map trust boundaries: what data comes from users, external services, or environment variables
+- Clone the repo and run the build to confirm it is in a known-good state
+- Collect architecture diagrams, prior audit records, and compliance requirements if available
+- Run automated scanners first, manual review fills the gaps they miss
+
+**Reviewer discipline:**
+- Limit review sessions to 60–90 minutes — attention degrades sharply beyond that
+- Review no more than 400–500 lines per session
+- Prioritize: authentication, payment, data handling, and public-facing entry points first
+
+**Automated scanners by language:**
+
+| Language | Tool |
+|----------|------|
+| Python | `bandit`, `semgrep` |
+| JavaScript / TypeScript | `eslint-plugin-security`, `semgrep`, `njsscan` |
+| Java | `SpotBugs + FindSecBugs`, `semgrep` |
+| Go | `gosec`, `semgrep` |
+| Ruby | `brakeman` |
+| PHP | `phpcs-security-audit`, `semgrep` |
+| Any | `semgrep --config=p/security-audit` |
+| Any (quality) | `SonarQube`, `SonarCloud` |
+
+```bash
+semgrep --config=p/security-audit --config=p/secrets .
+gitleaks detect --source . --report-format json --report-path gitleaks.json
+```
+
+---
+
+### Phase 1b: Threat Modeling (STRIDE)
+
+Run before detailed code review, especially for authentication, payment, or data-handling modules.
+
+| Threat | Targets | Example |
+|--------|---------|---------|
+| Spoofing | Authentication | Attacker impersonates another user |
+| Tampering | Integrity | Attacker modifies data in transit or storage |
+| Repudiation | Logging | Action taken with no audit trail |
+| Information Disclosure | Confidentiality | Sensitive data leaked in error responses |
+| Denial of Service | Availability | Request flood exhausts DB connections |
+| Elevation of Privilege | Authorization | Low-privilege user accesses admin functions |
+
+**Steps:**
+1. Draw a data flow diagram — identify all processes, data stores, external entities, and data flows
+2. Mark trust boundaries on the DFD
+3. Apply STRIDE to each element
+4. Prioritize threats by likelihood x impact before starting code review
+5. Use identified threats as a checklist during Phases 3–8
+
+---
+
+### Phase 2: Secrets and Credentials
+
+```bash
+grep -rn "password\s*=" .
+grep -rn "api_key\s*=" .
+grep -rn "BEGIN RSA PRIVATE KEY" .
+grep -rn "AKIA[0-9A-Z]{16}" .   # AWS access keys
+grep -rn "sk-[a-zA-Z0-9]{32,}" . # OpenAI keys
+
+# Git history
+git log -p | grep -i "password\|secret\|api_key\|token" | head -100
+gitleaks detect --source . --log-opts="--all"
+```
+
+**Flag:** hardcoded credentials in any branch, secrets in committed config files, environment variable fallback values hardcoded (`os.getenv("SECRET", "hardcoded-value")`), private keys or certificates in the repo.
+
+---
+
+### Phase 3: Authentication, Authorization, and Business Logic
+
+**Authentication:**
+- Password hashing using a slow algorithm? (`bcrypt`, `argon2`, `scrypt` — not `md5`, `sha1`, `sha256`)
+- Session token generation cryptographically random? (`secrets.token_hex()`, not `Math.random()`)
+- JWT tokens validated? Check that signature is verified, `alg: none` is rejected, expiry is enforced
+- Failed login attempts rate-limited?
+
+**Authorization:**
+- Trace every privileged operation back to a server-side authorization check
+- Role checks happen before data is returned, not just before it is rendered
+- IDOR: are object IDs validated against the requesting user's ownership?
+
+```python
+# Red flag — no ownership check
+def get_document(doc_id):
+    return db.query("SELECT * FROM docs WHERE id = ?", doc_id)
+
+# Correct
+def get_document(doc_id, user_id):
+    return db.query("SELECT * FROM docs WHERE id = ? AND owner_id = ?", doc_id, user_id)
+```
+
+**Business logic (manual only — scanners cannot detect these):**
+- Multi-step workflows completable out of order?
+- Numeric limits enforced server-side (negative quantities, price overrides)?
+- Concurrent requests to the same operation idempotent?
+- Low-privilege user able to trigger high-privilege background jobs?
+
+---
+
+### Phase 4: Input Validation and Injection Sinks
+
+Trace user-controlled data from entry points to dangerous sinks.
+
+**Dangerous sinks:**
+- SQL queries — string concatenation instead of parameterized queries
+- Shell commands — `os.system()`, `subprocess(shell=True)`, `exec()`, `eval()`
+- Template rendering — unsanitized user input passed to template engines
+- File paths — user-controlled paths without sanitization (`../` traversal)
+- Deserialization — `pickle.loads()`, `yaml.load()` (not `safe_load`), Java `ObjectInputStream`
+
+```python
+# SQLi — flag
+query = "SELECT * FROM users WHERE name = '" + username + "'"
+
+# Command injection — flag
+os.system("ping " + user_input)
+
+# Unsafe deserialization — flag
+obj = pickle.loads(request.body)
+```
+
+---
+
+### Phase 5: Cryptography Review
+
+- Deprecated algorithms in use? (`MD5`, `SHA1`, `DES`, `RC4`, `ECB` mode)
+- Keys and IVs generated randomly per operation, or reused?
+- TLS enforced for all external connections? Certificate errors suppressed?
+- Random values for security using a CSPRNG?
+
+```python
+# Weak — flag
+hashlib.md5(password.encode()).hexdigest()
+
+# Insecure random — flag
+import random; token = random.randint(0, 999999)
+
+# Correct
+import secrets; token = secrets.token_hex(32)
+```
+
+---
+
+### Phase 6: Error Handling and Logging
+
+- Error responses leak stack traces, internal paths, or SQL queries to the client?
+- Exceptions caught too broadly, masking real errors silently?
+- Sensitive data (passwords, tokens, PII) written to logs?
+
+```python
+# Leaks internals — flag
+except Exception as e:
+    return {"error": str(e), "traceback": traceback.format_exc()}
+
+# Logs sensitive data — flag
+logger.info(f"User login: {username} password={password}")
+```
+
+---
+
+### Phase 7: Dependency and Supply Chain Review
+
+```bash
+pip-audit                         # Python
+npm audit --audit-level=high      # Node.js
+grype dir:.                       # Any language
+trivy fs .                        # Any language
+
+# SBOM generation
+syft dir:. -o cyclonedx-json > sbom.json
+
+# License compliance
+pip install liccheck && liccheck   # Python
+npx license-checker --summary      # Node.js
+```
+
+**Flag:** known CVEs with reachable code paths, floating version ranges (`>=1.0`), packages from non-registry sources, GPL/AGPL/SSPL licenses in commercial codebases, unlicensed dependencies.
+
+---
+
+### Phase 8: Race Conditions and State Management
+
+- Shared resources accessed without locks?
+- TOCTOU patterns: check a condition, then act with a gap between the two?
+- Financial or inventory operations protected against concurrent modification?
+
+```python
+# TOCTOU — flag
+if not os.path.exists(filename):   # check
+    open(filename, 'w').write(data) # use — race window here
+```
+
+---
+
+### Phase 9: Code Quality Metrics
+
+| Metric | Tool | Threshold |
+|--------|------|-----------|
+| Cyclomatic complexity | `radon cc`, SonarQube | Flag >10 per function; critical >20 |
+| Cognitive complexity | SonarQube | Computed automatically |
+| Code duplication | SonarQube, `jscpd` | Flag >5% duplicate blocks |
+| Test coverage | pytest-cov, nyc, jacoco | Flag critical paths <80% branch coverage |
+
+```bash
+# Python
+radon cc -s -n B .    # functions with grade B or worse
+radon mi -s .         # maintainability index
+
+# Circular dependencies
+npx madge --circular src/   # Node.js
+pydeps src/ --max-bacon=3   # Python
+```
+
+**Coupling metrics:**
+- Afferent coupling (Ca): modules that depend on this one — high Ca means high change impact
+- Efferent coupling (Ce): modules this one depends on — high Ce means fragile and hard to test
+- Instability = Ce / (Ca + Ce). Flag modules that are both unstable and heavily depended upon
+
+---
+
+### Phase 10: Architecture Review
+
+**SOLID violations:**
+
+| Principle | What to flag |
+|-----------|-------------|
+| Single Responsibility | Classes doing unrelated things |
+| Open/Closed | Adding features requires modifying existing conditionals |
+| Liskov Substitution | Subclasses that break parent contracts or require type checks |
+| Interface Segregation | Interfaces with many methods left empty by implementations |
+| Dependency Inversion | High-level modules importing concrete low-level modules directly |
+
+**Layering violations:**
+- Business logic in controllers or route handlers
+- Database queries in view/template code
+- HTTP-specific constructs leaking into the domain/service layer
+
+**Anti-patterns to flag:**
+- **God object**: a single class that knows too much or does too much
+- **Feature envy**: a method that uses another class's data more than its own
+- **Shotgun surgery**: one logical change requires editing many unrelated files
+- **Data clumps**: groups of data that always appear together but are not encapsulated
+
+---
+
+### Validation Gate
+
+Before reporting any finding, confirm:
+
+- [ ] Code path is reachable from an untrusted input source (security) or production code path (quality/arch)
+- [ ] Finding is reproducible with a minimal proof-of-concept, test case, or metric reading
+- [ ] Impact is demonstrated, not theoretical
+- [ ] Fix does not already exist in a newer branch or commit
+- [ ] Finding is within the agreed audit scope
+- [ ] For business logic findings: triggered by a realistic user action, not an impossible state
+
+---
+
+### False Positive Filter
+
+Do not report without further investigation:
+
+- Grep matches in comments, documentation, or test fixtures, not production code
+- Secrets in example files clearly marked as placeholders (`YOUR_API_KEY_HERE`)
+- `MD5` or `SHA1` used for non-security purposes (checksums, cache keys, non-auth IDs)
+- `eval()` or `exec()` called only on fully developer-controlled strings
+- Missing rate limiting on non-sensitive, non-authenticated endpoints
+- Dependency CVEs with no reachable code path in the application
+
+---
+
+### Phase 11: Reporting
+
+**Report structure:**
+
+1. **Executive Summary**: severity distribution, overall risk rating, top 3 findings in business terms, one-paragraph assessment
+2. **Findings**: full per-finding detail ordered by severity descending
+3. **Positive Findings**: controls that are working well
+4. **Statistics**: finding counts by type and severity, complexity distribution, coverage summary
+5. **Remediation Plan**: findings ordered by fix priority with estimated effort per fix
+
+**Per-finding fields:**
+
+```
+### [FINDING-ID] Title
+
+**Type:** Code Security | Code Quality | Code Architecture | Code Maintainability
+**Severity:** Critical | High | Medium | Low | Info
+**CVSS Score:** (Code Security only) score — CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+**Location:** `path/to/file.py:42`
+
+**Evidence:**
+[exact code lines or tool output that proves the finding]
+
+**Steps to Trigger:**
+1. ...
+
+**Impact:**
+...
+
+**Recommendation:**
+[corrected code example]
+
+**References:** CWE-XXX, OWASP ASVS X.X.X
+```
+
+Use `finding-writer` skill to structure raw notes into a complete finding.
+
+---
+
+## Related contexts
+
+<CardGroup cols={3}>
+  <Card title="web-app-pentest" href="/contexts/web-app-pentest">
+    Full web application pentest methodology, recon through reporting
+
+  </Card>
+  <Card title="api-security-review" href="/contexts/api-security-review">
+    REST and GraphQL API security, authentication, BOLA, input validation, and rate limiting
+
+  </Card>
+  <Card title="cloud-audit" href="/contexts/cloud-audit">
+    AWS, Azure, and GCP security audit, IAM, storage, networking, secrets, and logging
+
+  </Card>
+</CardGroup>

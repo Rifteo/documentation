@@ -152,8 +152,12 @@
             "pages": ["contexts/mobile-pentest"]
           },
           {
-            "group": "Cloud",
-            "pages": ["contexts/cloud-audit"]
+            "group": "Infrastructure",
+            "pages": ["contexts/cloud-audit", "contexts/ad-pentest-unauthenticated"]
+          },
+          {
+            "group": "Code Review",
+            "pages": ["contexts/code-audit"]
           }
         ]
       },
