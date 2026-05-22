@@ -9,34 +9,42 @@ description: What is AuditGuard Community and what problem does it solve?
 
 ## What is AuditGuard Community?
 
-**AuditGuard Community** is the open community hub built around AuditGuard — a place where security professionals contribute, share, and maintain skills, scripts, and compliance workflows.
+**AuditGuard Community** is the open community hub where security professionals contribute, share, and maintain skills, scripts, and compliance workflows.
 
-While **AuditGuard** is the core engine that runs skills and produces structured audit outputs, **AuditGuard Community** is where those skills live, grow, and get peer-reviewed. Anyone can contribute a skill, report an issue, or propose improvements. The goal is a shared, high-quality library that covers every phase of a security engagement — from scoping and recon through exploitation, scoring, and reporting.
+**AuditGuard** is the core engine that runs skills and produces structured audit outputs. **AuditGuard Community** is where those skills live, grow, and get peer-reviewed. Anyone can contribute a skill, report an issue, or propose improvements. The goal is a shared, high-quality library that covers every phase of a security engagement: scoping and recon through exploitation, scoring, and reporting.
 
 ## What's in the Community Hub?
 
 | Resource | Description |
 |---|---|
 | **Skills** | Reusable, self-contained methodology units for pentesting, bug bounty, compliance, and reporting |
-| **Scripts** | Automation scripts that support skill execution — scanners, payload generators, report parsers |
-| **Contexts** | Pre-configured skill bundles for specific engagement types (web app pentest, API review, cloud audit) |
-| **Workflows** | Ordered sequences of skills executed together as a single audit or engagement run |
+| **Scripts** | Automation scripts that support skill execution: scanners, payload generators, report parsers |
+| **Contexts** | Engagement-specific knowledge bases for web app pentest, cloud audit, mobile pentest, and more |
 
-## AuditGuard vs. AuditGuard Community
+## The problem with AI agents and security work
 
-| | AuditGuard | AuditGuard Community |
-|---|---|---|
-| **What it is** | The core platform and CLI | The open skill and script library |
-| **Who maintains it** | AuditGuard team | Community contributors |
-| **Where it lives** | The AuditGuard platform | This documentation hub + GitHub |
-| **What you do with it** | Run skills, generate reports | Contribute skills, find methodologies, benchmark quality |
+Ask an agent to hunt for IDOR bugs. It will improvise. It misses verb inconsistency checks, skips GraphQL object exposure, and never tests parameter pollution. You re-prompt five times, spend 3x the tokens, and still get an incomplete result.
 
-## How Skills Work
+The agent is not dumb. It lacks a methodology.
 
-1. A **skill** is a self-contained methodology — it defines what to test, how to test it, and how to report the result
-2. Skills are installed via the CLI: `auditguard-skills add <skill-name>`
-3. Skills are run inside an AuditGuard engagement context, producing structured findings
-4. Community skills are peer-reviewed and benchmarked before being listed here
+## How skills fix this
+
+A skill is a battle-tested methodology file your agent reads before starting a task. It covers every test case, every bypass technique, every output format a practitioner would use. The agent stops improvising and starts executing.
+
+| | Without skill | With skill |
+|--|--------------|------------|
+| Output quality | Inconsistent | Structured and complete |
+| Turns to finish | 3 to 5 | 1 |
+| Methodology coverage | Partial | Full |
+| Report format | Whatever the agent guesses | Triage-ready, platform-specific |
+
+Skills are installed in one command:
+
+```bash
+auditguard-skills add bugbounty-reporter
+```
+
+No account. No configuration. The CLI detects your installed agents automatically.
 
 ## Next steps
 

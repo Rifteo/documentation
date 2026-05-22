@@ -1,15 +1,64 @@
 ---
 title: Contexts Overview
-description: What AuditGuard contexts are, how the 3-tier loading system works, and how to create one.
+description: What AuditGuard contexts are, how the 3-tier loading system works, and how to install one.
 ---
 
 ## What is a context?
 
-A **context** is a security knowledge bundle the agent loads before starting an engagement. It gives the agent domain expertise — methodology, techniques, tools, and reporting guidance — for a specific type of security work.
+A **context** is a security knowledge bundle the agent loads before starting an engagement. It gives the agent domain expertise: methodology, techniques, tools, and reporting guidance for a specific type of security work.
 
-Contexts are served to agents via the `auditguard-context-mcp` MCP server and retrieved on demand using the `get_context` tool.
+Contexts are served via the `auditguard-context-mcp` MCP server and retrieved on demand through natural language.
 
-Unlike skills (which define a specific technique), contexts define the **full engagement methodology** — the phases to follow, what to test, how to validate findings, and how to report.
+Unlike skills (which define a specific technique), contexts define the **full engagement methodology**: the phases to follow, what to test, how to validate findings, and how to report.
+
+## Install the MCP server
+
+```bash
+git clone https://github.com/AuditGuard-Community/context-mcp
+cd context-mcp
+pip install -e .
+```
+
+Register with all detected agents at once:
+
+```bash
+auditguard-context install
+```
+
+Or register with a specific agent:
+
+```bash
+auditguard-context install --agent claude-code
+auditguard-context install --agent cursor
+auditguard-context install --agent gemini-cli
+```
+
+Supports 10 agents: Claude Code, Cursor, Windsurf, Gemini CLI, Cline, Kiro, Codex, OpenCode, Amp, Continue.
+
+## Using a context
+
+Once the MCP server is registered, ask your agent in plain language:
+
+```
+list all available security contexts
+```
+
+```
+get the web-app-pentest context
+```
+
+The agent automatically loads the right level (L1 for an overview, L2 when it needs deep methodology detail).
+
+## Available contexts
+
+| Context | What it covers |
+|---------|---------------|
+| [Web App Pentest](/contexts/web-app-pentest) | Full web app pentest methodology: recon, auth, injection, business logic |
+| [API Security Review](/contexts/api-security-review) | REST and GraphQL API security: BOLA, auth, rate limiting, data exposure |
+| [Cloud Audit](/contexts/cloud-audit) | AWS/Azure/GCP: IAM, storage exposure, networking, logging, secrets |
+| [Mobile Pentest](/contexts/mobile-pentest) | Android and iOS: static analysis, traffic interception, storage, auth |
+| [Code Audit](/contexts/code-audit) | Source code security review: secrets, auth logic, injection sinks, crypto, dependencies |
+| [AD Pentest (Unauthenticated)](/contexts/ad-pentest-unauthenticated) | Unauthenticated infra pentest with AD focus: host discovery, SMB null sessions, AS-REP roasting, Kerberoasting |
 
 ## Context anatomy
 
@@ -29,11 +78,6 @@ The core of every context. It has a **frontmatter block** and a **body** structu
 ---
 name: my-context
 l0: One sentence describing what this context covers.
-license: MIT
-metadata:
-  version: "1.0.0"
-  author: AuditGuard
-  tags: ["pentest", "web", "owasp"]
 ---
 
 ## L1 — Overview
@@ -47,41 +91,17 @@ When to use this context and what it covers at a high level.
 Complete detailed content the agent uses during the engagement.
 ```
 
+See [CONTEXT_GUIDE.md](https://github.com/AuditGuard-Community/context-mcp/blob/main/CONTEXT_GUIDE.md) for the full format reference including optional fields.
+
 ## The 3-tier loading system
 
-Each context has three levels of detail. The MCP server loads the right level based on what the agent needs — keeping token usage low.
+Each context has three levels of detail. The MCP server loads the right level based on what the agent needs, keeping token usage low.
 
 | Level | What it contains | When used |
 |-------|-----------------|-----------|
 | **L0** | One sentence from the `l0` frontmatter field | Listings, quick discovery |
-| **L1** | Overview — when to use, key focus areas, high-level scope | Default load at session start |
-| **L2** | Full methodology — phases, techniques, tools, commands, reporting | Loaded when the agent needs deep detail |
-
-## Available contexts
-
-| Context | What it covers | Category |
-|---------|---------------|----------|
-| [Web App Pentest](/contexts/web-app-pentest) | Recon, authentication, authorization, injection, session, and business logic testing | Pentest |
-| [API Security Review](/contexts/api-security-review) | REST and GraphQL API security, authentication, BOLA, input validation, and rate limiting | Pentest |
-| [Mobile Pentest](/contexts/mobile-pentest) | Android and iOS testing, static analysis, traffic interception, local storage, and authentication | Pentest |
-| [AD Pentest (Unauthenticated)](/contexts/ad-pentest-unauthenticated) | Unauthenticated infra pentest with AD focus, host discovery, SMB null sessions, AS-REP roasting, Kerberoasting | Pentest |
-| [Cloud Audit](/contexts/cloud-audit) | AWS, Azure, and GCP security, IAM, storage exposure, networking, secrets, and logging | Audit |
-| [Code Audit](/contexts/code-audit) | Source code review across quality, architecture, maintainability, and security with STRIDE threat modeling | Audit |
-
-## Loading a context
-
-Contexts are loaded automatically when using `auditguard-context-mcp`. You can also load one explicitly:
-
-```bash
-# Load a context at session start
-auditguard-context load web-app-pentest
-
-# List all available contexts
-auditguard-context list
-
-# Load a specific level
-auditguard-context load web-app-pentest --level L2
-```
+| **L1** | Overview: when to use, key focus areas, high-level scope | Default load at session start |
+| **L2** | Full methodology: phases, techniques, tools, commands, reporting | Loaded when the agent needs deep detail |
 
 ## Context vs skill
 
@@ -92,7 +112,7 @@ auditguard-context load web-app-pentest --level L2
 | **Content** | Phases, tools, reporting guidance | Step-by-step instructions, output format, rules |
 | **Example** | `web-app-pentest` | `xss-hunter`, `jwt-cracker` |
 
-Contexts and skills work together — a context defines the engagement methodology and references relevant skills at each phase.
+Contexts and skills work together: a context defines the engagement methodology and references relevant skills at each phase.
 
 ## Naming conventions
 
@@ -101,8 +121,7 @@ Contexts and skills work together — a context defines the engagement methodolo
 | Use kebab-case | `web-app-pentest`, `cloud-audit` | `WebAppPentest`, `cloud_audit` |
 | Name by engagement type, not tool | `api-security-review` | `burp-scan` |
 | Keep names under 40 characters | `mobile-pentest` | `android-and-ios-mobile-pentest-full` |
-| Use descriptive tags | `pentest`, `audit`, `cloud`, `mobile` | `misc`, `general` |
 
 ## Next step
 
-Ready to write a context? Follow the [CONTEXT_GUIDE.md](https://github.com/AuditGuard-Community/contexts/blob/main/CONTEXT_GUIDE.md) in the community repo.
+Ready to write a context? Follow the [CONTEXT_GUIDE.md](https://github.com/AuditGuard-Community/context-mcp/blob/main/CONTEXT_GUIDE.md) in the community repo.

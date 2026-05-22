@@ -1,130 +1,132 @@
 ---
 title: Commands
-description: Full reference for all AuditGuard CLI commands and flags.
+description: Full reference for all auditguard-skills CLI commands and flags.
 ---
 
-## Global flags
+## `add`
 
-These flags work with any command:
-
-| Flag | Description | Default |
-|------|-------------|---------|
-| `--help` | Show help message and exit |  |
-| `--version` | Show current version |  |
-| `--verbose` | Enable verbose output | `false` |
-| `--log-level` | Set log verbosity: `debug`, `info`, `warn`, `error` | `info` |
-| `--config` | Path to a custom config file | `./auditguard.yml` |
-
----
-
-## `run`
-
-Execute an audit workflow against a target.
+Install a skill into all detected agents.
 
 ```bash
-auditguard run [options]
+auditguard-skills add <skill-name>
 ```
-
-**Options:**
-
-| Option | Description | Default |
-|--------|-------------|---------|
-| `--target` | Path or identifier of the resource to audit | Value from config |
-| `--skill` | Run a single skill by name instead of the full workflow |  |
-| `--output-format` | Report format: `json`, `html`, `markdown` | `json` |
-| `--output-dir` | Directory to write the report into | `./audit-reports` |
-| `--strict` | Treat warnings as failures | `false` |
-
-**Examples:**
-
-```bash
-# Run the full workflow defined in auditguard.yml
-auditguard run
-
-# Run a single skill
-auditguard run --skill check-access-control --target ./my-project
-
-# Generate an HTML report in strict mode
-auditguard run --output-format html --strict
-```
-
----
-
-## `configure`
-
-Validate or display the current configuration.
-
-```bash
-auditguard configure [options]
-```
-
-**Options:**
 
 | Option | Description |
 |--------|-------------|
-| `--validate` | Validate `auditguard.yml` and exit with status 0 if valid |
-| `--show` | Print the resolved configuration (after merging CLI overrides) |
-
-**Examples:**
+| `--agent <name>` | Install into a specific agent only |
+| `--global` | Install globally across all projects |
 
 ```bash
-# Validate the config file
-auditguard configure --validate
+# Install for all detected agents
+auditguard-skills add bugbounty-reporter
 
-# Show the resolved config
-auditguard configure --show
+# Install into a specific agent
+auditguard-skills add bugbounty-reporter --agent claude-code
+
+# Install globally across all projects
+auditguard-skills add bugbounty-reporter --global
 ```
 
 ---
 
-## `skills`
+## `remove`
 
-Manage and inspect available skills.
-
-```bash
-auditguard skills <subcommand>
-```
-
-**Subcommands:**
-
-| Subcommand | Description |
-|------------|-------------|
-| `list` | List all installed skills with their version and status |
-| `info <name>` | Show full details for a specific skill |
-
-**Examples:**
+Remove an installed skill.
 
 ```bash
-# List all available skills
-auditguard skills list
-
-# Show details for a specific skill
-auditguard skills info check-access-control
+auditguard-skills remove <skill-name>
 ```
 
 ---
 
-## `report`
+## `list`
 
-Inspect previously generated reports.
-
-```bash
-auditguard report <subcommand>
-```
-
-**Subcommands:**
-
-| Subcommand | Description |
-|------------|-------------|
-| `list` | List all reports in the output directory |
-| `show <filename>` | Print a report to stdout |
-
-**Examples:**
+Show all installed skills with their version and status.
 
 ```bash
-# List all saved reports
-auditguard report list
-
-# Print a specific report
-auditguard report show report_20260512_1430.json
+auditguard-skills list
 ```
+
+---
+
+## `available`
+
+Browse all skills available to install.
+
+```bash
+auditguard-skills available
+```
+
+---
+
+## `outdated`
+
+Check which installed skills have a newer version available.
+
+```bash
+auditguard-skills outdated
+```
+
+---
+
+## `update`
+
+Update all installed skills to their latest version.
+
+```bash
+auditguard-skills update
+```
+
+---
+
+## `agents`
+
+See which agents were detected on this machine.
+
+```bash
+auditguard-skills agents
+```
+
+---
+
+## Slash commands (Claude Code)
+
+Install any skill for Claude Code and you get five slash commands that work in every session, no skill loaded required:
+
+| Command | What it does |
+|---------|-------------|
+| `/auditguard:triage` | 7-question pre-submission gate. Outputs GO, KILL, or DOWNGRADE with evidence |
+| `/auditguard:chain` | Given a confirmed finding, checks the signal table for companion bugs to escalate severity |
+| `/auditguard:report` | Writes a submission-ready bug bounty report: title, steps, PoC, impact, remediation |
+| `/auditguard:hunt` | Launches a structured 7-phase engagement workflow on a target |
+| `/auditguard:intel` | Pulls CVEs, GitHub advisories, and HackerOne hacktivity for any named technology |
+| `/auditguard:setup` | Audits your AuditGuard install: shows installed skills and commands, checks context-mcp config, and gives exact setup steps for anything missing |
+
+```bash
+auditguard-skills add bugbounty-reporter --agent claude-code
+# Install AuditGuard slash commands for Claude Code? [Y/n/never]
+```
+
+---
+
+## Supported agents
+
+| Agent | Flag |
+|-------|------|
+| Claude Code | `claude-code` |
+| Gemini CLI | `gemini-cli` |
+| Codex | `codex` |
+| Cursor | `cursor` |
+| GitHub Copilot | `github-copilot` |
+| Windsurf | `windsurf` |
+| Cline | `cline` |
+| Continue | `continue` |
+| Aider Desk | `aider-desk` |
+| Roo Code | `roo` |
+| OpenHands | `openhands` |
+| Goose | `goose` |
+| Devin | `devin` |
+| Augment | `augment` |
+| Amp | `amp` |
+
+Run `auditguard-skills agents` to see the full list of 50+ supported agents.

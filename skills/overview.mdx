@@ -94,21 +94,71 @@ Python or shell scripts the skill invokes directly. Used for deterministic tasks
 
 ## Available skills
 
-| Skill | What it does | Category |
-|-------|-------------|----------|
-| [Find Skills](/skills/find-skills) | Discover and install skills from the community ecosystem | Agent workflows |
-| [Compliance Gap Analyzer](/skills/compliance-gap-analyzer) | Aggregate findings into a gap report across ISO 27001, NIST CSF, PCI-DSS, and OWASP | Compliance |
-| [Control Lookup](/skills/control-lookup) | Look up any control ID with cross-framework mappings and testing hints | Compliance |
-| [Finding Writer](/skills/finding-writer) | Convert raw pentest notes into a structured, report-ready finding | Pentest |
-| [IDOR Hunter](/skills/idor-hunter) | Systematic IDOR/BOLA detection: recon, testing, bypass techniques, and report structure | Pentest |
-| [JWT Cracker](/skills/jwt-cracker) | Full JWT attack methodology: alg:none, algorithm confusion, weak secrets, header injection | Pentest |
-| [XSS Hunter](/skills/xss-hunter) | Complete XSS methodology, reflected, stored, DOM, blind, CSP bypass, WAF evasion | Pentest |
-| [SSTI Hunter](/skills/ssti-hunter) | SSTI detection and exploitation across 13 template engines with RCE payloads per engine | Pentest |
-| [Check Exploit](/skills/check-exploit) | Search known exploit databases for a service, version, or CVE across 9 sources | Pentest |
-| [Nuclei Template Writer](/skills/nuclei-template-writer) | Convert a vulnerability or HTTP request into a ready-to-run Nuclei YAML template | Automation |
-| [Remediation Planner](/skills/remediation-planner) | Convert a security finding into a prioritized remediation plan with effort estimates | Reporting |
-| [Risk Assessor](/skills/risk-assessor) | Score a vulnerability using likelihood x impact with SLA-bound treatment recommendations | Risk |
-| [Skill Benchmark](/skills/skill-benchmark) | Score any SKILL.md across 5 quality dimensions and run a 54-agent compatibility check | Skill dev |
+**Bug Bounty**
+
+| Skill | What it does |
+|-------|-------------|
+| [Bugbounty Reporter](/skills/bugbounty-reporter) | Converts raw findings into triage-ready reports. Pre-submission gate included |
+| [Caveman](/skills/caveman) | Ultra-compressed comms mode for fast-paced testing sessions |
+
+**Vulnerability Testing**
+
+| Skill | What it does |
+|-------|-------------|
+| [IDOR Hunter](/skills/idor-hunter) | Systematic IDOR and BOLA detection with multi-account testing and bypass techniques |
+| [XSS Hunter](/skills/xss-hunter) | Full XSS methodology: reflected, stored, DOM, filter bypass, CSP evasion, mXSS |
+| [SSRF Hunter](/skills/ssrf-hunter) | SSRF detection and exploitation including internal recon, cloud metadata, and filter bypass |
+| [XXE Phantom](/skills/xxe-phantom) | XXE injection: file read, blind OOB, SSRF chaining, SVG and XLSX vectors |
+| [SSTI Hunter](/skills/ssti-hunter) | Server-side template injection with engine fingerprinting and RCE exploitation |
+| [JS Analyzer](/skills/js-analyzer) | JavaScript analysis for secrets, endpoints, sinks, and prototype pollution |
+| [JWT Cracker](/skills/jwt-cracker) | JWT attacks: alg:none, weak secret brute-force, RS256 to HS256, kid injection |
+| [HPP Hunter](/skills/hpp-hunter) | HTTP parameter pollution detection and exploitation |
+| [Clickjacking Hunter](/skills/clickjacking-hunter) | Clickjacking detection and PoC generation |
+| [Redirect Forge](/skills/redirect-forge) | Open redirect discovery and OAuth code theft chaining |
+
+**Reporting and Scoring**
+
+| Skill | What it does |
+|-------|-------------|
+| [Finding Writer](/skills/finding-writer) | Converts raw notes into a structured, report-ready finding |
+| [Pentest Report](/skills/pentest-report) | Assembles a full pentest report from individual findings |
+| [CVSS Scorer](/skills/cvss-scorer) | Computes exact CVSS v3.1 base score and vector from a vulnerability description |
+| [Risk Assessor](/skills/risk-assessor) | Business risk assessment from technical findings |
+| [Remediation Planner](/skills/remediation-planner) | Generates specific, prioritized remediation plans |
+
+**Recon and Assessment**
+
+| Skill | What it does |
+|-------|-------------|
+| [Attack Surface](/skills/attack-surface) | Maps the full attack surface before testing begins |
+| [Scope Grill](/skills/scope-grill) | Validates and clarifies engagement scope |
+| [Check Exploit](/skills/check-exploit) | Checks if a CVE has a public exploit and assesses exploitability |
+| [Vuln Diagnose](/skills/vuln-diagnose) | Diagnoses ambiguous or incomplete vulnerability reports |
+| [Nuclei Template Writer](/skills/nuclei-template-writer) | Writes production-ready Nuclei templates from vulnerability descriptions |
+
+**MCP Integrations**
+
+Skills that orchestrate external MCP tool servers into structured engagements.
+
+| Skill | MCP Server | What it does |
+|-------|-----------|-------------|
+| [HexStrike Forge](/skills/hexstrike-forge) | HexStrike | Full pentest engagement: 5-phase workflow, parallel tool execution, triage gates, false positive filtering, and report-ready findings from a single prompt |
+
+**Compliance and Governance**
+
+| Skill | What it does |
+|-------|-------------|
+| [Compliance Gap Analyzer](/skills/compliance-gap-analyzer) | Identifies compliance gaps against security frameworks |
+| [Control Lookup](/skills/control-lookup) | Maps controls across ISO 27001, SOC2, NIST, and PCI-DSS |
+
+**Workflow**
+
+| Skill | What it does |
+|-------|-------------|
+| [Find Skills](/skills/find-skills) | Discovers and loads the right skill for any security task |
+| [Engagement Handoff](/skills/engagement-handoff) | Structures engagement handoff notes between team members |
+| [CTF Writeup](/skills/ctf-writeup) | Formats CTF challenge writeups |
+| [Skill Benchmark](/skills/skill-benchmark) | Benchmarks skill performance with and without the agent |
 
 ## Installing a skill
 

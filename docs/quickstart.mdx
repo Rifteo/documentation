@@ -1,68 +1,71 @@
 ---
 title: Quickstart
-description: Install AuditGuard and run your first audit workflow in under 5 minutes.
+description: Install a skill and run your first security methodology in under 2 minutes.
 ---
 
 ## Prerequisites
 
-Before you begin, make sure you have the following installed:
-
-- Python 3.10 or higher
+- Node.js 18 or higher
 - Git
-- A terminal (bash, zsh, or PowerShell)
+- An AI agent installed (Claude Code, Gemini CLI, Cursor, or any [supported agent](/usage/commands))
 
-## Installation
+## Install the CLI
 
-<Steps>
-  <Step title="Clone the repository">
-    ```bash
-    git clone https://github.com/AuditGuard-Community/auditguard.git
-    cd auditguard
-    ```
-  </Step>
+Until the npm package is published, install via git:
 
-  <Step title="Install dependencies">
-    ```bash
-    pip install -r requirements.txt
-    ```
-  </Step>
+```bash
+git clone https://github.com/AuditGuard-Community/skills-cli
+cd skills-cli
+npm link
+```
 
-  <Step title="Verify the installation">
-    ```bash
-    auditguard --version
-    ```
+## Add your first skill
 
-    Expected output:
-    ```
-    AuditGuard v1.0.0
-    ```
-  </Step>
+```bash
+auditguard-skills add bugbounty-reporter
+```
 
-  <Step title="Run your first audit">
-    ```bash
-    auditguard run --target ./my-project
-    ```
+The CLI detects your installed agents automatically and puts the skill in the right place. No account. No configuration.
 
-    AuditGuard will scan the target directory, execute the default workflow, and produce a report in `./audit-reports/`.
-  </Step>
-</Steps>
+Not sure which skill to use? Install `find-skills` first — it reads your task description and loads the right skill automatically:
 
-## What happens during a run?
+```bash
+auditguard-skills add find-skills
+```
 
-When you execute `auditguard run`, the tool:
+## Verify the installation
 
-1. Loads the configuration file (default: `auditguard.yml`)
-2. Resolves which skills are included in the selected workflow
-3. Executes each skill sequentially against the target
-4. Collects all results and writes a structured report
+```bash
+auditguard-skills list
+```
+
+## Activate a skill
+
+After installing, activate it inside your agent:
+
+| Agent | How to activate |
+|-------|----------------|
+| Claude Code | Type `/skills` and select from the list |
+| Cursor / Windsurf | Type `/skill-name` in chat |
+| Gemini CLI | Type `@skill-name` to invoke |
+| Other agents | Skills are loaded automatically from the skills directory on session start |
+
+Then describe your task in plain language:
+
+```
+I found that /api/orders/{id} returns order data without checking
+if the authenticated user owns that order. Any integer ID works.
+```
+
+The agent produces a complete, triage-ready report. First try.
 
 ## Next steps
 
 <CardGroup cols={2}>
-  <Card title="Commands reference" icon="terminal" href="/usage/commands">
-    Explore all available commands and flags
+  <Card title="All skills" icon="puzzle-piece" href="/skills/overview">
+    Browse the full skill library
   </Card>
-  <Card title="Configuration" icon="sliders" href="/usage/configuration">
-    Customize AuditGuard with your own settings
+  <Card title="CLI commands" icon="terminal" href="/usage/commands">
+    Explore all available commands and flags
   </Card>
 </CardGroup>

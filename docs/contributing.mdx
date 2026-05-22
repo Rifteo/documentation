@@ -30,8 +30,8 @@ AuditGuard is a community-driven project. Contributions (new skills, bug fixes, 
 
   <Step title="Fork and branch">
     ```bash
-    git clone https://github.com/AuditGuard-Community/auditguard.git
-    cd auditguard
+    git clone https://github.com/AuditGuard-Community/skills
+    cd skills
     git checkout -b skill/your-skill-name
     ```
   </Step>
@@ -41,9 +41,9 @@ AuditGuard is a community-driven project. Contributions (new skills, bug fixes, 
     ```
     skills/
     └── your-skill-name/
-        ├── skill.yml
-        ├── main.py
-        └── README.md
+        ├── SKILL.md
+        ├── references/   (optional)
+        └── scripts/      (optional)
     ```
   </Step>
 
@@ -52,13 +52,12 @@ AuditGuard is a community-driven project. Contributions (new skills, bug fixes, 
   </Step>
 
   <Step title="Add to docs.json">
-    Add your skill page to the `Skills` group in `docs.json`:
+    Add your skill page to the appropriate group in `docs.json` under the Skills tab. Place it in the group that matches the skill category (Vulnerability Testing, Reporting, Recon, etc.):
     ```json
     {
-      "group": "Skills",
+      "group": "Vulnerability Testing",
       "pages": [
-        "skills/overview",
-        "skills/skill-template",
+        "skills/existing-skill",
         "skills/your-skill-name"
       ]
     }
@@ -81,8 +80,8 @@ AuditGuard is a community-driven project. Contributions (new skills, bug fixes, 
 
 Before submitting, verify:
 
-- [ ] `skill.yml` has all required fields (`name`, `version`, `description`, `author`, `inputs`)
-- [ ] `main.py` implements `run(inputs) -> dict` and returns a valid status
+- [ ] `SKILL.md` frontmatter has all required fields (`name`, `description`, `license`, `metadata`)
+- [ ] `SKILL.md` body has `When to Use`, at least one step section, `Output Format`, and `Rules`
 - [ ] Documentation follows the [Style Guide](/docs/style-guide) exactly
 - [ ] No section in the documentation is left empty
 - [ ] Examples use realistic, not trivial, inputs
