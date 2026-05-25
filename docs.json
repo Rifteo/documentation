@@ -9,11 +9,11 @@
     "dark": "#EEC12A"
   },
   "logo": {
-    "light": "/images/black.png",
-    "dark": "/images/white.png",
+    "light": "/medias/images/black.png",
+    "dark": "/medias/images/white.png",
     "href": "/"
   },
-  "favicon": "/images/favicon.png",
+  "favicon": "/medias/images/favicon.png",
   "appearance": {
     "default": "dark",
     "strict": false
@@ -55,7 +55,7 @@
     ]
   },
   "banner": {
-    "content": "AuditGuard Community Hub is now live — [explore skills →](/skills/overview)",
+    "content": "AuditGuard Community Hub is now live  [explore skills →](/skills/overview)",
     "dismissible": true
   },
   "navigation": {
@@ -78,61 +78,60 @@
         "groups": [
           {
             "group": "Overview",
-            "pages": ["skills/overview"]
+            "pages": ["skills/overview", "skills/benchmarks"]
           },
           {
-            "group": "Planning",
+            "group": "Web Application",
             "pages": [
-              {
-                "group": "Reconnaissance",
-                "pages": ["skills/scope-grill", "skills/attack-surface"]
-              },
-              "skills/engagement-handoff",
-              "skills/hexstrike-forge"
+              "skills/xss-hunter",
+              "skills/xxe-phantom",
+              "skills/ssti-hunter",
+              "skills/js-analyzer",
+              "skills/hpp-hunter",
+              "skills/clickjacking-hunter",
+              "skills/redirect-forge"
             ]
           },
           {
-            "group": "Discovery",
-            "pages": ["skills/find-skills", "skills/js-analyzer", "skills/check-exploit"]
+            "group": "API Security",
+            "pages": ["skills/idor-hunter", "skills/jwt-cracker"]
           },
           {
-            "group": "Attack Skills",
+            "group": "Infrastructure",
+            "pages": ["skills/ssrf-hunter", "skills/nuclei-template-writer", "skills/check-exploit"]
+          },
+          {
+            "group": "Reconnaissance",
+            "pages": ["skills/scope-grill", "skills/attack-surface", "skills/vuln-diagnose"]
+          },
+          {
+            "group": "Reporting",
             "pages": [
-              {
-                "group": "Injection",
-                "pages": ["skills/ssrf-hunter", "skills/xxe-phantom", "skills/ssti-hunter"]
-              },
-              {
-                "group": "Client-Side",
-                "pages": ["skills/xss-hunter", "skills/clickjacking-hunter", "skills/redirect-forge", "skills/hpp-hunter"]
-              },
-              {
-                "group": "Auth & Access",
-                "pages": ["skills/idor-hunter", "skills/jwt-cracker"]
-              },
-              "skills/nuclei-template-writer"
+              "skills/finding-writer",
+              "skills/pentest-report",
+              "skills/bugbounty-reporter",
+              "skills/cvss-scorer",
+              "skills/risk-assessor",
+              "skills/remediation-planner"
             ]
           },
           {
-            "group": "Compliance & Audit",
+            "group": "Compliance",
             "pages": ["skills/compliance-gap-analyzer", "skills/control-lookup"]
           },
           {
-            "group": "Scoring & Reporting",
+            "group": "Workflow",
             "pages": [
-              {
-                "group": "Scoring",
-                "pages": ["skills/vuln-diagnose", "skills/cvss-scorer", "skills/risk-assessor"]
-              },
-              {
-                "group": "Reporting",
-                "pages": ["skills/finding-writer", "skills/bugbounty-reporter", "skills/pentest-report", "skills/remediation-planner"]
-              }
+              "skills/find-skills",
+              "skills/engagement-handoff",
+              "skills/ctf-writeup",
+              "skills/caveman",
+              "skills/skill-benchmark"
             ]
           },
           {
-            "group": "Utilities",
-            "pages": ["skills/caveman", "skills/ctf-writeup", "skills/skill-benchmark"]
+            "group": "Integrations",
+            "pages": ["skills/hexstrike-forge"]
           }
         ]
       },

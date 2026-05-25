@@ -39,7 +39,7 @@ The agent is not dumb. It lacks a methodology.
 
 ### Quickstart
 
-**Skills** — install via the CLI:
+**Skills**  install via the CLI:
 
 ```bash
 git clone https://github.com/AuditGuard-Community/skills-cli
@@ -55,7 +55,7 @@ Not sure which skill to use? Install `find-skills` first:
 auditguard-skills add find-skills
 ```
 
-**Contexts** — install via the MCP server:
+**Contexts**  install via the MCP server:
 
 ```bash
 git clone https://github.com/AuditGuard-Community/context-mcp
@@ -111,5 +111,5 @@ Read the [contribution guide](docs/contributing.mdx) for the full process. It ta
 ---
 
 <div align="center">
-  <sub>Built by the <a href="https://github.com/AuditGuard-Community">AuditGuard Community</a> — MIT License</sub>
+  <sub>Built by the <a href="https://github.com/AuditGuard-Community">AuditGuard Community</a>  MIT License</sub>
 </div>
