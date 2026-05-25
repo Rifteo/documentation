@@ -1,6 +1,6 @@
 ---
 title: API Security Review
-description: REST and GraphQL API security review — authentication, authorization, BOLA, input validation, and rate limiting.
+description: REST and GraphQL API security review  authentication, authorization, BOLA, input validation, and rate limiting.
 ---
 
 <Info>
@@ -46,7 +46,7 @@ Load this context when:
 
 ---
 
-### Phase 1 — API Discovery
+### Phase 1  API Discovery
 
 - Collect API endpoints from JS bundles, mobile apps, Swagger/OpenAPI docs
 - Check `/api/docs`, `/swagger.json`, `/openapi.json`, `/api/v1/`
@@ -55,35 +55,35 @@ Load this context when:
 
 ---
 
-### Phase 2 — Authentication & Authorization
+### Phase 2  Authentication & Authorization
 
-- **API key in URL** (`?api_key=xxx`) — log exposure risk
-- **JWT testing** — use `jwt-cracker` skill if available
-- **OAuth token scope** — request minimal scope, try upgrading
-- **BOLA** — change object IDs in requests (use `idor-hunter` skill if available)
-- **Broken function-level authorization** — access admin endpoints with user token
+- **API key in URL** (`?api_key=xxx`)  log exposure risk
+- **JWT testing**  use `jwt-cracker` skill if available
+- **OAuth token scope**  request minimal scope, try upgrading
+- **BOLA**  change object IDs in requests (use `idor-hunter` skill if available)
+- **Broken function-level authorization**  access admin endpoints with user token
 
 ---
 
-### Phase 3 — Input Validation
+### Phase 3  Input Validation
 
 - Injection in all parameters (SQLi, NoSQLi, command injection)
-- Mass assignment — send undocumented fields (`role`, `is_admin`)
+- Mass assignment  send undocumented fields (`role`, `is_admin`)
 - Unrestricted file upload via API
 - JSON/XML injection in request body
 
 ---
 
-### Phase 4 — Rate Limiting & Resource Consumption
+### Phase 4  Rate Limiting & Resource Consumption
 
 - Brute-force endpoints without lockout
-- Large payload attacks — send oversized JSON arrays
+- Large payload attacks  send oversized JSON arrays
 - Nested GraphQL queries (query depth attack)
-- Missing pagination — dump entire dataset in one request
+- Missing pagination  dump entire dataset in one request
 
 ---
 
-### Phase 5 — Data Exposure
+### Phase 5  Data Exposure
 
 - Response contains sensitive fields not needed by the client
 - Error messages leak stack traces, DB queries, internal paths
@@ -91,7 +91,7 @@ Load this context when:
 
 ---
 
-### Phase 6 — Reporting
+### Phase 6  Reporting
 
 Use `finding-writer` skill. Reference the OWASP API Security Top 10 category in each finding (API1:2023 – Broken Object Level Authorization, API2:2023 – Broken Authentication, etc.).
 
@@ -101,17 +101,17 @@ Use `finding-writer` skill. Reference the OWASP API Security Top 10 category in 
 
 <CardGroup cols={3}>
   <Card title="web-app-pentest" href="/contexts/web-app-pentest">
-    Full web application pentest methodology — recon, auth, authorization, injection, business logic
+    Full web application pentest methodology  recon, auth, authorization, injection, business logic
 
     `AuditGuard-Community/contexts`
   </Card>
   <Card title="mobile-pentest" href="/contexts/mobile-pentest">
-    Android and iOS testing — static analysis, traffic interception, local storage, and authentication
+    Android and iOS testing  static analysis, traffic interception, local storage, and authentication
 
     `AuditGuard-Community/contexts`
   </Card>
   <Card title="cloud-audit" href="/contexts/cloud-audit">
-    AWS, Azure, and GCP security — IAM, storage, networking, secrets, and logging
+    AWS, Azure, and GCP security  IAM, storage, networking, secrets, and logging
 
     `AuditGuard-Community/contexts`
   </Card>

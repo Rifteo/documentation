@@ -1,6 +1,6 @@
 ---
 title: XXE Phantom
-description: Complete XXE (XML External Entity) detection and exploitation methodology — classic file read, blind OOB exfiltration, XInclude, SVG/DOCX/SAML vectors, WAF bypass, SSRF chaining, and report structure.
+description: Complete XXE (XML External Entity) detection and exploitation methodology  classic file read, blind OOB exfiltration, XInclude, SVG/DOCX/SAML vectors, WAF bypass, SSRF chaining, and report structure.
 ---
 
 <Info>
@@ -17,7 +17,7 @@ auditguard-skills add xxe-phantom
 
 ## Summary
 
-Detect and exploit XML External Entity injection across all attack surfaces — from classic file read to blind OOB exfiltration and multi-step escalation chains.
+Detect and exploit XML External Entity injection across all attack surfaces  from classic file read to blind OOB exfiltration and multi-step escalation chains.
 
 - Phase 1 finds the attack surface: explicit XML endpoints, hidden XML via Content-Type switching on JSON APIs, file upload vectors (SVG, DOCX, XLSX, ODT, XSL), SAML/SSO flows, SOAP, WebDAV, RSS feeds
 - Phase 2 covers classic XXE with visible output: file read, SSRF, port scanning, multi-file read, and error-based file read
@@ -31,7 +31,7 @@ Detect and exploit XML External Entity injection across all attack surfaces — 
 
 ## SKILL.md
 
-### XXE Phantom — XML External Entity Injection
+### XXE Phantom  XML External Entity Injection
 
 #### When to Use This Skill
 
@@ -58,7 +58,7 @@ Use this skill when the user:
 - Escalation: XXE → cloud metadata, XXE → SSH keys, XXE → Redis RCE via Gopher
 
 **Out of scope:**
-- Standard JSON API endpoints that don't accept XML — use Content-Type switching to check first
+- Standard JSON API endpoints that don't accept XML  use Content-Type switching to check first
 
 #### How It Works
 
@@ -134,10 +134,10 @@ Use when DOCTYPE is blocked but XML element content is user-controlled.
 
 #### Known Limitations
 
-- Parser must evaluate external entities — hardened parsers (DTD processing disabled) are not vulnerable
+- Parser must evaluate external entities  hardened parsers (DTD processing disabled) are not vulnerable
 - Entity syntax appearing literally in the response (`&xxe;`) means reflection exists but entity expansion is disabled
-- PHP `expect://` RCE is rare — requires the expect extension to be loaded
-- GCP metadata requires `Metadata-Flavor: Google` header — may not work via XXE if parser doesn't forward custom headers
+- PHP `expect://` RCE is rare  requires the expect extension to be loaded
+- GCP metadata requires `Metadata-Flavor: Google` header  may not work via XXE if parser doesn't forward custom headers
 
 ---
 
@@ -145,7 +145,7 @@ Use when DOCTYPE is blocked but XML element content is user-controlled.
 
 <CardGroup cols={3}>
   <Card title="ssrf-hunter" href="/skills/ssrf-hunter">
-    Complete SSRF detection and exploitation methodology — cloud metadata, internal network, and protocol handler abuse
+    Complete SSRF detection and exploitation methodology  cloud metadata, internal network, and protocol handler abuse
 
     
   </Card>

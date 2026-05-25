@@ -1,6 +1,6 @@
 ---
 title: Caveman Mode
-description: Ultra-compressed response mode for cybersecurity contexts — strips filler while keeping CVEs, payloads, CVSS scores, and findings exact.
+description: Ultra-compressed response mode for cybersecurity contexts  strips filler while keeping CVEs, payloads, CVSS scores, and findings exact.
 ---
 
 <Info>
@@ -17,12 +17,12 @@ auditguard-skills add caveman
 
 ## Summary
 
-Maximum signal, zero noise — an ultra-compressed communication mode for security professionals who know their domain.
+Maximum signal, zero noise  an ultra-compressed communication mode for security professionals who know their domain.
 
 - Activated only by explicit user request (`/caveman`, "be brief", "tl;dr", "just the findings", etc.)
 - Strips introductions, background, pleasantries, hedging, filler, and disclaimers without mercy
 - Preserves every technical artifact verbatim: CVE IDs, CVSS vectors, payloads, tool commands, HTTP requests, IP addresses, and code blocks
-- Stays active for every response until explicitly deactivated — no drift back to verbose mode
+- Stays active for every response until explicitly deactivated  no drift back to verbose mode
 - Temporarily expands for destructive/irreversible actions, legal/scope boundaries, or when the user signals confusion
 
 ---
@@ -37,7 +37,7 @@ Ultra-compressed communication for cybersecurity work. Maximum signal, zero nois
 
 **User-triggered only.** This mode is NEVER activated by the agent on its own judgment. It activates when the user explicitly requests it:
 
-- `/caveman` — direct invocation
+- `/caveman`  direct invocation
 - "caveman mode", "talk like caveman", "use caveman", "caveman"
 - "be brief", "in short", "short answer", "keep it short"
 - "straight to the point", "cut to the chase", "bottom line"
@@ -56,9 +56,9 @@ Drop without mercy:
 - Articles when removable without ambiguity
 - Restatements of the user's own question
 - Legal/disclaimer boilerplate (unless scope-critical)
-- Step-by-step tool explanations — auditors know their tools
+- Step-by-step tool explanations  auditors know their tools
 
-#### What Stays Exact — Non-Negotiable
+#### What Stays Exact  Non-Negotiable
 
 Every technical artifact is preserved verbatim:
 - CVE IDs, CWE IDs, CVSS vectors and scores
@@ -69,7 +69,7 @@ Every technical artifact is preserved verbatim:
 - Severity ratings (Critical/High/Medium/Low/Info)
 - Error messages and stack traces
 - Hash values, tokens, credentials in evidence
-- Code blocks — unchanged, always
+- Code blocks  unchanged, always
 
 #### How It Works
 
@@ -80,7 +80,7 @@ Every technical artifact is preserved verbatim:
 ```
 Finding:     [vuln type] @ [location]. [impact one-liner]. Fix: [specific action].
 Exploit:     [tool/method] -> [result]
-Scan result: [host]:[port] [service] [version] — [notable flag]
+Scan result: [host]:[port] [service] [version]  [notable flag]
 Auth/access: [endpoint] [auth state] -> [what's exposed]
 Status:      [component] [state]. [evidence]. [next].
 ```
@@ -90,10 +90,10 @@ Fragments OK. Arrows for causality (`X -> Y`). Severity in brackets `[Critical]`
 **Auto-Clarity Exception:**
 
 Temporarily drop compression for:
-- **Destructive/irreversible actions** — full warning before `DROP TABLE`, `rm -rf`, mass exploitation
-- **Legal/scope boundaries** — out-of-scope targets, authorization gaps (always full sentence)
+- **Destructive/irreversible actions**  full warning before `DROP TABLE`, `rm -rf`, mass exploitation
+- **Legal/scope boundaries**  out-of-scope targets, authorization gaps (always full sentence)
 - **Multi-step attack chains** where fragment order could cause dangerous misread
-- **User repeats or says "I don't understand"** — expand until they confirm
+- **User repeats or says "I don't understand"**  expand until they confirm
 
 Resume compression immediately after the clear part ends.
 
@@ -105,7 +105,7 @@ Resume compression immediately after the clear part ends.
 
 #### Known Limitations
 
-- Mode is user-triggered only — never self-activated
+- Mode is user-triggered only  never self-activated
 - Temporarily deactivated for safety-critical communications
 
 ---

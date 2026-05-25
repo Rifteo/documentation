@@ -1,6 +1,6 @@
 ---
 title: HPP Hunter
-description: Complete HTTP Parameter Pollution methodology — server behavior fingerprinting, server-side and client-side HPP, WAF bypass via parameter splitting, OAuth/payment/access-control abuse, header and JSON body pollution, and report structure.
+description: Complete HTTP Parameter Pollution methodology  server behavior fingerprinting, server-side and client-side HPP, WAF bypass via parameter splitting, OAuth/payment/access-control abuse, header and JSON body pollution, and report structure.
 ---
 
 <Info>
@@ -17,7 +17,7 @@ auditguard-skills add hpp-hunter
 
 ## Summary
 
-Exploit inconsistencies in how different server technologies handle duplicate HTTP parameters — WAF bypasses, privilege escalation, payment manipulation, and OAuth token theft.
+Exploit inconsistencies in how different server technologies handle duplicate HTTP parameters  WAF bypasses, privilege escalation, payment manipulation, and OAuth token theft.
 
 - Phase 1 fingerprints how the target handles duplicate parameters (first-wins, last-wins, concatenation, or array) per server technology
 - Phase 2 covers server-side HPP: precedence abuse, payload splitting for WAF bypass, security parameter override, and access control bypass
@@ -32,7 +32,7 @@ Exploit inconsistencies in how different server technologies handle duplicate HT
 
 ### HPP Hunter
 
-HTTP Parameter Pollution (HPP) exploits how different server technologies handle duplicate HTTP parameters in inconsistent ways. The same request can be interpreted differently by a WAF, a front-end proxy, and a back-end application — creating bypasses, logic flaws, and privilege escalation paths.
+HTTP Parameter Pollution (HPP) exploits how different server technologies handle duplicate HTTP parameters in inconsistent ways. The same request can be interpreted differently by a WAF, a front-end proxy, and a back-end application  creating bypasses, logic flaws, and privilege escalation paths.
 
 #### When to Use This Skill
 
@@ -53,7 +53,7 @@ Use this skill when the user:
 - High-value scenarios: OAuth token theft, payment bypass, privilege escalation, SSRF
 
 **Out of scope:**
-- Other vulnerability classes — HPP is specifically about duplicate parameter handling
+- Other vulnerability classes  HPP is specifically about duplicate parameter handling
 
 #### How It Works
 
@@ -71,8 +71,8 @@ GET /search?color=red&color=blue
 | Array / both visible | Array |
 
 Technology quick reference:
-- PHP/Apache — Last wins | ASP.NET/IIS — Joined with `, ` | JSP/Tomcat — First wins
-- Node.js/Express — Array | Python/Flask — First wins | Ruby/Rails — Last wins
+- PHP/Apache  Last wins | ASP.NET/IIS  Joined with `, ` | JSP/Tomcat  First wins
+- Node.js/Express  Array | Python/Flask  First wins | Ruby/Rails  Last wins
 
 **Phase 2: Server-Side HPP**
 
@@ -122,7 +122,7 @@ Duplicate `X-Forwarded-For` to bypass IP allowlists. Duplicate JSON keys to over
 
 #### Known Limitations
 
-- Effectiveness depends entirely on the server's duplicate parameter handling behavior — always fingerprint first
+- Effectiveness depends entirely on the server's duplicate parameter handling behavior  always fingerprint first
 - JSON key deduplication is parser-specific; test with both orderings
 - WAF bypass requires that the WAF and back-end have different parameter precedence rules
 
@@ -137,12 +137,12 @@ Duplicate `X-Forwarded-For` to bypass IP allowlists. Duplicate JSON keys to over
     
   </Card>
   <Card title="ssrf-hunter" href="/skills/ssrf-hunter">
-    Complete SSRF detection and exploitation methodology — cloud metadata, internal network enumeration, and bypass techniques
+    Complete SSRF detection and exploitation methodology  cloud metadata, internal network enumeration, and bypass techniques
 
     
   </Card>
   <Card title="xss-hunter" href="/skills/xss-hunter">
-    Complete XSS testing methodology — reflected, stored, DOM-based, blind, and mutation XSS
+    Complete XSS testing methodology  reflected, stored, DOM-based, blind, and mutation XSS
 
     
   </Card>

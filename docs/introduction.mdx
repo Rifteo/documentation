@@ -1,64 +1,96 @@
 ---
 title: Introduction
-description: What is AuditGuard Community and what problem does it solve?
 ---
 
 <video autoPlay loop muted playsInline style={{ width: '100%', borderRadius: '8px', marginBottom: '32px' }}>
-  <source src="/images/welcome.mp4" type="video/mp4" />
+  <source src="/medias/videos/welcome.mp4" type="video/mp4" />
 </video>
 
-## What is AuditGuard Community?
+## The #1 community-built skills library for AI security agents
 
-**AuditGuard Community** is the open community hub where security professionals contribute, share, and maintain skills, scripts, and compliance workflows.
+**AuditGuard Community** is the world's leading open library of security skills for AI agents  built by practitioners, peer-reviewed by the community, and proven in real engagements.
 
-**AuditGuard** is the core engine that runs skills and produces structured audit outputs. **AuditGuard Community** is where those skills live, grow, and get peer-reviewed. Anyone can contribute a skill, report an issue, or propose improvements. The goal is a shared, high-quality library that covers every phase of a security engagement: scoping and recon through exploitation, scoring, and reporting.
+We didn't build another scanner. We built something better: **a methodology layer** that turns your AI agent into an expert practitioner. Every skill encodes the exact steps, bypass techniques, and output formats that senior pentesters use  so your agent stops guessing and starts executing.
+
+<CardGroup cols={3}>
+  <Card title="23 skills" icon="shield-halved">
+    Covering every phase of a security engagement  from scoping to final report
+  </Card>
+  <Card title="Proven by benchmarks" icon="chart-line">
+    Up to +120% more findings, -97% time saved, false positives eliminated
+  </Card>
+  <Card title="100% open source" icon="code-branch">
+    MIT licensed. No account. No vendor lock-in. Runs on any AI agent.
+  </Card>
+</CardGroup>
+
+---
+
+## The problem with AI agents and security work
+
+Ask an agent to hunt for IDOR bugs. It improvises. It misses verb inconsistency checks, skips GraphQL object exposure, never tests parameter pollution. You re-prompt five times, burn 3× the tokens, and still get an incomplete result.
+
+**The agent is not the problem. The missing methodology is.**
+
+---
+
+## What AuditGuard skills deliver
+
+These are real numbers, same prompt, same model  skill on vs skill off:
+
+| | Without Skill | With Skill |
+|--|:---:|:---:|
+| IDOR findings on the same target | 5 | **11 (+120%)** |
+| Time to complete XSS hunt | 8 min | **2 min (-75%)** |
+| SSRF result quality | False positives | **Confirmed exploit** |
+| Turns to complete JWT test | 3 | **1 (-67%)** |
+| Scope collection time | 43s | **4s (-90%)** |
+
+A skill is a battle-tested methodology file your agent reads before starting a task. It covers every test case, every bypass technique, every output format a practitioner would use. The agent stops improvising and starts executing.
+
+---
 
 ## What's in the Community Hub?
 
 | Resource | Description |
 |---|---|
-| **Skills** | Reusable, self-contained methodology units for pentesting, bug bounty, compliance, and reporting |
+| **Skills** | 23 reusable methodology units for pentesting, bug bounty, compliance, and reporting |
 | **Scripts** | Automation scripts that support skill execution: scanners, payload generators, report parsers |
 | **Contexts** | Engagement-specific knowledge bases for web app pentest, cloud audit, mobile pentest, and more |
 
-## The problem with AI agents and security work
+---
 
-Ask an agent to hunt for IDOR bugs. It will improvise. It misses verb inconsistency checks, skips GraphQL object exposure, and never tests parameter pollution. You re-prompt five times, spend 3x the tokens, and still get an incomplete result.
-
-The agent is not dumb. It lacks a methodology.
-
-## How skills fix this
-
-A skill is a battle-tested methodology file your agent reads before starting a task. It covers every test case, every bypass technique, every output format a practitioner would use. The agent stops improvising and starts executing.
-
-| | Without skill | With skill |
-|--|--------------|------------|
-| Output quality | Inconsistent | Structured and complete |
-| Turns to finish | 3 to 5 | 1 |
-| Methodology coverage | Partial | Full |
-| Report format | Whatever the agent guesses | Triage-ready, platform-specific |
-
-Skills are installed in one command:
+## One command away
 
 ```bash
-auditguard-skills add bugbounty-reporter
+auditguard-skills add idor-hunter
 ```
 
 No account. No configuration. The CLI detects your installed agents automatically.
 
-## Next steps
+---
+
+## Built by the community. Trusted by practitioners.
+
+Every skill in this library was contributed, benchmarked, and peer-reviewed by security professionals. No theoretical exercises  every methodology has been run against real targets and measured against the alternative of flying blind.
+
+If a skill doesn't perform better than an agent without it, it doesn't ship.
+
+---
+
+## Get started
 
 <CardGroup cols={2}>
   <Card title="Quickstart" icon="rocket" href="/docs/quickstart">
-    Set up AuditGuard and run your first skill in minutes
+    Set up AuditGuard and run your first skill in under 5 minutes
   </Card>
-  <Card title="Skills" icon="puzzle-piece" href="/skills/overview">
-    Browse the full skill library
+  <Card title="Browse Skills" icon="puzzle-piece" href="/skills/overview">
+    Explore the full library  23 skills across 8 categories
   </Card>
-  <Card title="Commands" icon="terminal" href="/usage/commands">
-    Full reference for all CLI commands and flags
+  <Card title="See the Numbers" icon="chart-bar" href="/skills/benchmarks">
+    Real benchmark results  skill on vs skill off
   </Card>
-  <Card title="Contributing" icon="users" href="/docs/contributing">
-    Style guide and contribution process for new skills
+  <Card title="Contribute" icon="users" href="/docs/contributing">
+    Add your methodology to the community library
   </Card>
 </CardGroup>

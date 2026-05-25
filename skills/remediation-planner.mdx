@@ -21,7 +21,7 @@ Given any security finding, vulnerability, or bug description, produce a priorit
 
 - Identifies the vulnerability class, root cause, and affected component from the input
 - Orders steps by priority: immediate fixes first (stop the bleeding), then root cause fixes, then hardening to prevent recurrence
-- Keeps each step actionable — a developer can start implementing without follow-up questions
+- Keeps each step actionable  a developer can start implementing without follow-up questions
 - Labels effort as Low / Medium / High with clear definitions, and flags any temporary compensating controls explicitly
 
 ---
@@ -43,7 +43,7 @@ Use this skill when the user:
 
 #### What Does It Check?
 
-The skill analyzes the finding to identify the vulnerability class, root cause, and affected component. It then produces an ordered list of steps — minimum set needed, no padding — that a developer can follow directly.
+The skill analyzes the finding to identify the vulnerability class, root cause, and affected component. It then produces an ordered list of steps  minimum set needed, no padding  that a developer can follow directly.
 
 **In scope:**
 - Any vulnerability class: injection (SQLi, XSS, SSTI, SSRF), broken access control (IDOR, privilege escalation), authentication issues (JWT, session), cryptographic failures, misconfigurations
@@ -51,7 +51,7 @@ The skill analyzes the finding to identify the vulnerability class, root cause, 
 - Hardening steps to prevent recurrence
 
 **Out of scope:**
-- Vulnerability discovery — use a hunter skill (idor-hunter, xss-hunter, ssti-hunter) for that
+- Vulnerability discovery  use a hunter skill (idor-hunter, xss-hunter, ssti-hunter) for that
 - Generic security advice unrelated to the specific finding
 
 #### How It Works
@@ -66,15 +66,15 @@ Immediate fixes first (stop the bleeding), then root cause fixes, then hardening
 
 **Step 3: Write Each Step**
 
-Title + max 2-line description + effort label. No padding, no restating the problem. Steps must be actionable — a developer should be able to start implementing without follow-up questions.
+Title + max 2-line description + effort label. No padding, no restating the problem. Steps must be actionable  a developer should be able to start implementing without follow-up questions.
 
 #### Effort Scale
 
 | Label | Meaning |
 |-------|---------|
-| **Low** | Quick config change, one-line fix, or a well-understood patch — hours to a day |
-| **Medium** | Requires code refactoring, moderate testing, or cross-team coordination — days to a week |
-| **High** | Architectural change, significant engineering work, or complex coordination — weeks or more |
+| **Low** | Quick config change, one-line fix, or a well-understood patch  hours to a day |
+| **Medium** | Requires code refactoring, moderate testing, or cross-team coordination  days to a week |
+| **High** | Architectural change, significant engineering work, or complex coordination  weeks or more |
 
 #### Output
 
@@ -85,22 +85,22 @@ Example output:
 ```
 Remediation Plan: SQL Injection in /api/search
 
-Step 1 — Replace String Concatenation with Parameterized Queries
+Step 1  Replace String Concatenation with Parameterized Queries
 Rewrite all database queries using prepared statements or an ORM with parameter binding.
 Apply across every database-facing function, not just the reported endpoint.
 Effort: Low
 
-Step 2 — Add Centralized Input Validation
+Step 2  Add Centralized Input Validation
 Introduce a validation layer that enforces expected types and formats before input reaches
 the data layer. Use an allowlist approach for structured fields.
 Effort: Medium
 
-Step 3 — Restrict Database User Permissions
+Step 3  Restrict Database User Permissions
 Grant the application's DB user only the permissions it needs. Remove DROP, CREATE,
 and admin grants, and create separate read/write roles if the app allows it.
 Effort: Low
 
-Step 4 — Deploy a WAF Rule as a Compensating Control [temporary]
+Step 4  Deploy a WAF Rule as a Compensating Control [temporary]
 Add a WAF rule to detect and block common SQL injection patterns while the code fix
 is being rolled out. Not a substitute for Steps 1–3.
 Effort: Medium
@@ -110,7 +110,7 @@ Effort: Medium
 
 - If the finding is too vague (no vulnerability class, no affected component), one clarifying question will be asked before producing the plan
 - If no concrete remediation exists (fundamental design flaw), the skill will state that clearly and describe the trade-offs of available mitigations instead
-- Effort estimates are indicative — actual effort depends on codebase size, test coverage, and team familiarity
+- Effort estimates are indicative  actual effort depends on codebase size, test coverage, and team familiarity
 
 ---
 

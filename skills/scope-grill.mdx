@@ -1,5 +1,5 @@
 ---
-title: Scope Grill
+title: Scope Grill ★
 description: Interviews the user about a pentest or audit engagement before any testing begins, capturing target, scope, rules of engagement, auth, and deliverables into a structured brief.
 ---
 
@@ -17,11 +17,11 @@ auditguard-skills add scope-grill
 
 ## Summary
 
-Capture every critical engagement parameter before a single test is run — an untested assumption about scope or authorization invalidates findings and creates legal risk.
+Capture every critical engagement parameter before a single test is run  an untested assumption about scope or authorization invalidates findings and creates legal risk.
 
 - Asks 10 targeted questions one at a time in a fixed sequence, providing a recommended answer or example for each
 - Covers target, authorization confirmation, scope boundaries, test type (black/grey/white box), available accounts, rules of engagement, known tech stack, prior work, deliverables, and deadline
-- Will not proceed if written authorization is not confirmed — flags the legal risk explicitly
+- Will not proceed if written authorization is not confirmed  flags the legal risk explicitly
 - Produces a filled **Engagement Brief** saved as `ENGAGEMENT.md` in the current directory
 
 ---
@@ -46,16 +46,16 @@ Use this skill when the user:
 
 **Information captured in sequence:**
 
-1. **Target** — What is the exact target? (domain, IP range, application name, cloud account)
-2. **Authorization** — Do you have written authorization to test this target? (required — does not proceed if no)
-3. **Scope** — What is explicitly in scope? What is explicitly out of scope?
-4. **Test type** — Black-box (no credentials, no source), grey-box (credentials only), or white-box (full access + source)?
-5. **Accounts** — Test accounts available? What roles? (admin, user, guest, API key?)
-6. **Rules of engagement** — Any restrictions? (no DoS, no phishing, no persistence, time windows?)
-7. **Known stack** — Any known technologies? (framework, language, cloud provider, WAF, CDN?)
-8. **Prior work** — Previous pentest reports, known issues, or areas to re-verify?
-9. **Deliverables** — What's expected? (findings list, full report, executive summary?) Who is the audience?
-10. **Deadline** — When are findings due?
+1. **Target**  What is the exact target? (domain, IP range, application name, cloud account)
+2. **Authorization**  Do you have written authorization to test this target? (required  does not proceed if no)
+3. **Scope**  What is explicitly in scope? What is explicitly out of scope?
+4. **Test type**  Black-box (no credentials, no source), grey-box (credentials only), or white-box (full access + source)?
+5. **Accounts**  Test accounts available? What roles? (admin, user, guest, API key?)
+6. **Rules of engagement**  Any restrictions? (no DoS, no phishing, no persistence, time windows?)
+7. **Known stack**  Any known technologies? (framework, language, cloud provider, WAF, CDN?)
+8. **Prior work**  Previous pentest reports, known issues, or areas to re-verify?
+9. **Deliverables**  What's expected? (findings list, full report, executive summary?) Who is the audience?
+10. **Deadline**  When are findings due?
 
 #### How It Works
 
@@ -69,17 +69,17 @@ If the user cannot confirm written authorization to test the target, the skill s
 
 **Scope Ambiguity Flagging**
 
-If scope is vague (e.g., "test the application"), flag it — an unclear scope is itself a risk. Ask for explicit in-scope and out-of-scope items.
+If scope is vague (e.g., "test the application"), flag it  an unclear scope is itself a risk. Ask for explicit in-scope and out-of-scope items.
 
 **Output**
 
 After all questions are answered, produce a filled **Engagement Brief** and save it as `ENGAGEMENT.md` in the current directory.
 
 ```markdown
-# Engagement Brief — [Client] — [Date]
+# Engagement Brief  [Client]  [Date]
 
 ## Target
-[exact target — domains, IPs, application names]
+[exact target  domains, IPs, application names]
 
 ## Authorization
 Written authorization confirmed: YES
@@ -115,7 +115,7 @@ Out of scope: [list]
 
 - Will not begin testing until authorization is confirmed
 - If scope is vague, flags it rather than proceeding with assumptions
-- One question at a time — does not dump the full list at once
+- One question at a time  does not dump the full list at once
 
 ---
 

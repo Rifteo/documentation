@@ -1,6 +1,6 @@
 ---
 title: CVSS Scorer
-description: Computes an exact CVSS v3.1 base score and vector from a vulnerability description — infers metrics from context, asks one sharp question only when ambiguity would change the severity level.
+description: Computes an exact CVSS v3.1 base score and vector from a vulnerability description  infers metrics from context, asks one sharp question only when ambiguity would change the severity level.
 ---
 
 <Info>
@@ -17,7 +17,7 @@ auditguard-skills add cvss-scorer
 
 ## Summary
 
-Produce an exact CVSS v3.1 vector and score from a vulnerability description — decisive, accurate, and concise.
+Produce an exact CVSS v3.1 vector and score from a vulnerability description  decisive, accurate, and concise.
 
 - Infers all eight base metrics aggressively from the vulnerability description without flooding the auditor with scenarios
 - Only asks a clarifying question when the answer would change the severity bucket (e.g., Medium vs. High) or shift the score by ≥1.0
@@ -46,14 +46,14 @@ Use this skill when the user:
 
 The skill infers all eight CVSS v3.1 base metrics:
 
-- **AV** (Attack Vector) — Network / Adjacent / Local / Physical
-- **AC** (Attack Complexity) — Low / High
-- **PR** (Privileges Required) — None / Low / High
-- **UI** (User Interaction) — None / Required
-- **S** (Scope) — Unchanged / Changed
-- **C** (Confidentiality) — None / Low / High
-- **I** (Integrity) — None / Low / High
-- **A** (Availability) — None / Low / High
+- **AV** (Attack Vector)  Network / Adjacent / Local / Physical
+- **AC** (Attack Complexity)  Low / High
+- **PR** (Privileges Required)  None / Low / High
+- **UI** (User Interaction)  None / Required
+- **S** (Scope)  Unchanged / Changed
+- **C** (Confidentiality)  None / Low / High
+- **I** (Integrity)  None / Low / High
+- **A** (Availability)  None / Low / High
 
 #### How It Works
 
@@ -83,7 +83,7 @@ Use the entry point's AV/AC/PR/UI and the final step's C/I/A/S.
 
 ```
 CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N
-Score: 9.1 — Critical
+Score: 9.1  Critical
 ```
 
 A short note only for metrics that are non-obvious, were assumed, or could surprise the auditor.
@@ -102,8 +102,8 @@ A short note only for metrics that are non-obvious, were assumed, or could surpr
 
 #### Known Limitations
 
-- Self-XSS is not a valid standalone finding — the skill will flag it rather than score it
-- Blind variants (blind SQLi, blind SSRF, blind XXE) use C:L not C:H — data is inferred, not read
+- Self-XSS is not a valid standalone finding  the skill will flag it rather than score it
+- Blind variants (blind SQLi, blind SSRF, blind XXE) use C:L not C:H  data is inferred, not read
 - Never explains what CVSS metrics mean unless asked
 - Never shows the score formula or intermediate math
 

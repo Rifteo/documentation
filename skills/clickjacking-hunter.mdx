@@ -1,6 +1,6 @@
 ---
 title: Clickjacking Hunter
-description: Complete clickjacking (UI redressing) methodology — framing protection detection, single-click and multi-step PoC construction, JS frame-busting bypass, drag-and-drop and OAuth consent variants, and report structure.
+description: Complete clickjacking (UI redressing) methodology  framing protection detection, single-click and multi-step PoC construction, JS frame-busting bypass, drag-and-drop and OAuth consent variants, and report structure.
 ---
 
 <Info>
@@ -17,7 +17,7 @@ auditguard-skills add clickjacking-hunter
 
 ## Summary
 
-Detect and exploit UI redressing vulnerabilities across sensitive endpoints — from header checks to a fully functional PoC page.
+Detect and exploit UI redressing vulnerabilities across sensitive endpoints  from header checks to a fully functional PoC page.
 
 - Phase 1 checks framing protections via `X-Frame-Options` and `Content-Security-Policy: frame-ancestors` across all sensitive endpoints
 - Phase 2 confirms that the target page actually loads inside an iframe before building the full PoC
@@ -31,7 +31,7 @@ Detect and exploit UI redressing vulnerabilities across sensitive endpoints — 
 
 ### Clickjacking Hunter
 
-Clickjacking (UI redressing) tricks a victim into clicking elements on a hidden target page by overlaying invisible iframes on top of decoy content. Impact ranges from account deletion and fund transfer to OAuth authorization and 2FA disable — any one-click sensitive action is a candidate.
+Clickjacking (UI redressing) tricks a victim into clicking elements on a hidden target page by overlaying invisible iframes on top of decoy content. Impact ranges from account deletion and fund transfer to OAuth authorization and 2FA disable  any one-click sensitive action is a candidate.
 
 #### When to Use This Skill
 
@@ -52,7 +52,7 @@ Use this skill when the user:
 - OAuth consent clickjacking and drag-and-drop variants
 
 **Out of scope:**
-- Low-value pages with no sensitive action reachable — clickjacking on a marketing page is not reportable
+- Low-value pages with no sensitive action reachable  clickjacking on a marketing page is not reportable
 
 #### How It Works
 
@@ -81,11 +81,11 @@ If JavaScript frame-busting is detected, bypass it using the `sandbox` attribute
 **Phase 5: High-Value Targets**
 
 Priority order:
-1. Account deletion / email change — one click → ATO or permanent loss
-2. 2FA disable — security downgrade, enables ATO
-3. OAuth consent screens — grants attacker app access to victim account
-4. Financial actions (transfer, checkout) — direct financial impact
-5. Admin actions — high impact if victim is an admin
+1. Account deletion / email change  one click → ATO or permanent loss
+2. 2FA disable  security downgrade, enables ATO
+3. OAuth consent screens  grants attacker app access to victim account
+4. Financial actions (transfer, checkout)  direct financial impact
+5. Admin actions  high impact if victim is an admin
 
 #### Output
 
@@ -100,8 +100,8 @@ Report includes: affected endpoints, reproduction steps, two screenshots (opacit
 #### Known Limitations
 
 - Requires a browser where the victim is logged into the target to demonstrate the PoC
-- CSP `frame-ancestors` takes precedence over `X-Frame-Options` in modern browsers — both must be checked
-- `ALLOW-FROM` is deprecated and ignored by modern browsers — pages using only this directive are vulnerable
+- CSP `frame-ancestors` takes precedence over `X-Frame-Options` in modern browsers  both must be checked
+- `ALLOW-FROM` is deprecated and ignored by modern browsers  pages using only this directive are vulnerable
 
 ---
 
@@ -109,7 +109,7 @@ Report includes: affected endpoints, reproduction steps, two screenshots (opacit
 
 <CardGroup cols={3}>
   <Card title="xss-hunter" href="/skills/xss-hunter">
-    Complete XSS testing methodology — reflected, stored, DOM-based, blind, and mutation XSS
+    Complete XSS testing methodology  reflected, stored, DOM-based, blind, and mutation XSS
 
     
   </Card>

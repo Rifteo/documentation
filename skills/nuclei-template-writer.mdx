@@ -1,6 +1,6 @@
 ---
 title: Nuclei Template Writer
-description: Convert a vulnerability description or HTTP request/response pair into a ready-to-run Nuclei YAML template — handles auth strategies, matcher selection, OOB detection, and multi-step flows.
+description: Convert a vulnerability description or HTTP request/response pair into a ready-to-run Nuclei YAML template  handles auth strategies, matcher selection, OOB detection, and multi-step flows.
 ---
 
 <Info>
@@ -19,7 +19,7 @@ auditguard-skills add nuclei-template-writer
 
 Turns a finding into a Nuclei template that can detect the same vulnerability at scale across thousands of targets.
 
-- Parses any input type — description only, HTTP request, request + response, or multi-step flow — and adjusts template quality accordingly
+- Parses any input type  description only, HTTP request, request + response, or multi-step flow  and adjusts template quality accordingly
 - Classifies the vulnerability class, selects the right detection strategy (word, regex, status, DSL, or interactsh matchers), and handles all auth strategies (unauthenticated, Bearer, session cookie, Basic, CSRF token)
 - Always generates an unauthenticated probe variant alongside the authenticated template
 - Outputs the complete YAML template, a "customize before running" checklist, the exact `nuclei` command, and any limitations (OOB required, OAuth not templateable, etc.)
@@ -43,7 +43,7 @@ Use this skill when the user:
 
 #### What Does It Check?
 
-The skill determines the input type (description / request / request+response / multi-step), then selects the best matchers and auth strategy to produce a production-ready template. Quality depends on input richness — a full request+response produces precise matchers, while a description alone produces a skeleton with placeholder payloads.
+The skill determines the input type (description / request / request+response / multi-step), then selects the best matchers and auth strategy to produce a production-ready template. Quality depends on input richness  a full request+response produces precise matchers, while a description alone produces a skeleton with placeholder payloads.
 
 **In scope:**
 - All vulnerability classes: XSS, SQLi, SSRF, LFI, IDOR, SSTI, RCE, auth bypass, etc.
@@ -52,8 +52,8 @@ The skill determines the input type (description / request / request+response / 
 - Multi-step flows (IDOR with two accounts, CSRF with token extraction)
 
 **Out of scope:**
-- OAuth / SAML / SSO flows — too complex to template reliably
-- Running or adapting templates — this skill generates them, not executes them
+- OAuth / SAML / SSO flows  too complex to template reliably
+- Running or adapting templates  this skill generates them, not executes them
 
 #### How It Works
 
@@ -89,15 +89,15 @@ State clearly if OOB is required, auth cannot be templated (OAuth/SSO), multi-ac
 
 | Input Type | Template Quality |
 |------------|-----------------|
-| Description only (A) | Skeleton with placeholder payloads — mark what needs customization |
+| Description only (A) | Skeleton with placeholder payloads  mark what needs customization |
 | HTTP request (B) | Parameterized request, best-guess matchers |
-| Request + response (C) | Full template with precise matchers — production ready |
+| Request + response (C) | Full template with precise matchers  production ready |
 | Multi-step / IDOR (D) | Multi-step raw template with cookie reuse |
 
 Example run command:
 
 ```bash
-# No auth — run directly
+# No auth  run directly
 nuclei -t template-name.yaml -l targets.txt
 
 # Bearer / API key
@@ -109,10 +109,10 @@ nuclei -t template-name.yaml -l targets.txt -var "username=test@test.com" -var "
 
 #### Known Limitations
 
-- OOB templates require an interactsh server — hits appear in the interactsh dashboard, not nuclei output
-- OAuth/SAML/SSO auth cannot be reliably templated — manual testing required
+- OOB templates require an interactsh server  hits appear in the interactsh dashboard, not nuclei output
+- OAuth/SAML/SSO auth cannot be reliably templated  manual testing required
 - IDOR templates need two valid accounts; replace `VICTIM_OBJECT_ID` and `ATTACKER_SESSION` with real values
-- Type A/B matchers are inferred — always validate against the real response before bulk-running
+- Type A/B matchers are inferred  always validate against the real response before bulk-running
 
 ---
 
@@ -125,7 +125,7 @@ nuclei -t template-name.yaml -l targets.txt -var "username=test@test.com" -var "
     
   </Card>
   <Card title="xss-hunter" href="/skills/xss-hunter">
-    Complete XSS testing methodology — reflected, stored, DOM, blind, CSP bypass, WAF evasion
+    Complete XSS testing methodology  reflected, stored, DOM, blind, CSP bypass, WAF evasion
 
     
   </Card>

@@ -1,6 +1,6 @@
 ---
-title: XSS Hunter
-description: Complete XSS testing methodology — reflected, stored, DOM-based, blind, and mutation XSS, CSP bypass, DOM clobbering, filter/WAF evasion, and impact escalation.
+title: XSS Hunter ★
+description: Complete XSS testing methodology  reflected, stored, DOM-based, blind, and mutation XSS, CSP bypass, DOM clobbering, filter/WAF evasion, and impact escalation.
 ---
 
 <Info>
@@ -17,7 +17,7 @@ auditguard-skills add xss-hunter
 
 ## Summary
 
-Execute a complete Cross-Site Scripting (XSS) testing methodology across all attack types — from reconnaissance to impact escalation.
+Execute a complete Cross-Site Scripting (XSS) testing methodology across all attack types  from reconnaissance to impact escalation.
 
 - Covers 9 attack types: reflected XSS, stored XSS, DOM-based XSS, blind XSS, filter and WAF evasion, CSP bypass, mutation XSS (mXSS), DOM clobbering, and impact escalation
 - Identifies the injection context (HTML body, attribute, JS string, template literal, href, CSS) before selecting the right payload
@@ -30,7 +30,7 @@ Execute a complete Cross-Site Scripting (XSS) testing methodology across all att
 
 ### XSS Hunter
 
-Complete XSS testing methodology — reflected, stored, DOM-based, blind, mutation XSS, CSP bypass, DOM clobbering, filter/WAF evasion, and impact escalation.
+Complete XSS testing methodology  reflected, stored, DOM-based, blind, mutation XSS, CSP bypass, DOM clobbering, filter/WAF evasion, and impact escalation.
 
 #### When to Use This Skill
 
@@ -55,8 +55,8 @@ XSS occurs when user-controlled input is rendered in a browser without proper sa
 - Impact escalation: cookie theft, credential harvesting, keylogging, CSRF, account takeover, internal network scanning
 
 **Out of scope:**
-- SQL injection, SSTI, or other vulnerability classes — use dedicated skills
-- Automated mass scanning — this is a guided methodology
+- SQL injection, SSTI, or other vulnerability classes  use dedicated skills
+- Automated mass scanning  this is a guided methodology
 
 #### How It Works
 
@@ -126,8 +126,8 @@ Report structure follows: `Title: [Stored/Reflected/DOM] XSS on [endpoint/featur
 #### Known Limitations
 
 - Blind XSS requires an OOB server (XSS Hunter, Burp Collaborator, or interactsh) to receive callbacks
-- DOM clobbering requires understanding JS variable usage in the target application — read JS source first
-- mXSS effectiveness depends on the browser version and sanitizer version — test in multiple browsers
+- DOM clobbering requires understanding JS variable usage in the target application  read JS source first
+- mXSS effectiveness depends on the browser version and sanitizer version  test in multiple browsers
 - Always use `document.domain` (not `alert(1)`) to prove execution origin in findings
 
 ---

@@ -1,6 +1,6 @@
 ---
-title: SSRF Hunter
-description: Complete SSRF detection and exploitation methodology — injection point discovery, cloud metadata theft (AWS/GCP/Azure), internal network enumeration, protocol handler abuse, filter bypass techniques, blind SSRF via OOB, and report structure.
+title: SSRF Hunter ★
+description: Complete SSRF detection and exploitation methodology  injection point discovery, cloud metadata theft (AWS/GCP/Azure), internal network enumeration, protocol handler abuse, filter bypass techniques, blind SSRF via OOB, and report structure.
 ---
 
 <Info>
@@ -21,7 +21,7 @@ Detect and exploit Server-Side Request Forgery from injection point discovery th
 
 - Phase 1 maps all SSRF injection points: obvious URL parameters, less-obvious parameters (PDF renderers, file importers, webhook callbacks), and non-URL parameters that trigger fetches
 - Phase 2 confirms SSRF using OOB callbacks (Burp Collaborator, interactsh) and classifies the result (non-blind vs. blind, filtered vs. full response)
-- Phase 3 exploits cloud metadata endpoints for AWS IMDSv1/v2, GCP, and Azure — stealing IAM credentials, service account tokens, and managed identity tokens
+- Phase 3 exploits cloud metadata endpoints for AWS IMDSv1/v2, GCP, and Azure  stealing IAM credentials, service account tokens, and managed identity tokens
 - Phase 4 enumerates internal network services via SSRF port scanning (Redis, MySQL, MongoDB, Docker API, Kubernetes kubelet)
 - Phase 5 abuses protocol handlers: `file://`, `gopher://`, `dict://` for Redis command injection and SMTP relay
 - Phase 6 covers filter bypass techniques: IP encoding (decimal, hex, octal, IPv6 mapped), localhost aliases, redirect chains, DNS rebinding
@@ -55,7 +55,7 @@ Use this skill when the user:
 - Filter bypass: IP encoding, localhost aliases, redirect chains, DNS rebinding
 
 **Out of scope:**
-- Other vulnerability classes — use dedicated skills for XXE, IDOR, etc.
+- Other vulnerability classes  use dedicated skills for XXE, IDOR, etc.
 
 #### How It Works
 
@@ -124,15 +124,15 @@ http://localhost/  http://127.1/  http://0/  → Localhost aliases
 
 | Severity | Condition |
 |---|---|
-| Critical | Cloud metadata accessible — IAM credentials stolen |
-| Critical | Docker/Kubernetes API accessible — unauthenticated RCE possible |
+| Critical | Cloud metadata accessible  IAM credentials stolen |
+| Critical | Docker/Kubernetes API accessible  unauthenticated RCE possible |
 | High | Internal services accessible (Redis, databases) |
 | High | Local file read via `file://` |
-| Medium | Blind SSRF confirmed — limited internal access |
+| Medium | Blind SSRF confirmed  limited internal access |
 
 #### Known Limitations
 
-- AWS IMDSv2 requires token-based authentication — test whether the app forwards custom headers
+- AWS IMDSv2 requires token-based authentication  test whether the app forwards custom headers
 - Blind SSRF has limited direct impact but can be escalated via DNS exfiltration or chaining with other bugs
 - DNS rebinding attacks require external tooling (singularity) and specific DNS TTL conditions
 
@@ -142,17 +142,17 @@ http://localhost/  http://127.1/  http://0/  → Localhost aliases
 
 <CardGroup cols={3}>
   <Card title="xxe-phantom" href="/skills/xxe-phantom">
-    Complete XXE detection and exploitation methodology — file read, blind OOB, SAML vectors, and SSRF chaining
+    Complete XXE detection and exploitation methodology  file read, blind OOB, SAML vectors, and SSRF chaining
 
     
   </Card>
   <Card title="redirect-forge" href="/skills/redirect-forge">
-    Complete open redirect methodology — SSRF chaining, OAuth token theft, and bypass techniques
+    Complete open redirect methodology  SSRF chaining, OAuth token theft, and bypass techniques
 
     
   </Card>
   <Card title="hpp-hunter" href="/skills/hpp-hunter">
-    Complete HTTP Parameter Pollution methodology — includes SSRF via HPP scenarios
+    Complete HTTP Parameter Pollution methodology  includes SSRF via HPP scenarios
 
     
   </Card>

@@ -1,6 +1,26 @@
 ---
 title: Skills Overview
-description: What AuditGuard skills are, how they work, and how to create one.
+description: 23 battle-tested security skills for AI agents  covering every phase of a security engagement.
+---
+
+## Stop improvising. Start executing.
+
+AuditGuard skills are the methodology layer your AI agent is missing. Each skill encodes the exact steps, bypass techniques, and output formats that expert practitioners use  so your agent delivers complete, structured results from the first prompt.
+
+<CardGroup cols={3}>
+  <Card title="23 skills" icon="shield-halved">
+    Web, API, infrastructure, compliance, and reporting  every phase covered
+  </Card>
+  <Card title="★ Top 5 benchmarked" icon="star">
+    Community-selected best performers  proven by real benchmark data
+  </Card>
+  <Card title="One command install" icon="terminal">
+    `auditguard-skills add <skill>`  no config, no account
+  </Card>
+</CardGroup>
+
+> ★ marks the top 5 skills by benchmark performance. See the [full benchmark results →](/skills/benchmarks)
+
 ---
 
 ## What is a skill?
@@ -12,7 +32,103 @@ A **skill** is a self-contained instruction file that teaches an AI agent a spec
 - Specifies the **exact output format** to produce
 - Includes **rules and guardrails** to prevent incorrect behavior
 
-Skills are not code modules, they are structured prompts that encode expert knowledge. The agent reads the `SKILL.md`, understands when to apply it, and executes the methodology against whatever the user provides.
+Skills are not code modules  they are structured prompts that encode expert knowledge. The agent reads the `SKILL.md`, understands when to apply it, and executes the methodology against whatever the user provides.
+
+---
+
+## Available skills
+
+**Web Application**
+
+| Skill | What it does |
+|-------|-------------|
+| [XSS Hunter ★](/skills/xss-hunter) | Full XSS methodology: reflected, stored, DOM, filter bypass, CSP evasion, mXSS |
+| [IDOR Hunter ★](/skills/idor-hunter) | Systematic IDOR and BOLA detection with multi-account testing and bypass techniques |
+| [XXE Phantom](/skills/xxe-phantom) | XXE injection: file read, blind OOB, SSRF chaining, SVG and XLSX vectors |
+| [SSTI Hunter](/skills/ssti-hunter) | Server-side template injection with engine fingerprinting and RCE exploitation |
+| [JS Analyzer](/skills/js-analyzer) | JavaScript analysis for secrets, endpoints, sinks, and prototype pollution |
+| [HPP Hunter](/skills/hpp-hunter) | HTTP parameter pollution detection and exploitation |
+| [Clickjacking Hunter](/skills/clickjacking-hunter) | Clickjacking detection and PoC generation |
+| [Redirect Forge](/skills/redirect-forge) | Open redirect discovery and OAuth code theft chaining |
+
+**API Security**
+
+| Skill | What it does |
+|-------|-------------|
+| [IDOR Hunter ★](/skills/idor-hunter) | Systematic IDOR and BOLA detection  catches what generic agents miss every time |
+| [JWT Cracker](/skills/jwt-cracker) | JWT attacks: alg:none, weak secret brute-force, RS256 to HS256, kid injection |
+
+**Infrastructure**
+
+| Skill | What it does |
+|-------|-------------|
+| [SSRF Hunter ★](/skills/ssrf-hunter) | SSRF detection and exploitation  turns false positives into confirmed exploits |
+| [Nuclei Template Writer](/skills/nuclei-template-writer) | Writes production-ready Nuclei templates from vulnerability descriptions |
+| [Check Exploit](/skills/check-exploit) | Checks if a CVE has a public exploit and assesses exploitability |
+
+**Reconnaissance**
+
+| Skill | What it does |
+|-------|-------------|
+| [Scope Grill ★](/skills/scope-grill) | Validates and clarifies engagement scope before any testing begins |
+| [Attack Surface](/skills/attack-surface) | Maps the full attack surface of a target before testing begins |
+| [Vuln Diagnose](/skills/vuln-diagnose) | Diagnoses ambiguous or incomplete vulnerability reports |
+
+**Reporting**
+
+| Skill | What it does |
+|-------|-------------|
+| [Finding Writer](/skills/finding-writer) | Converts raw notes into a structured, report-ready finding |
+| [Pentest Report](/skills/pentest-report) | Assembles a full pentest report from individual findings |
+| [Bugbounty Reporter](/skills/bugbounty-reporter) | Converts raw findings into triage-ready HackerOne/Bugcrowd reports |
+| [CVSS Scorer](/skills/cvss-scorer) | Computes exact CVSS v3.1 base score and vector from a vulnerability description |
+| [Risk Assessor](/skills/risk-assessor) | Business risk assessment and executive-ready justification from technical findings |
+| [Remediation Planner](/skills/remediation-planner) | Generates specific, prioritized remediation plans with code-level fixes |
+
+**Compliance**
+
+| Skill | What it does |
+|-------|-------------|
+| [Compliance Gap Analyzer](/skills/compliance-gap-analyzer) | Identifies compliance gaps against ISO 27001, SOC2, NIST, and PCI-DSS |
+| [Control Lookup](/skills/control-lookup) | Maps controls across frameworks with cross-references and testing hints |
+
+**Workflow**
+
+| Skill | What it does |
+|-------|-------------|
+| [Find Skills](/skills/find-skills) | Discovers and installs the right skill for any security task |
+| [Engagement Handoff](/skills/engagement-handoff) | Structures engagement handoff notes between team members |
+| [CTF Writeup](/skills/ctf-writeup) | Formats CTF challenge writeups for publication |
+| [Caveman](/skills/caveman) | Ultra-compressed comms mode for fast-paced testing sessions |
+| [Skill Benchmark](/skills/skill-benchmark) | Benchmarks skill performance with and without the agent |
+
+**Integrations**
+
+Skills that orchestrate external MCP tool servers into structured engagements.
+
+| Skill | MCP Server | What it does |
+|-------|-----------|-------------|
+| [HexStrike Forge ★](/skills/hexstrike-forge) | HexStrike | Full pentest engagement: 5-phase workflow, parallel execution, triage gates, and report-ready findings from a single prompt |
+
+---
+
+## Installing a skill
+
+```bash
+# Install a skill
+auditguard-skills add <skill-name>
+
+# Install globally (available in all projects)
+auditguard-skills add <skill-name> --global
+
+# List installed skills
+auditguard-skills list
+
+# List all available skills
+auditguard-skills available
+```
+
+---
 
 ## Skill anatomy
 
@@ -21,10 +137,10 @@ Every skill lives in its own directory:
 ```
 skills/
 └── my-skill/
-    ├── SKILL.md          # Required, agent instructions
-    ├── references/       # Optional, context files the skill reads at runtime
+    ├── SKILL.md          # Required  agent instructions
+    ├── references/       # Optional  context files the skill reads at runtime
     │   └── guide.md
-    └── scripts/          # Optional, Python or bash scripts the skill runs
+    └── scripts/          # Optional  Python or bash scripts the skill runs
         └── my-tool.py
 ```
 
@@ -51,130 +167,23 @@ metadata:
 ```markdown
 # Skill Title
 
-Brief intro: what this skill does and why it matters.
-
 ## When to Use
-
 Activate this skill when the user:
 - asks to test X
 - provides Y and wants it structured as Z
-- says "check X" or "find X"
 
 ## Step 1: Title
-
 What the agent does in this step.
 
-## Step 2: Title
-
-...
-
 ## Output Format
-
 Produce exactly this structure. Do not omit any section.
 
----
-
-[output template here]
-
----
-
 ## Rules
-
 - Rule 1: hard constraint
 - Rule 2: behavior guardrail
 ```
 
-### `references/`
-
-Static context documents the skill reads during execution: severity guides, CWE/OWASP maps, known-secrets wordlists, ID pattern references, rubrics, and agent profiles. Checked into the skill directory so they are always available offline.
-
-### `scripts/`
-
-Python or shell scripts the skill invokes directly. Used for deterministic tasks that should not be left to the agent's judgment: CVSS scoring, CWE lookup, report generation.
-
-## Available skills
-
-**Bug Bounty**
-
-| Skill | What it does |
-|-------|-------------|
-| [Bugbounty Reporter](/skills/bugbounty-reporter) | Converts raw findings into triage-ready reports. Pre-submission gate included |
-| [Caveman](/skills/caveman) | Ultra-compressed comms mode for fast-paced testing sessions |
-
-**Vulnerability Testing**
-
-| Skill | What it does |
-|-------|-------------|
-| [IDOR Hunter](/skills/idor-hunter) | Systematic IDOR and BOLA detection with multi-account testing and bypass techniques |
-| [XSS Hunter](/skills/xss-hunter) | Full XSS methodology: reflected, stored, DOM, filter bypass, CSP evasion, mXSS |
-| [SSRF Hunter](/skills/ssrf-hunter) | SSRF detection and exploitation including internal recon, cloud metadata, and filter bypass |
-| [XXE Phantom](/skills/xxe-phantom) | XXE injection: file read, blind OOB, SSRF chaining, SVG and XLSX vectors |
-| [SSTI Hunter](/skills/ssti-hunter) | Server-side template injection with engine fingerprinting and RCE exploitation |
-| [JS Analyzer](/skills/js-analyzer) | JavaScript analysis for secrets, endpoints, sinks, and prototype pollution |
-| [JWT Cracker](/skills/jwt-cracker) | JWT attacks: alg:none, weak secret brute-force, RS256 to HS256, kid injection |
-| [HPP Hunter](/skills/hpp-hunter) | HTTP parameter pollution detection and exploitation |
-| [Clickjacking Hunter](/skills/clickjacking-hunter) | Clickjacking detection and PoC generation |
-| [Redirect Forge](/skills/redirect-forge) | Open redirect discovery and OAuth code theft chaining |
-
-**Reporting and Scoring**
-
-| Skill | What it does |
-|-------|-------------|
-| [Finding Writer](/skills/finding-writer) | Converts raw notes into a structured, report-ready finding |
-| [Pentest Report](/skills/pentest-report) | Assembles a full pentest report from individual findings |
-| [CVSS Scorer](/skills/cvss-scorer) | Computes exact CVSS v3.1 base score and vector from a vulnerability description |
-| [Risk Assessor](/skills/risk-assessor) | Business risk assessment from technical findings |
-| [Remediation Planner](/skills/remediation-planner) | Generates specific, prioritized remediation plans |
-
-**Recon and Assessment**
-
-| Skill | What it does |
-|-------|-------------|
-| [Attack Surface](/skills/attack-surface) | Maps the full attack surface before testing begins |
-| [Scope Grill](/skills/scope-grill) | Validates and clarifies engagement scope |
-| [Check Exploit](/skills/check-exploit) | Checks if a CVE has a public exploit and assesses exploitability |
-| [Vuln Diagnose](/skills/vuln-diagnose) | Diagnoses ambiguous or incomplete vulnerability reports |
-| [Nuclei Template Writer](/skills/nuclei-template-writer) | Writes production-ready Nuclei templates from vulnerability descriptions |
-
-**MCP Integrations**
-
-Skills that orchestrate external MCP tool servers into structured engagements.
-
-| Skill | MCP Server | What it does |
-|-------|-----------|-------------|
-| [HexStrike Forge](/skills/hexstrike-forge) | HexStrike | Full pentest engagement: 5-phase workflow, parallel tool execution, triage gates, false positive filtering, and report-ready findings from a single prompt |
-
-**Compliance and Governance**
-
-| Skill | What it does |
-|-------|-------------|
-| [Compliance Gap Analyzer](/skills/compliance-gap-analyzer) | Identifies compliance gaps against security frameworks |
-| [Control Lookup](/skills/control-lookup) | Maps controls across ISO 27001, SOC2, NIST, and PCI-DSS |
-
-**Workflow**
-
-| Skill | What it does |
-|-------|-------------|
-| [Find Skills](/skills/find-skills) | Discovers and loads the right skill for any security task |
-| [Engagement Handoff](/skills/engagement-handoff) | Structures engagement handoff notes between team members |
-| [CTF Writeup](/skills/ctf-writeup) | Formats CTF challenge writeups |
-| [Skill Benchmark](/skills/skill-benchmark) | Benchmarks skill performance with and without the agent |
-
-## Installing a skill
-
-```bash
-# Install for a specific agent
-auditguard-skills add <skill-name> --agent claude-code
-
-# Install globally (available in all projects)
-auditguard-skills add <skill-name> --global
-
-# List installed skills
-auditguard-skills list
-
-# List all available skills
-auditguard-skills available
-```
+---
 
 ## Skill lifecycle
 
@@ -189,15 +198,17 @@ auditguard-skills available
     Bundle any reference documents or helper scripts the skill needs into `references/` and `scripts/`
   </Step>
   <Step title="Benchmark">
-    Run `skill-benchmark` to score quality and check compatibility across agents, fix any issues before publishing
+    Run `skill-benchmark` to score quality and check compatibility across agents  if it doesn't outperform no-skill, it doesn't ship
   </Step>
   <Step title="Document">
     Write the `.mdx` documentation page following the [Style Guide](/docs/style-guide)
   </Step>
   <Step title="Publish">
-    Open a pull request, the skill appears in the community hub after review and merge
+    Open a pull request  the skill appears in the community hub after review and merge
   </Step>
 </Steps>
+
+---
 
 ## Naming conventions
 
@@ -208,6 +219,6 @@ auditguard-skills available
 | Keep names under 40 characters | `control-lookup` | `multi-framework-compliance-control-reference-lookup` |
 | Use descriptive tags from the approved list | `pentest`, `compliance`, `risk`, `audit` | `misc`, `tool`, `helper` |
 
-## Next step
+## Ready to contribute?
 
-Ready to write a skill? Follow the [Style Guide](/docs/style-guide) and the [contribution process](/docs/contributing).
+Follow the [Style Guide](/docs/style-guide) and the [contribution process](/docs/contributing) to add your methodology to the community library.

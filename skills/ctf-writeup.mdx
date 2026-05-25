@@ -1,6 +1,6 @@
 ---
 title: CTF Writeup Generator
-description: Generates a clean, publishable CTF challenge writeup from solve notes — suitable for HTB, CTFtime, personal blogs, and team wikis.
+description: Generates a clean, publishable CTF challenge writeup from solve notes  suitable for HTB, CTFtime, personal blogs, and team wikis.
 ---
 
 <Info>
@@ -17,12 +17,12 @@ auditguard-skills add ctf-writeup
 
 ## Summary
 
-Turn solve notes, tool output, and scattered observations into a clean, publishable CTF writeup that teaches — including the wrong turns.
+Turn solve notes, tool output, and scattered observations into a clean, publishable CTF writeup that teaches  including the wrong turns.
 
 - Collects challenge name, category, point value, CTF event, flag, key steps, and wrong turns from the user
 - Produces a complete writeup with header, challenge description, initial analysis, step-by-step solution walkthrough with real commands and payloads, key insight paragraph, and optional takeaways
 - Suitable for HackTheBox, CTFtime, personal blogs, and team wikis
-- Enforces a direct, technical tone aimed at peers — no marketing fluff
+- Enforces a direct, technical tone aimed at peers  no marketing fluff
 
 ---
 
@@ -46,7 +46,7 @@ The skill will ask if not provided:
 - Challenge name, category, and point value
 - CTF event name and date
 - The flag (for confirmation)
-- Key steps taken to solve it — notes, commands, payloads used
+- Key steps taken to solve it  notes, commands, payloads used
 - Any wrong turns worth documenting
 
 #### How It Works
@@ -55,7 +55,7 @@ The skill will ask if not provided:
 
 **Header**
 ```
-# [Challenge Name] — [CTF Event Name]
+# [Challenge Name]  [CTF Event Name]
 **Category:** [Web / Pwn / Crypto / Forensics / OSINT / Misc]
 **Points:** [value]
 **Difficulty:** [as rated by organizer or personal assessment]
@@ -72,11 +72,11 @@ What was noticed first? What tools were used to understand the challenge? Includ
 
 **Solution Walkthrough**
 
-Step-by-step with numbered steps. Shows every command, payload, or key observation with real code blocks. Explains *why* each step worked — not just what happened.
+Step-by-step with numbered steps. Shows every command, payload, or key observation with real code blocks. Explains *why* each step worked  not just what happened.
 
 **Key Insight**
 
-One paragraph on the core trick — what would someone need to know to solve this without the writeup? The part other players will search for.
+One paragraph on the core trick  what would someone need to know to solve this without the writeup? The part other players will search for.
 
 **Flag**
 ```
@@ -93,7 +93,7 @@ A markdown-formatted writeup ready for publication on HackTheBox, CTFtime, a per
 
 #### Known Limitations
 
-- Shows real commands and payloads — vague writeups help nobody
+- Shows real commands and payloads  vague writeups help nobody
 - Never publishes writeups for active competitions where sharing is prohibited
 - Includes wrong turns only when they illustrate a useful lesson
 
