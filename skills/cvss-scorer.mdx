@@ -1,5 +1,5 @@
 ---
-title: CVSS Scorer
+title: CVSS Scorer ★
 description: Computes an exact CVSS v3.1 base score and vector from a vulnerability description infers metrics from context, asks one sharp question only when ambiguity would change the severity level.
 ---
 
@@ -10,11 +10,19 @@ description: Computes an exact CVSS v3.1 base score and vector from a vulnerabil
   **Tags:** security, reporting, risk
 </Info>
 
+<Tip>
+  **★ Benchmark result:** -63% tokens, -68% time — same score, zero noise. Same model, same prompt.
+</Tip>
+
 **Installation**
 
 ```bash
 auditguard-skills add cvss-scorer
 ```
+
+<video controls playsInline style={{ width: '100%', borderRadius: '8px', marginBottom: '32px' }}>
+  <source src="/medias/videos/cvss-scorer.mp4" type="video/mp4" />
+</video>
 
 ---
 

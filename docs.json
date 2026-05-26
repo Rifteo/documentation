@@ -161,6 +161,15 @@
         ]
       },
       {
+        "tab": "Scripts",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": ["scripts/overview", "scripts/script-template"]
+          }
+        ]
+      },
+      {
         "tab": "Reference",
         "groups": [
           {
