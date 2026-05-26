@@ -7,6 +7,10 @@ description: Interviews the user about a pentest or audit engagement before any 
   **Category:** Pentest & security testing
 </Info>
 
+<Tip>
+  **★ Top 5 benchmark result:** -93% token usage and -90% time for scope collection (43s → 4s) — no more wasted back-and-forth before testing.
+</Tip>
+
 **Installation**
 
 ```bash
@@ -116,6 +120,18 @@ Out of scope: [list]
 - Will not begin testing until authorization is confirmed
 - If scope is vague, flags it rather than proceeding with assumptions
 - One question at a time  does not dump the full list at once
+
+---
+
+## Benchmark Results
+
+Tested on claude-sonnet-4-6 via Claude Code CLI. Same prompt, same model, same target. The only variable is whether the skill is loaded.
+
+| Metric | Without Skill | With Skill |
+|--------|--------------|------------|
+| Turns to complete | 2 | 1 |
+| Response tokens | ~2,332 | ~165 |
+| Total time | 43s | 4s |
 
 ---
 

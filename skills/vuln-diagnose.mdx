@@ -126,6 +126,18 @@ A Minimal Reproduction Case document with confirmed impact and evidence, ready f
 
 ---
 
+## Benchmark Results
+
+Tested on claude-sonnet-4-6 via Claude Code CLI. Same prompt, same model, same target. The only variable is whether the skill is loaded.
+
+| Metric | Without Skill | With Skill |
+|--------|--------------|------------|
+| Turns to complete | 2 | 1 |
+| Response tokens | ~2,255 | ~1,315 |
+| Total time | 55s | 26s |
+
+---
+
 ## Related skills
 
 <CardGroup cols={3}>

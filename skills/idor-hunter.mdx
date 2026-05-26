@@ -7,6 +7,10 @@ description: Systematic IDOR/BOLA detection methodology  recon, multi-account te
   **Category:** Pentest & security testing
 </Info>
 
+<Tip>
+  **★ Top 5 benchmark result:** +120% more findings on the same target — 5 without the skill vs. 11 with it, same model, same prompt.
+</Tip>
+
 <video controls playsInline style={{ width: '100%', borderRadius: '8px', marginBottom: '32px' }}>
   <source src="/medias/videos/idor-hunter.mp4" type="video/mp4" />
 </video>
@@ -126,6 +130,19 @@ before returning data. Never rely on client-supplied IDs alone.
 - Requires at least two test accounts with separate sessions  cannot test IDOR without multiple principals
 - Second-order IDOR may require understanding of server-side reference resolution logic, which depends on application-specific context
 - Does not automate testing  the methodology guides manual or semi-automated steps
+
+---
+
+## Benchmark Results
+
+Tested on claude-sonnet-4-6 via Claude Code CLI. Same prompt, same model, same target. The only variable is whether the skill is loaded.
+
+| Metric | Without Skill | With Skill |
+|--------|--------------|------------|
+| Turns to complete | 1 | 1 |
+| Total tokens | ~3,521 | ~1,696 |
+| Time | 77s | 40s |
+| IDOR findings | 5 | 11 |
 
 ---
 
