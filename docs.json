@@ -144,11 +144,7 @@
           },
           {
             "group": "Web & API",
-            "pages": ["contexts/web-app-pentest", "contexts/api-security-review"]
-          },
-          {
-            "group": "Mobile",
-            "pages": ["contexts/mobile-pentest"]
+            "pages": ["contexts/web-app-pentest"]
           },
           {
             "group": "Infrastructure",
