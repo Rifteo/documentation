@@ -9,7 +9,7 @@
 <br/>
 
 [![Skills](https://img.shields.io/badge/skills-28-blueviolet?style=for-the-badge)](https://github.com/AuditGuard-Community/skills)
-[![Contexts](https://img.shields.io/badge/contexts-6-blue?style=for-the-badge)](https://github.com/AuditGuard-Community/context-mcp)
+[![Contexts](https://img.shields.io/badge/contexts-4-blue?style=for-the-badge)](https://github.com/AuditGuard-Community/context-mcp)
 [![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=for-the-badge)](docs/contributing.mdx)
 
@@ -32,7 +32,7 @@ The agent is not dumb. It lacks a methodology.
 | Resource | Count | What it does |
 |----------|-------|-------------|
 | **Skills** | 28 | Battle-tested methodology files your agent reads before starting a task |
-| **Contexts** | 6 | Engagement-specific knowledge bases: web app pentest, cloud audit, mobile pentest, and more |
+| **Contexts** | 4 | Engagement-specific knowledge bases: web app pentest, cloud audit, code audit, and more |
 | **Scripts** | Growing | Standalone automation scripts for common security and compliance tasks |
 
 ---
@@ -88,9 +88,7 @@ Then ask your agent: `get the web-app-pentest context`
 | Context | What it covers |
 |---------|---------------|
 | `web-app-pentest` | Full web app pentest: recon, auth, injection, business logic |
-| `api-security-review` | REST and GraphQL API security: BOLA, auth, rate limiting, data exposure |
 | `cloud-audit` | AWS/Azure/GCP: IAM, storage exposure, networking, logging, secrets |
-| `mobile-pentest` | Android and iOS: static analysis, traffic interception, storage, auth |
 | `code-audit` | Source code security review: secrets, auth logic, injection sinks, crypto |
 | `ad-pentest-unauthenticated` | Unauthenticated AD pentest: host discovery, SMB null sessions, AS-REP roasting, Kerberoasting |
 

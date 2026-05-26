@@ -161,15 +161,6 @@
         ]
       },
       {
-        "tab": "Scripts",
-        "groups": [
-          {
-            "group": "Overview",
-            "pages": ["scripts/overview", "scripts/script-template"]
-          }
-        ]
-      },
-      {
         "tab": "Reference",
         "groups": [
           {
@@ -196,7 +187,6 @@
       {
         "header": "Resources",
         "items": [
-          { "label": "Scripts", "href": "/scripts/overview" },
           { "label": "Contexts", "href": "/contexts/overview" },
           { "label": "Examples", "href": "/usage/examples" }
         ]

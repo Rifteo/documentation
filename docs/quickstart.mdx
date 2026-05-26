@@ -27,7 +27,7 @@ auditguard-skills add bugbounty-reporter
 
 The CLI detects your installed agents automatically and puts the skill in the right place. No account. No configuration.
 
-Not sure which skill to use? Install `find-skills` first  it reads your task description and loads the right skill automatically:
+Not sure which skill to use? Install `find-skills` first it reads your task description and loads the right skill automatically:
 
 ```bash
 auditguard-skills add find-skills
@@ -59,13 +59,32 @@ if the authenticated user owns that order. Any integer ID works.
 
 The agent produces a complete, triage-ready report. First try.
 
+## Claude Code slash commands
+
+When installing for Claude Code, the CLI offers to add six slash commands that work in every session — no skill loaded required:
+
+| Command | What it does |
+|---------|-------------|
+| `/auditguard:triage` | 7-question pre-submission gate — GO, KILL, or DOWNGRADE with evidence |
+| `/auditguard:chain` | Given a confirmed finding, checks for companion bugs to escalate severity |
+| `/auditguard:report` | Writes a submission-ready bug bounty report |
+| `/auditguard:hunt` | Launches a 7-phase structured engagement workflow |
+| `/auditguard:intel` | Pulls CVEs, GitHub advisories, and HackerOne hacktivity for any technology |
+| `/auditguard:setup` | Audits your install and gives exact fix steps for anything missing |
+
+Accept the prompt when it appears, or install slash commands manually:
+
+```bash
+auditguard-skills add bugbounty-reporter --agent claude-code
+```
+
 ## Next steps
 
 <CardGroup cols={2}>
-  <Card title="All skills" icon="puzzle-piece" href="/skills/overview">
-    Browse the full skill library
-  </Card>
-  <Card title="CLI commands" icon="terminal" href="/usage/commands">
-    Explore all available commands and flags
-  </Card>
+ <Card title="All skills" icon="puzzle-piece" href="/skills/overview">
+  Browse the full skill library
+ </Card>
+ <Card title="CLI commands" icon="terminal" href="/usage/commands">
+  Explore all available commands and flags
+ </Card>
 </CardGroup>

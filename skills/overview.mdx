@@ -1,22 +1,22 @@
 ---
 title: Skills Overview
-description: 29 battle-tested security skills for AI agents  covering every phase of a security engagement.
+description: 29 battle-tested security skills for AI agents covering every phase of a security engagement.
 ---
 
 ## Stop improvising. Start executing.
 
-AuditGuard skills are the methodology layer your AI agent is missing. Each skill encodes the exact steps, bypass techniques, and output formats that expert practitioners use  so your agent delivers complete, structured results from the first prompt.
+AuditGuard skills are the methodology layer your AI agent is missing. Each skill encodes the exact steps, bypass techniques, and output formats that expert practitioners use so your agent delivers complete, structured results from the first prompt.
 
 <CardGroup cols={3}>
-  <Card title="29 skills" icon="shield-halved">
-    Web, API, infrastructure, compliance, and reporting  every phase covered
-  </Card>
-  <Card title="★ Top 5 benchmarked" icon="star">
-    Community-selected best performers  proven by real benchmark data
-  </Card>
-  <Card title="One command install" icon="terminal">
-    `auditguard-skills add <skill>`  no config, no account
-  </Card>
+ <Card title="29 skills" icon="shield-halved">
+  Web, API, infrastructure, compliance, and reporting every phase covered
+ </Card>
+ <Card title="★ Top 5 benchmarked" icon="star">
+  Community-selected best performers proven by real benchmark data
+ </Card>
+ <Card title="One command install" icon="terminal">
+  `auditguard-skills add <skill>` no config, no account
+ </Card>
 </CardGroup>
 
 > ★ marks the top 5 skills by benchmark performance. See the [full benchmark results →](/skills/benchmarks)
@@ -48,7 +48,7 @@ A **skill** is a self-contained instruction file that teaches an AI agent a spec
 - Specifies the **exact output format** to produce
 - Includes **rules and guardrails** to prevent incorrect behavior
 
-Skills are not code modules  they are structured prompts that encode expert knowledge. The agent reads the `SKILL.md`, understands when to apply it, and executes the methodology against whatever the user provides.
+Skills are not code modules they are structured prompts that encode expert knowledge. The agent reads the `SKILL.md`, understands when to apply it, and executes the methodology against whatever the user provides.
 
 ---
 
@@ -71,14 +71,14 @@ Skills are not code modules  they are structured prompts that encode expert know
 
 | Skill | What it does |
 |-------|-------------|
-| [IDOR Hunter ★](/skills/idor-hunter) | Systematic IDOR and BOLA detection  catches what generic agents miss every time |
+| [IDOR Hunter ★](/skills/idor-hunter) | See Web Application — also covers API BOLA and object-level auth bypass |
 | [JWT Cracker](/skills/jwt-cracker) | JWT attacks: alg:none, weak secret brute-force, RS256 to HS256, kid injection |
 
 **Infrastructure**
 
 | Skill | What it does |
 |-------|-------------|
-| [SSRF Hunter ★](/skills/ssrf-hunter) | SSRF detection and exploitation  turns false positives into confirmed exploits |
+| [SSRF Hunter ★](/skills/ssrf-hunter) | SSRF detection and exploitation turns false positives into confirmed exploits |
 | [Nuclei Template Writer](/skills/nuclei-template-writer) | Writes production-ready Nuclei templates from vulnerability descriptions |
 | [Check Exploit](/skills/check-exploit) | Checks if a CVE has a public exploit and assesses exploitability |
 
@@ -153,11 +153,11 @@ Every skill lives in its own directory:
 ```
 skills/
 └── my-skill/
-    ├── SKILL.md          # Required  agent instructions
-    ├── references/       # Optional  context files the skill reads at runtime
-    │   └── guide.md
-    └── scripts/          # Optional  Python or bash scripts the skill runs
-        └── my-tool.py
+  ├── SKILL.md     # Required agent instructions
+  ├── references/    # Optional context files the skill reads at runtime
+  │  └── guide.md
+  └── scripts/     # Optional Python or bash scripts the skill runs
+    └── my-tool.py
 ```
 
 ### `SKILL.md`
@@ -172,9 +172,9 @@ name: my-skill
 description: One-sentence description shown in skill discovery and search results.
 license: MIT
 metadata:
-  version: "1.0.0"
-  author: YourName
-  tags: ["security", "compliance", "pentest"]
+ version: "1.0.0"
+ author: YourName
+ tags: ["security", "compliance", "pentest"]
 ---
 ```
 
@@ -204,24 +204,24 @@ Produce exactly this structure. Do not omit any section.
 ## Skill lifecycle
 
 <Steps>
-  <Step title="Define">
-    Identify the methodology to encode: what triggers it, what steps it follows, and what output it produces
-  </Step>
-  <Step title="Write SKILL.md">
-    Author the `SKILL.md` following the [Style Guide](/docs/style-guide): frontmatter, trigger conditions, step-by-step instructions, output format, and rules
-  </Step>
-  <Step title="Add references and scripts">
-    Bundle any reference documents or helper scripts the skill needs into `references/` and `scripts/`
-  </Step>
-  <Step title="Benchmark">
-    Run `skill-benchmark` to score quality and check compatibility across agents  if it doesn't outperform no-skill, it doesn't ship
-  </Step>
-  <Step title="Document">
-    Write the `.mdx` documentation page following the [Style Guide](/docs/style-guide)
-  </Step>
-  <Step title="Publish">
-    Open a pull request  the skill appears in the community hub after review and merge
-  </Step>
+ <Step title="Define">
+  Identify the methodology to encode: what triggers it, what steps it follows, and what output it produces
+ </Step>
+ <Step title="Write SKILL.md">
+  Author the `SKILL.md` following the [Style Guide](/docs/style-guide): frontmatter, trigger conditions, step-by-step instructions, output format, and rules
+ </Step>
+ <Step title="Add references and scripts">
+  Bundle any reference documents or helper scripts the skill needs into `references/` and `scripts/`
+ </Step>
+ <Step title="Benchmark">
+  Run `skill-benchmark` to score quality and check compatibility across agents if it doesn't outperform no-skill, it doesn't ship
+ </Step>
+ <Step title="Document">
+  Write the `.mdx` documentation page following the [Style Guide](/docs/style-guide)
+ </Step>
+ <Step title="Publish">
+  Open a pull request the skill appears in the community hub after review and merge
+ </Step>
 </Steps>
 
 ---

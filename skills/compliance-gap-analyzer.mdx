@@ -1,10 +1,13 @@
 ---
 title: Compliance Gap Analyzer
-description: Aggregates audit findings mapped to framework controls, classifies each control, identifies blind spots, prioritizes gaps by severity, and produces a complete gap report  supports ISO 27001, NIST CSF, PCI-DSS, and OWASP.
+description: Aggregates audit findings mapped to framework controls, classifies each control, identifies blind spots, prioritizes gaps by severity, and produces a complete gap report supports ISO 27001, NIST CSF, PCI-DSS, and OWASP.
 ---
 
 <Info>
-  **Category:** Compliance workflows
+  **Status:** Stable
+  **Version:** 1.0.0
+  **Author:** AuditGuard
+  **Tags:** compliance, security, reporting
 </Info>
 
 **Installation**
@@ -21,7 +24,7 @@ Turns a raw list of audit findings into a fully structured compliance gap report
 
 - Groups findings by framework and control, then applies a weakest-link rule to classify each control as Compliant, Partially Compliant, Non-Compliant, or Not Tested
 - Assigns a Gap Priority Score (Critical → Low) based on finding severity and control criticality within the framework
-- Surfaces blind spots  controls that were in scope but never tested  as unknown-risk items requiring explicit acknowledgment
+- Surfaces blind spots controls that were in scope but never tested as unknown-risk items requiring explicit acknowledgment
 - Optionally compares against a previous audit to flag regressions, closed gaps, and persistent issues
 
 ---
@@ -46,7 +49,7 @@ Use this skill when the user:
 
 #### What Does It Check?
 
-This skill processes findings mapped to ISO 27001, NIST CSF, PCI-DSS v4, OWASP Top 10, and OWASP ASVS controls. It classifies each control using a weakest-link rule  a single non-compliant finding marks the whole control as Non-Compliant. Partially Compliant controls are treated as gaps, not as passing. Blind spots (controls with no findings) are flagged separately because their risk is unknown.
+This skill processes findings mapped to ISO 27001, NIST CSF, PCI-DSS v4, OWASP Top 10, and OWASP ASVS controls. It classifies each control using a weakest-link rule a single non-compliant finding marks the whole control as Non-Compliant. Partially Compliant controls are treated as gaps, not as passing. Blind spots (controls with no findings) are flagged separately because their risk is unknown.
 
 **In scope:**
 - ISO 27001 (2013 and 2022 Annex A), NIST CSF 1.1 and 2.0, PCI-DSS v3.2.1 and v4.0, OWASP Top 10 (A01–A10), OWASP ASVS (VX.Y.Z)
@@ -54,8 +57,8 @@ This skill processes findings mapped to ISO 27001, NIST CSF, PCI-DSS v4, OWASP T
 - Delta analysis when a previous gap report is provided
 
 **Out of scope:**
-- Producing findings from raw scans or tool output  use `finding-writer` first
-- Providing control definitions or cross-framework mappings  use `control-lookup` for that
+- Producing findings from raw scans or tool output use `finding-writer` first
+- Providing control definitions or cross-framework mappings use `control-lookup` for that
 
 #### How It Works
 
@@ -65,7 +68,7 @@ Confirm the framework(s) in scope, the list of findings (each with a control ref
 
 **Step 2: Normalize and Group**
 
-Group findings by framework and control, normalizing control IDs to canonical notation. Cross-framework findings appear in every relevant framework  they are not deduplicated.
+Group findings by framework and control, normalizing control IDs to canonical notation. Cross-framework findings appear in every relevant framework they are not deduplicated.
 
 **Step 3: Classify Each Control**
 
@@ -84,7 +87,7 @@ Compare against a previous audit to identify new gaps, closed gaps, persistent g
 | Status | Condition |
 |--------|-----------|
 | Complete report | Findings are provided with control mappings |
-| Error | No findings or control mappings provided  skill stops and asks for input |
+| Error | No findings or control mappings provided skill stops and asks for input |
 
 Example output structure:
 
@@ -100,7 +103,7 @@ Recommended Next Steps
 
 #### Known Limitations
 
-- Requires findings to already have control references  the skill does not auto-map raw vulnerabilities to controls
+- Requires findings to already have control references the skill does not auto-map raw vulnerabilities to controls
 - Compliance rate is calculated over tested controls only, not total controls in scope; coverage rate is reported separately
 
 </Accordion>
@@ -123,19 +126,19 @@ Tested on claude-sonnet-4-6 via Claude Code CLI. Same prompt, same model, same t
 ## Related skills
 
 <CardGroup cols={3}>
-  <Card title="finding-writer" href="/skills/finding-writer">
-    Convert raw pentest notes into structured audit findings ready for reporting
+ <Card title="finding-writer" href="/skills/finding-writer">
+  Convert raw pentest notes into structured audit findings ready for reporting
 
-    
-  </Card>
-  <Card title="control-lookup" href="/skills/control-lookup">
-    Look up any control ID and map it across ISO 27001, NIST CSF, PCI-DSS, and OWASP
+  
+ </Card>
+ <Card title="control-lookup" href="/skills/control-lookup">
+  Look up any control ID and map it across ISO 27001, NIST CSF, PCI-DSS, and OWASP
 
-    
-  </Card>
-  <Card title="risk-assessor" href="/skills/risk-assessor">
-    Score a vulnerability using likelihood × impact with SLA-bound remediation urgency
+  
+ </Card>
+ <Card title="risk-assessor" href="/skills/risk-assessor">
+  Score a vulnerability using likelihood × impact with SLA-bound remediation urgency
 
-    
-  </Card>
+  
+ </Card>
 </CardGroup>

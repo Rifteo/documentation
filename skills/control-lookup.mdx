@@ -1,10 +1,13 @@
 ---
 title: Control Lookup
-description: Looks up any control ID across ISO 27001, NIST CSF, PCI-DSS v4, and OWASP  returns the full control card, cross-framework mappings with confidence level, related controls, and testing hints.
+description: Looks up any control ID across ISO 27001, NIST CSF, PCI-DSS v4, and OWASP returns the full control card, cross-framework mappings with confidence level, related controls, and testing hints.
 ---
 
 <Info>
-  **Category:** Compliance workflows
+  **Status:** Stable
+  **Version:** 1.0.0
+  **Author:** AuditGuard
+  **Tags:** compliance, security, access
 </Info>
 
 **Installation**
@@ -19,7 +22,7 @@ auditguard-skills add control-lookup
 
 Provide any control ID, name, or plain-language description and get back a complete control card with implementation guidance, cross-framework equivalents, related controls, and evidence-based testing hints.
 
-- Accepts control IDs from ISO 27001 (2013/2022), NIST CSF (1.1/2.0), PCI-DSS v4, OWASP Top 10, and OWASP ASVS  as well as keywords and plain-language objectives
+- Accepts control IDs from ISO 27001 (2013/2022), NIST CSF (1.1/2.0), PCI-DSS v4, OWASP Top 10, and OWASP ASVS as well as keywords and plain-language objectives
 - Returns a full control card: objective, description, control type, and implementation guidance
 - Maps the control to all four other frameworks with a confidence level: Direct, Partial, or Related
 - Provides 3–5 evidence-based testing hints including common failure modes and subtle edge cases
@@ -46,7 +49,7 @@ Use this skill when the user:
 
 #### What Does It Check?
 
-The skill identifies a control based on ID, name, or plain-language intent, then produces a self-contained card. Cross-framework mappings are assigned a confidence level (Direct / Partial / Related)  a Direct mapping means satisfying one control largely satisfies the other. All five rows of the mapping table are always populated; if no mapping exists, it says so explicitly rather than forcing a weak mapping.
+The skill identifies a control based on ID, name, or plain-language intent, then produces a self-contained card. Cross-framework mappings are assigned a confidence level (Direct / Partial / Related) a Direct mapping means satisfying one control largely satisfies the other. All five rows of the mapping table are always populated; if no mapping exists, it says so explicitly rather than forcing a weak mapping.
 
 **In scope:**
 - ISO 27001:2013 and ISO 27001:2022 Annex A
@@ -56,8 +59,8 @@ The skill identifies a control based on ID, name, or plain-language intent, then
 - OWASP ASVS 4.0 and 5.0
 
 **Out of scope:**
-- Producing compliance gap reports  use `compliance-gap-analyzer` for that
-- Writing findings from vulnerabilities  use `finding-writer` for that
+- Producing compliance gap reports use `compliance-gap-analyzer` for that
+- Writing findings from vulnerabilities use `finding-writer` for that
 
 #### How It Works
 
@@ -79,20 +82,20 @@ List 2–4 controls in the same framework that are prerequisites, dependents, or
 
 **Step 5: Testing Hints**
 
-Provide 3–5 specific, evidence-based indicators an auditor would look for  not generic guidance, but concrete requests such as "access control policy, approved by management and reviewed within the last 12 months." Also covers common failure modes and edge cases where a control is technically in place but its spirit is not met.
+Provide 3–5 specific, evidence-based indicators an auditor would look for not generic guidance, but concrete requests such as "access control policy, approved by management and reviewed within the last 12 months." Also covers common failure modes and edge cases where a control is technically in place but its spirit is not met.
 
 #### Output
 
 | Status | Condition |
 |--------|-----------|
 | Full control card | Control identified and all sections populated |
-| Clarification request | Input matches multiple candidates  user must confirm |
+| Clarification request | Input matches multiple candidates user must confirm |
 | No mapping note | Framework row is populated with "No direct or partial mapping" if none exists |
 
 Example output structure:
 
 ```
-Control: [ID]  [Name]
+Control: [ID] [Name]
 Framework: [name + version]
 Domain: [category]
 Type: [Preventive / Detective / ...]
@@ -110,7 +113,7 @@ Edge cases
 
 #### Known Limitations
 
-- Mappings are based on the skill's training knowledge  always verify against the latest published framework documents for high-stakes decisions
+- Mappings are based on the skill's training knowledge always verify against the latest published framework documents for high-stakes decisions
 - If a keyword matches controls across multiple frameworks, a card is produced for each; review all before acting
 
 </Accordion>
@@ -133,19 +136,19 @@ Tested on claude-sonnet-4-6 via Claude Code CLI. Same prompt, same model, same t
 ## Related skills
 
 <CardGroup cols={3}>
-  <Card title="compliance-gap-analyzer" href="/skills/compliance-gap-analyzer">
-    Aggregate findings into a gap report across ISO 27001, NIST CSF, PCI-DSS, and OWASP
+ <Card title="compliance-gap-analyzer" href="/skills/compliance-gap-analyzer">
+  Aggregate findings into a gap report across ISO 27001, NIST CSF, PCI-DSS, and OWASP
 
-    
-  </Card>
-  <Card title="finding-writer" href="/skills/finding-writer">
-    Convert raw pentest notes into structured audit findings ready for reporting
+  
+ </Card>
+ <Card title="finding-writer" href="/skills/finding-writer">
+  Convert raw pentest notes into structured audit findings ready for reporting
 
-    
-  </Card>
-  <Card title="risk-assessor" href="/skills/risk-assessor">
-    Score a vulnerability using likelihood × impact with SLA-bound remediation urgency
+  
+ </Card>
+ <Card title="risk-assessor" href="/skills/risk-assessor">
+  Score a vulnerability using likelihood × impact with SLA-bound remediation urgency
 
-    
-  </Card>
+  
+ </Card>
 </CardGroup>

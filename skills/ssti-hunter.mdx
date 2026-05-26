@@ -1,10 +1,13 @@
 ---
 title: SSTI Hunter
-description: Complete SSTI detection and exploitation methodology  engine fingerprinting, RCE payloads per engine, sandbox escapes, blind detection, and report structure.
+description: Complete SSTI detection and exploitation methodology engine fingerprinting, RCE payloads per engine, sandbox escapes, blind detection, and report structure.
 ---
 
 <Info>
-  **Category:** Pentest & security testing
+  **Status:** Stable
+  **Version:** 1.0.0
+  **Author:** AuditGuard
+  **Tags:** pentest, security, web
 </Info>
 
 **Installation**
@@ -17,7 +20,7 @@ auditguard-skills add ssti-hunter
 
 ## Summary
 
-Execute a complete Server-Side Template Injection (SSTI) methodology  from finding injection points to confirming RCE and producing a structured report.
+Execute a complete Server-Side Template Injection (SSTI) methodology from finding injection points to confirming RCE and producing a structured report.
 
 - Covers 13 template engines: Jinja2, Twig, Smarty, Mako, FreeMarker, Velocity, Pebble, Thymeleaf, ERB, EJS, Pug, Handlebars, and Nunjucks
 - Phase 1–3 map injection surfaces, confirm vulnerability, and fingerprint the engine using a decision tree
@@ -32,7 +35,7 @@ Execute a complete Server-Side Template Injection (SSTI) methodology  from findi
 
 ### SSTI Hunter
 
-Complete SSTI detection and exploitation methodology  engine fingerprinting, RCE payloads per engine, sandbox escapes, blind detection, and report structure.
+Complete SSTI detection and exploitation methodology engine fingerprinting, RCE payloads per engine, sandbox escapes, blind detection, and report structure.
 
 #### When to Use This Skill
 
@@ -57,8 +60,8 @@ SSTI occurs when user input is embedded directly into a template and evaluated b
 - Impact escalation: sensitive file read, cloud metadata (AWS/GCP/Azure), reverse shell
 
 **Out of scope:**
-- Client-side template injection (AngularJS, Vue)  different vulnerability class
-- Automated scanning  this is a guided methodology
+- Client-side template injection (AngularJS, Vue) different vulnerability class
+- Automated scanning this is a guided methodology
 
 #### How It Works
 
@@ -110,14 +113,14 @@ Checklist: math expression evaluated server-side, engine identified, RCE payload
 | Phase 4 | RCE payload returns command output |
 | Phase 6 | Blind confirmed via time delay or OOB callback |
 
-Report structure follows: `Title: SSTI in [parameter] on [endpoint]  RCE via [Engine]`, Severity: Critical, CWE-94, OWASP A03:2021.
+Report structure follows: `Title: SSTI in [parameter] on [endpoint] RCE via [Engine]`, Severity: Critical, CWE-94, OWASP A03:2021.
 
 #### Known Limitations
 
 - Blind SSTI OOB requires an internet-accessible interactsh or Burp Collaborator server
-- Thymeleaf SSTI usually appears in Spring MVC path variables  requires understanding of the routing layer
-- Handlebars RCE requires prototype pollution (< 4.7.7)  patched versions may not be exploitable
-- Always confirm scope before use  RCE payloads are high-impact
+- Thymeleaf SSTI usually appears in Spring MVC path variables requires understanding of the routing layer
+- Handlebars RCE requires prototype pollution (< 4.7.7) patched versions may not be exploitable
+- Always confirm scope before use RCE payloads are high-impact
 
 </Accordion>
 
@@ -138,19 +141,19 @@ Tested on claude-sonnet-4-6 via Claude Code CLI. Same prompt, same model, same t
 ## Related skills
 
 <CardGroup cols={3}>
-  <Card title="xss-hunter" href="/skills/xss-hunter">
-    Complete XSS testing methodology  reflected, stored, DOM, blind, CSP bypass, WAF evasion
+ <Card title="xss-hunter" href="/skills/xss-hunter">
+  Complete XSS testing methodology reflected, stored, DOM, blind, CSP bypass, WAF evasion
 
-    
-  </Card>
-  <Card title="check-exploit" href="/skills/check-exploit">
-    Search known exploit databases for a given service, version, or CVE
+  
+ </Card>
+ <Card title="check-exploit" href="/skills/check-exploit">
+  Search known exploit databases for a given service, version, or CVE
 
-    
-  </Card>
-  <Card title="finding-writer" href="/skills/finding-writer">
-    Convert raw pentest notes into structured audit findings ready for reporting
+  
+ </Card>
+ <Card title="finding-writer" href="/skills/finding-writer">
+  Convert raw pentest notes into structured audit findings ready for reporting
 
-    
-  </Card>
+  
+ </Card>
 </CardGroup>

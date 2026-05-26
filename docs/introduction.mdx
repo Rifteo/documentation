@@ -5,7 +5,7 @@ title: Introduction
 > Your AI agent improvises. We make it execute.
 
 <video autoPlay loop muted playsInline style={{ width: '100%', borderRadius: '8px', marginBottom: '32px' }}>
-  <source src="/medias/videos/welcome.mp4" type="video/mp4" />
+ <source src="/medias/videos/welcome.mp4" type="video/mp4" />
 </video>
 
 ## The #1 open source toolkit purpose-built for AI security agents
@@ -14,20 +14,18 @@ The first complete, community-built toolkit for AI security agents. Not a scanne
 
 Skills that encode exactly how senior pentesters think. Contexts that prime your agent before every engagement. Live bug bounty scope and disclosed reports from five platforms — all inside your agent before the first prompt.
 
-Thousands of practitioners. Hundreds of engagements. One command to install.
-
 **Stop letting your agent guess. Start letting it execute.**
 
 <CardGroup cols={3}>
-  <Card title="29 skills" icon="shield-halved">
-    Covering every phase of a security engagement — from scoping to final report
-  </Card>
-  <Card title="5 platforms, live scope" icon="bullseye">
-    HackerOne, Intigriti, YesWeHack, Bugcrowd, Immunefi — inside your agent before the first prompt.
-  </Card>
-  <Card title="Zero setup. Any agent." icon="bolt">
-    MIT licensed. No account. No config. Works with Claude Code, Cursor, Windsurf, and more.
-  </Card>
+ <Card title="29 skills" icon="shield-halved">
+  Covering every phase of a security engagement — from scoping to final report
+ </Card>
+ <Card title="5 platforms, live scope" icon="bullseye">
+  HackerOne, Intigriti, YesWeHack, Bugcrowd, Immunefi — inside your agent before the first prompt.
+ </Card>
+ <Card title="Zero setup. Any agent." icon="bolt">
+  MIT licensed. No account. No config. Works with Claude Code, Cursor, Windsurf, and more.
+ </Card>
 </CardGroup>
 
 ---
@@ -60,6 +58,8 @@ The community's top 5 skills by benchmark performance — ranked by real results
 | [SSRF Hunter ★](/skills/ssrf-hunter) | False positives → **confirmed exploits** | Infrastructure |
 | [Scope Grill ★](/skills/scope-grill) | **-93% tokens**, -90% time to collect scope | Reconnaissance |
 | [HexStrike Forge ★](/skills/hexstrike-forge) | **0 → 2 confirmed findings** per session | Integrations |
+
+> ★ = top 5 by benchmark performance. [See all 18 benchmark results →](/skills/benchmarks)
 
 ---
 
@@ -99,19 +99,39 @@ If a resource doesn't perform better than an agent without it, it doesn't ship.
 
 ---
 
+## Claude Code slash commands
+
+Install any skill for Claude Code and get six slash commands that work in every session — no skill loaded required:
+
+| Command | What it does |
+|---------|-------------|
+| `/auditguard:triage` | 7-question pre-submission gate — outputs GO, KILL, or DOWNGRADE with evidence |
+| `/auditguard:chain` | Given a confirmed finding, checks for companion bugs to escalate severity |
+| `/auditguard:report` | Writes a submission-ready bug bounty report: title, steps, PoC, impact, remediation |
+| `/auditguard:hunt` | Launches a structured 7-phase engagement workflow on a target |
+| `/auditguard:intel` | Pulls CVEs, GitHub advisories, and HackerOne hacktivity for any named technology |
+| `/auditguard:setup` | Audits your AuditGuard install and gives exact setup steps for anything missing |
+
+```bash
+auditguard-skills add bugbounty-reporter --agent claude-code
+# Install AuditGuard slash commands for Claude Code? [Y/n/never]
+```
+
+---
+
 ## Get started
 
 <CardGroup cols={2}>
-  <Card title="Add your first skill" icon="rocket" href="/docs/quickstart">
-    Set up AuditGuard and run your first skill in under 5 minutes
-  </Card>
-  <Card title="Browse all 29 skills" icon="puzzle-piece" href="/skills/overview">
-    Explore the full library across 8 categories
-  </Card>
-  <Card title="See the numbers" icon="chart-bar" href="/skills/benchmarks">
-    Real benchmark results — skill on vs. skill off
-  </Card>
-  <Card title="Contribute" icon="users" href="/docs/contributing">
-    Add your methodology to the community library
-  </Card>
+ <Card title="Add your first skill" icon="rocket" href="/docs/quickstart">
+  Set up AuditGuard and run your first skill in under 5 minutes
+ </Card>
+ <Card title="Browse all 29 skills" icon="puzzle-piece" href="/skills/overview">
+  Explore the full library across 8 categories
+ </Card>
+ <Card title="See the numbers" icon="chart-bar" href="/skills/benchmarks">
+  Real benchmark results — skill on vs. skill off
+ </Card>
+ <Card title="Contribute" icon="users" href="/docs/contributing">
+  Add your methodology to the community library
+ </Card>
 </CardGroup>

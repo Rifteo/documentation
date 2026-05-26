@@ -4,12 +4,15 @@ description: A 5-phase structured pentest methodology for the hexstrike-ai MCP s
 ---
 
 <Info>
-  **Category:** Pentest & security testing
+  **Status:** Stable
+  **Version:** 1.0.0
+  **Author:** AuditGuard
+  **Tags:** pentest, security, integrations
   **Requires:** hexstrike-ai MCP server v6.0.0+
 </Info>
 
 <Tip>
-  **★ Top 5 benchmark result:** 0 → 2 confirmed findings with CVSS scores and remediation per session — vs. 0 structured findings without the skill. See the full results in the Benchmark Results section below.
+ **★ Top 5 benchmark result:** 0 → 2 confirmed findings with CVSS scores and remediation per session — vs. 0 structured findings without the skill. See the full results in the Benchmark Results section below.
 </Tip>
 
 **Installation**
@@ -86,9 +89,9 @@ No finding is written without evidence. No finding is written without a remediat
 After findings are forged, the skill presents a delivery menu:
 
 ```
-→ pentest-report        full formatted client report
-→ remediation-planner   prioritized fix guidance per finding
-→ engagement-handoff    save state for follow-up session
+→ pentest-report    full formatted client report
+→ remediation-planner  prioritized fix guidance per finding
+→ engagement-handoff  save state for follow-up session
 ```
 
 ---
@@ -138,13 +141,13 @@ Surfaced during benchmarking. The skill works around these automatically.
 ## Related skills
 
 <CardGroup cols={3}>
-  <Card title="scope-grill" href="/skills/scope-grill">
-    Interview the user about scope, authorization, and rules of engagement before testing begins
-  </Card>
-  <Card title="finding-writer" href="/skills/finding-writer">
-    Convert raw pentest notes into structured audit findings ready for reporting
-  </Card>
-  <Card title="pentest-report" href="/skills/pentest-report">
-    Generate a complete, client-ready penetration test report from all confirmed findings
-  </Card>
+ <Card title="scope-grill" href="/skills/scope-grill">
+  Interview the user about scope, authorization, and rules of engagement before testing begins
+ </Card>
+ <Card title="finding-writer" href="/skills/finding-writer">
+  Convert raw pentest notes into structured audit findings ready for reporting
+ </Card>
+ <Card title="pentest-report" href="/skills/pentest-report">
+  Generate a complete, client-ready penetration test report from all confirmed findings
+ </Card>
 </CardGroup>

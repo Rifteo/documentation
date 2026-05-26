@@ -1,10 +1,10 @@
 ---
 title: Cloud Audit
-description: AWS, Azure, and GCP security audit  IAM, storage exposure, networking, secrets, and logging misconfigurations.
+description: AWS, Azure, and GCP security audit IAM, storage exposure, networking, secrets, and logging misconfigurations.
 ---
 
 <Info>
-  **Category:** Audit
+ **Category:** Audit
 </Info>
 
 **Load this context**
@@ -19,7 +19,7 @@ get the cloud-audit context
 
 ## Summary
 
-A cloud security audit methodology covering AWS, Azure, and GCP  from IAM review to compliance mapping.
+A cloud security audit methodology covering AWS, Azure, and GCP from IAM review to compliance mapping.
 
 - Phase 1 reviews IAM: wildcard permissions, unused access keys, MFA enforcement, overly permissive roles (AWS), Owner/Contributor assignments (Azure), and primitive roles on service accounts (GCP)
 - Phase 2 checks storage exposure: public S3 buckets, Azure Blob containers with public access, and GCS buckets with `allUsers` bindings
@@ -46,7 +46,7 @@ Load this context when:
 
 ---
 
-### Phase 1  IAM Review
+### Phase 1 IAM Review
 
 **AWS:**
 ```bash
@@ -73,7 +73,7 @@ Check for:
 **Azure:**
 - Review role assignments at subscription level
 - Check for Owner/Contributor roles assigned to external users
-- Privileged Identity Management (PIM)  are privileged roles time-bound?
+- Privileged Identity Management (PIM) are privileged roles time-bound?
 
 **GCP:**
 - Check for primitive roles (Owner, Editor) on service accounts
@@ -81,7 +81,7 @@ Check for:
 
 ---
 
-### Phase 2  Storage Exposure
+### Phase 2 Storage Exposure
 
 **AWS S3:**
 ```bash
@@ -109,7 +109,7 @@ gsutil iam get gs://bucket-name
 
 ---
 
-### Phase 3  Network Security
+### Phase 3 Network Security
 
 - Security groups with `0.0.0.0/0` on sensitive ports (22, 3389, 1433, 5432)
 - VPC flow logs enabled on all VPCs?
@@ -119,7 +119,7 @@ gsutil iam get gs://bucket-name
 
 ---
 
-### Phase 4  Logging & Monitoring
+### Phase 4 Logging & Monitoring
 
 | Check | AWS | Azure | GCP |
 |-------|-----|-------|-----|
@@ -130,16 +130,16 @@ gsutil iam get gs://bucket-name
 
 ---
 
-### Phase 5  Secrets Management
+### Phase 5 Secrets Management
 
 - Hardcoded secrets in Lambda/Cloud Functions environment variables
 - Secrets in EC2 user data scripts
 - Use of secrets manager (AWS Secrets Manager / Azure Key Vault / GCP Secret Manager) vs plaintext config files
-- Key rotation policy for KMS/Key Vault keys  are keys rotated at least annually?
+- Key rotation policy for KMS/Key Vault keys are keys rotated at least annually?
 
 ---
 
-### Phase 6  Reporting
+### Phase 6 Reporting
 
 Map each finding to a CIS Benchmark control or relevant compliance framework:
 - **CIS AWS Foundations Benchmark** / **CIS Azure Benchmark** / **CIS GCP Benchmark**
@@ -154,14 +154,14 @@ Use `finding-writer` skill for structured output. Use `compliance-gap-analyzer` 
 ## Related contexts
 
 <CardGroup cols={2}>
-  <Card title="web-app-pentest" href="/contexts/web-app-pentest">
-    Full web application pentest methodology  recon, auth, authorization, injection, business logic
+ <Card title="web-app-pentest" href="/contexts/web-app-pentest">
+  Full web application pentest methodology recon, auth, authorization, injection, business logic
 
-    `AuditGuard-Community/contexts`
-  </Card>
-  <Card title="code-audit" href="/contexts/code-audit">
-    Source code security review  secrets, auth logic, injection sinks, crypto, dependencies
+  `AuditGuard-Community/contexts`
+ </Card>
+ <Card title="code-audit" href="/contexts/code-audit">
+  Source code security review secrets, auth logic, injection sinks, crypto, dependencies
 
-    `AuditGuard-Community/contexts`
-  </Card>
+  `AuditGuard-Community/contexts`
+ </Card>
 </CardGroup>

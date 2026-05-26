@@ -1,18 +1,21 @@
 ---
 title: IDOR Hunter ★
-description: Systematic IDOR/BOLA detection methodology  recon, multi-account testing, bypass techniques, and report structure.
+description: Systematic IDOR/BOLA detection methodology recon, multi-account testing, bypass techniques, and report structure.
 ---
 
 <Info>
-  **Category:** Pentest & security testing
+  **Status:** Stable
+  **Version:** 1.0.0
+  **Author:** AuditGuard
+  **Tags:** pentest, security, access
 </Info>
 
 <Tip>
-  **★ Top 5 benchmark result:** +120% more findings on the same target — 5 without the skill vs. 11 with it, same model, same prompt.
+ **★ Top 5 benchmark result:** +120% more findings on the same target — 5 without the skill vs. 11 with it, same model, same prompt.
 </Tip>
 
 <video controls playsInline style={{ width: '100%', borderRadius: '8px', marginBottom: '32px' }}>
-  <source src="/medias/videos/idor-hunter.mp4" type="video/mp4" />
+ <source src="/medias/videos/idor-hunter.mp4" type="video/mp4" />
 </video>
 
 **Installation**
@@ -27,7 +30,7 @@ auditguard-skills add idor-hunter
 
 ## Summary
 
-Apply a structured, six-phase methodology to discover and confirm Insecure Direct Object Reference (IDOR) and Broken Object Level Authorization (BOLA) vulnerabilities  the #1 finding in bug bounty programs.
+Apply a structured, six-phase methodology to discover and confirm Insecure Direct Object Reference (IDOR) and Broken Object Level Authorization (BOLA) vulnerabilities the #1 finding in bug bounty programs.
 
 - Phase 1 maps every object reference in the target across URL paths, query strings, request bodies, headers, cookies, GraphQL, WebSockets, and encoded/hidden IDs
 - Phases 2–4 run systematic tests across horizontal IDOR, vertical IDOR, unauthenticated access, second-order IDOR, and a full set of bypass techniques (encoding, HTTP method manipulation, parameter pollution, path traversal, version switching)
@@ -67,8 +70,8 @@ IDOR occurs when an application exposes a reference to an internal object withou
 - All bypass techniques: encoding, HTTP method manipulation, parameter pollution, path traversal, version switching, content-type switching
 
 **Out of scope:**
-- SQL injection, XSS, or other vulnerability classes  these require separate skills
-- Automated scanning  this is a guided methodology, not a scanner
+- SQL injection, XSS, or other vulnerability classes these require separate skills
+- Automated scanning this is a guided methodology, not a scanner
 
 #### How It Works
 
@@ -102,7 +105,7 @@ Produce a structured finding with title, severity, affected endpoint, step-by-st
 |--------|-----------|
 | Confirmed finding | Unauthorized access reproducibly demonstrated with attacker session |
 | Not confirmed | 200 response observed but response body matches attacker's own data |
-| Blocked  bypass needed | Direct ID swap returns 403; Phase 4 techniques queued |
+| Blocked bypass needed | Direct ID swap returns 403; Phase 4 techniques queued |
 
 Example finding structure:
 
@@ -129,9 +132,9 @@ before returning data. Never rely on client-supplied IDs alone.
 
 #### Known Limitations
 
-- Requires at least two test accounts with separate sessions  cannot test IDOR without multiple principals
+- Requires at least two test accounts with separate sessions cannot test IDOR without multiple principals
 - Second-order IDOR may require understanding of server-side reference resolution logic, which depends on application-specific context
-- Does not automate testing  the methodology guides manual or semi-automated steps
+- Does not automate testing the methodology guides manual or semi-automated steps
 
 </Accordion>
 
@@ -153,19 +156,19 @@ Tested on claude-sonnet-4-6 via Claude Code CLI. Same prompt, same model, same t
 ## Related skills
 
 <CardGroup cols={3}>
-  <Card title="finding-writer" href="/skills/finding-writer">
-    Convert raw pentest notes into structured audit findings ready for reporting
+ <Card title="finding-writer" href="/skills/finding-writer">
+  Convert raw pentest notes into structured audit findings ready for reporting
 
-    
-  </Card>
-  <Card title="jwt-cracker" href="/skills/jwt-cracker">
-    Full JWT attack methodology  alg:none, algorithm confusion, weak secret brute-force, and more
+  
+ </Card>
+ <Card title="jwt-cracker" href="/skills/jwt-cracker">
+  Full JWT attack methodology alg:none, algorithm confusion, weak secret brute-force, and more
 
-    
-  </Card>
-  <Card title="risk-assessor" href="/skills/risk-assessor">
-    Score a vulnerability using likelihood × impact with SLA-bound remediation urgency
+  
+ </Card>
+ <Card title="risk-assessor" href="/skills/risk-assessor">
+  Score a vulnerability using likelihood × impact with SLA-bound remediation urgency
 
-    
-  </Card>
+  
+ </Card>
 </CardGroup>
