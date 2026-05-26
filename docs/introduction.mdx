@@ -2,19 +2,21 @@
 title: Introduction
 ---
 
+> Your AI agent improvises pentests. AuditGuard tradecraft makes it operate like a seasoned practitioner.
+
 <video autoPlay loop muted playsInline style={{ width: '100%', borderRadius: '8px', marginBottom: '32px' }}>
   <source src="/medias/videos/welcome.mp4" type="video/mp4" />
 </video>
 
-## The #1 community-built skills library for AI security agents
+## The #1 community-built knowledge base for AI security agents
 
-**AuditGuard Community** is the world's leading open library of security skills for AI agents  built by practitioners, peer-reviewed by the community, and proven in real engagements.
+**AuditGuard Community** is the world's leading open library of security skills for AI agents — built by practitioners, peer-reviewed by the community, and proven in real engagements.
 
-We didn't build another scanner. We built something better: **a methodology layer** that turns your AI agent into an expert practitioner. Every skill encodes the exact steps, bypass techniques, and output formats that senior pentesters use  so your agent stops guessing and starts executing.
+We didn't build another scanner. We built something better: **a methodology layer** that turns your AI agent into an expert practitioner. Every skill encodes the exact steps, bypass techniques, and output formats that senior pentesters use — so your agent stops guessing and starts executing.
 
 <CardGroup cols={3}>
   <Card title="23 skills" icon="shield-halved">
-    Covering every phase of a security engagement  from scoping to final report
+    Covering every phase of a security engagement — from scoping to final report
   </Card>
   <Card title="Proven by benchmarks" icon="chart-line">
     Up to +120% more findings, -97% time saved, false positives eliminated
@@ -26,17 +28,9 @@ We didn't build another scanner. We built something better: **a methodology laye
 
 ---
 
-## The problem with AI agents and security work
+## Proven by real numbers
 
-Ask an agent to hunt for IDOR bugs. It improvises. It misses verb inconsistency checks, skips GraphQL object exposure, never tests parameter pollution. You re-prompt five times, burn 3× the tokens, and still get an incomplete result.
-
-**The agent is not the problem. The missing methodology is.**
-
----
-
-## What AuditGuard skills deliver
-
-These are real numbers, same prompt, same model  skill on vs skill off:
+These are real benchmark results — same prompt, same model, skill on vs. skill off:
 
 | | Without Skill | With Skill |
 |--|:---:|:---:|
@@ -46,7 +40,29 @@ These are real numbers, same prompt, same model  skill on vs skill off:
 | Turns to complete JWT test | 3 | **1 (-67%)** |
 | Scope collection time | 43s | **4s (-90%)** |
 
-A skill is a battle-tested methodology file your agent reads before starting a task. It covers every test case, every bypass technique, every output format a practitioner would use. The agent stops improvising and starts executing.
+[See all 18 benchmark results →](/skills/benchmarks)
+
+---
+
+## Top skills right now
+
+The community's top 5 skills by benchmark performance — ranked by real results, not votes:
+
+| Skill | Headline Result | Category |
+|-------|----------------|----------|
+| [IDOR Hunter ★](/skills/idor-hunter) | **+120% more findings** on the same target | API Security |
+| [XSS Hunter ★](/skills/xss-hunter) | **-75% time** to complete a hunt, +29% more coverage | Web Application |
+| [SSRF Hunter ★](/skills/ssrf-hunter) | False positives → **confirmed exploits** | Infrastructure |
+| [Scope Grill ★](/skills/scope-grill) | **-93% tokens**, -90% time to collect scope | Reconnaissance |
+| [HexStrike Forge ★](/skills/hexstrike-forge) | **0 → 2 confirmed findings** per session | Integrations |
+
+---
+
+## The problem with AI agents and security work
+
+Ask an agent to hunt for IDOR bugs. It improvises. It misses verb inconsistency checks, skips GraphQL object exposure, never tests parameter pollution. You re-prompt five times, burn 3× the tokens, and still get an incomplete result.
+
+**The agent is not the problem. The missing methodology is.**
 
 ---
 
@@ -72,7 +88,7 @@ No account. No configuration. The CLI detects your installed agents automaticall
 
 ## Built by the community. Trusted by practitioners.
 
-Every skill in this library was contributed, benchmarked, and peer-reviewed by security professionals. No theoretical exercises  every methodology has been run against real targets and measured against the alternative of flying blind.
+Every skill in this library was contributed, benchmarked, and peer-reviewed by security professionals. No theoretical exercises — every methodology has been run against real targets and measured against the alternative of flying blind.
 
 If a skill doesn't perform better than an agent without it, it doesn't ship.
 
@@ -81,14 +97,14 @@ If a skill doesn't perform better than an agent without it, it doesn't ship.
 ## Get started
 
 <CardGroup cols={2}>
-  <Card title="Quickstart" icon="rocket" href="/docs/quickstart">
+  <Card title="Add your first skill" icon="rocket" href="/docs/quickstart">
     Set up AuditGuard and run your first skill in under 5 minutes
   </Card>
-  <Card title="Browse Skills" icon="puzzle-piece" href="/skills/overview">
-    Explore the full library  23 skills across 8 categories
+  <Card title="Browse all 23 skills" icon="puzzle-piece" href="/skills/overview">
+    Explore the full library across 8 categories
   </Card>
-  <Card title="See the Numbers" icon="chart-bar" href="/skills/benchmarks">
-    Real benchmark results  skill on vs skill off
+  <Card title="See the numbers" icon="chart-bar" href="/skills/benchmarks">
+    Real benchmark results — skill on vs. skill off
   </Card>
   <Card title="Contribute" icon="users" href="/docs/contributing">
     Add your methodology to the community library
