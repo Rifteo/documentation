@@ -26,7 +26,9 @@ Turns a finding into a Nuclei template that can detect the same vulnerability at
 
 ---
 
-## SKILL.md
+## SKILL.md file
+
+<Accordion title="Discover skill details">
 
 ### Nuclei Template Writer
 
@@ -113,6 +115,8 @@ nuclei -t template-name.yaml -l targets.txt -var "username=test@test.com" -var "
 - OAuth/SAML/SSO auth cannot be reliably templated  manual testing required
 - IDOR templates need two valid accounts; replace `VICTIM_OBJECT_ID` and `ATTACKER_SESSION` with real values
 - Type A/B matchers are inferred  always validate against the real response before bulk-running
+
+</Accordion>
 
 ---
 

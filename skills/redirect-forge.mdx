@@ -28,7 +28,9 @@ Detect and exploit open redirect vulnerabilities across all parameter types, the
 
 ---
 
-## SKILL.md
+## SKILL.md file
+
+<Accordion title="Discover skill details">
 
 ### Redirect Forge  Open Redirect
 
@@ -114,6 +116,8 @@ redirect_uri=https://target.com/go?to=https://evil.com
 
 - App that redirects to a fixed list of URLs is not vulnerable  verify redirect destination is truly attacker-controlled
 - `Location` header present but middleware blocks external domains downstream → false positive; test with actual browser or curl -L
+
+</Accordion>
 
 ---
 
