@@ -1,105 +1,65 @@
 ---
 title: Configuration
-description: Configure AuditGuard with auditguard.yml to define targets, workflows, and output settings.
+description: Environment variables and agent config options for auditguard-context-mcp.
 ---
 
-## Overview
+## Skills CLI
 
-AuditGuard reads its settings from an `auditguard.yml` file at the root of your project. This file controls which skills run, what they target, and how results are reported.
+No configuration file required. The CLI auto-detects installed agents on your machine.
 
-## Minimal configuration
-
-```yaml
-version: "1"
-
-target:
-  path: ./
-
-workflow:
-  skills:
-    - check-access-control
-    - validate-user-permissions
-
-output:
-  format: json
-  dir: ./audit-reports
-```
-
-## Full configuration reference
-
-```yaml
-version: "1"
-
-# Target defines what AuditGuard will audit
-target:
-  path: ./                    # Local path or remote resource identifier
-  exclude:                    # Paths to skip
-    - node_modules/
-    - .git/
-
-# Workflow defines which skills run and in what order
-workflow:
-  name: my-audit-workflow     # Optional, used in report headers
-  skills:
-    - skill-name-1
-    - skill-name-2
-  strict: false               # Treat warnings as failures (default: false)
-
-# Output controls report format and destination
-output:
-  format: json                # "json" | "html" | "markdown"
-  dir: ./audit-reports        # Directory where reports are written
-  filename: report            # Base filename (timestamp appended automatically)
-
-# Logging controls verbosity
-logging:
-  level: info                 # "debug" | "info" | "warn" | "error"
-```
-
-## Configuration fields
-
-### `target`
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `path` | string | Yes | The local directory or resource to audit |
-| `exclude` | list | No | Glob patterns for paths to skip |
-
-### `workflow`
-
-| Field | Type | Required | Default | Description |
-|-------|------|----------|---------|-------------|
-| `name` | string | No |  | Human-readable name shown in reports |
-| `skills` | list | Yes |  | Ordered list of skill names to execute |
-| `strict` | boolean | No | `false` | Fail the run if any skill returns `warning` |
-
-### `output`
-
-| Field | Type | Required | Default | Description |
-|-------|------|----------|---------|-------------|
-| `format` | string | No | `json` | Report format: `json`, `html`, or `markdown` |
-| `dir` | string | No | `./audit-reports` | Directory to write reports into |
-| `filename` | string | No | `report` | Base name for the report file |
-
-### `logging`
-
-| Field | Type | Required | Default | Description |
-|-------|------|----------|---------|-------------|
-| `level` | string | No | `info` | Log verbosity level |
-
-## Overriding configuration via CLI
-
-All configuration values can be overridden at runtime using CLI flags. CLI flags take precedence over `auditguard.yml`.
+To target a specific agent:
 
 ```bash
-# Override the target path
-auditguard run --target ./other-project
-
-# Override the output format
-auditguard run --output-format html
-
-# Enable strict mode
-auditguard run --strict
+auditguard-skills add finding-writer --agent claude-code
+auditguard-skills add finding-writer --agent gemini-cli
 ```
 
-See [Commands](/usage/commands) for the full list of flags.
+To install globally instead of project-level:
+
+```bash
+auditguard-skills add finding-writer --global
+```
+
+---
+
+## Context MCP server
+
+### Environment variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `AUDITGUARD_CONTEXTS_PATH` | Path to a local contexts repo clone | GitHub API (remote) |
+| `AUDITGUARD_LOG_LEVEL` | Log verbosity: `DEBUG`, `INFO`, `WARNING`, `ERROR` | `INFO` |
+| `AUDITGUARD_LOG_FILE` | Path to write logs to a file | stderr only |
+
+### Use a local contexts clone
+
+Point the server at a local clone instead of fetching from GitHub:
+
+```bash
+AUDITGUARD_CONTEXTS_PATH=/path/to/contexts auditguard-context-mcp
+```
+
+Or set it in your agent's MCP config:
+
+```json
+{
+  "command": "auditguard-context-mcp",
+  "args": [],
+  "env": {
+    "AUDITGUARD_CONTEXTS_PATH": "/path/to/contexts"
+  }
+}
+```
+
+### Bug bounty credentials
+
+Credentials are stored in `~/.auditguard/credentials.json` and managed via the CLI:
+
+```bash
+auditguard-context auth hackerone
+auditguard-context auth --list
+auditguard-context auth --remove hackerone
+```
+
+See [Commands](/usage/commands) for the full reference.
