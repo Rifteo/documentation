@@ -1,0 +1,167 @@
+---
+title: Scope to Bounty ★
+description: MCP server that gives AI agents live bug bounty program scope from HackerOne, Intigriti, YesWeHack, Bugcrowd, and Immunefi — plus access to all AuditGuard security contexts.
+---
+
+<Info>
+  **Category:** MCP Server
+  **Runtime:** Python 3.10+
+</Info>
+
+<video controls playsInline style={{ width: '100%', borderRadius: '8px', marginBottom: '32px' }}>
+  <source src="/medias/videos/bug-bounty-scope-mcp.mp4" type="video/mp4" />
+</video>
+
+## Summary
+
+Stop copying scope tables by hand. The AuditGuard Context MCP server gives your AI agent live access to bug bounty program scope directly from the platform — in-scope assets, out-of-scope exclusions, bounty eligibility, and policy — before a single test is run.
+
+- Fetches live scope from HackerOne, Intigriti, YesWeHack, Bugcrowd, and Immunefi
+- Searches publicly disclosed HackerOne reports by vulnerability type, technology, or keyword
+- Loads AuditGuard security contexts (L1 overview or L2 full methodology) on demand
+- Registers automatically with Claude Code, Cursor, Windsurf, Gemini CLI, and 7 other agents
+
+---
+
+## Installation
+
+```bash
+git clone https://github.com/AuditGuard-Community/context-mcp
+cd context-mcp
+pip install -e .
+```
+
+---
+
+## Register with your agent
+
+**Auto-install — detects all installed agents:**
+
+```bash
+auditguard-context install
+```
+
+**Single agent:**
+
+```bash
+auditguard-context install --agent claude-code
+auditguard-context install --agent cursor
+auditguard-context install --agent gemini-cli
+```
+
+**Project-level only:**
+
+```bash
+auditguard-context install --agent claude-code --project
+```
+
+**Supported agents:**
+
+| Agent | Config location |
+|---|---|
+| `claude-code` | `~/.claude.json` |
+| `cursor` | `~/.cursor/mcp.json` |
+| `windsurf` | `~/.codeium/windsurf/mcp_config.json` |
+| `gemini-cli` | `~/.gemini/settings.json` |
+| `cline` | `~/.cline/data/settings/cline_mcp_settings.json` |
+| `kiro` | `~/.kiro/settings/mcp.json` |
+| `codex` | `~/.codex/config.toml` |
+| `opencode` | `~/.config/opencode/opencode.json` |
+| `amp` | `~/.config/amp/settings.json` |
+| `continue` | `~/.continue/config.json` |
+
+---
+
+## MCP Tools
+
+### Bug Bounty Platforms
+
+| Tool | What it does |
+|---|---|
+| `get_program_scope` | Fetch live scope for any bug bounty program — in-scope, out-of-scope, bounty eligibility, policy |
+| `search_hacktivity` | Search publicly disclosed HackerOne reports by vulnerability type, tech, or keyword |
+
+Once registered, ask your agent:
+
+```
+get the scope for hackerone program "github"
+get the scope for yeswehack program "datadome-bot-bounty"
+search hacktivity for GraphQL vulnerabilities
+search hacktivity for SSRF in cloud environments
+```
+
+**Platform support:**
+
+| Platform | Scope | Auth required |
+|---|---|---|
+| `hackerone` | Full scope + policy | Yes — username + API token |
+| `intigriti` | Full scope | Yes — API token |
+| `yeswehack` | Full scope | No |
+| `bugcrowd` | Partial (public HTML) | No |
+| `immunefi` | Direct link | No |
+
+### Security Contexts
+
+| Tool | What it does |
+|---|---|
+| `list_contexts` | List all available AuditGuard contexts with one-line summaries |
+| `get_context` | Load a context by name — L1 overview or L2 full methodology |
+| `search_contexts` | Search contexts by keyword |
+
+Each context has two levels:
+
+- **L1** — Overview and when to use (default, lightweight)
+- **L2** — Full detailed methodology
+
+Ask your agent:
+
+```
+list all available security contexts
+get the web-app-pentest context
+load cloud-audit full methodology
+search contexts for jwt
+```
+
+---
+
+## Authentication
+
+**HackerOne** — get your token at `hackerone.com/settings/api_token/edit`
+
+```bash
+auditguard-context auth hackerone
+# HackerOne username: yourname
+# HackerOne API token: ****
+```
+
+**Intigriti** — get your token at `app.intigriti.com/settings/api`
+
+```bash
+auditguard-context auth intigriti
+# Intigriti API token: ****
+```
+
+YesWeHack and `search_hacktivity` work without credentials.
+
+**Manage connected platforms:**
+
+```bash
+auditguard-context auth --list
+auditguard-context auth --remove hackerone
+```
+
+---
+
+## Related contexts
+
+<CardGroup cols={3}>
+  <Card title="Web App Pentest" href="/contexts/web-app-pentest">
+    Full web application penetration test methodology
+  </Card>
+  <Card title="API Security Review" href="/contexts/api-security-review">
+    REST and GraphQL API security review methodology
+  </Card>
+  <Card title="Cloud Audit" href="/contexts/cloud-audit">
+    AWS, GCP, and Azure security audit methodology
+  </Card>
+</CardGroup>

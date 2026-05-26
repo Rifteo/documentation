@@ -7,6 +7,10 @@ description: Complete SSRF detection and exploitation methodology  injection poi
   **Category:** Pentest & security testing
 </Info>
 
+<Tip>
+  **★ Top 5 benchmark result:** Eliminates false positives — turns unconfirmed SSRF indicators into confirmed, exploitable vulnerabilities. Same model, same target.
+</Tip>
+
 **Installation**
 
 ```bash
@@ -29,7 +33,9 @@ Detect and exploit Server-Side Request Forgery from injection point discovery th
 
 ---
 
-## SKILL.md
+## SKILL.md file
+
+<Accordion title="Discover skill details">
 
 ### SSRF Hunter
 
@@ -135,6 +141,21 @@ http://localhost/  http://127.1/  http://0/  → Localhost aliases
 - AWS IMDSv2 requires token-based authentication  test whether the app forwards custom headers
 - Blind SSRF has limited direct impact but can be escalated via DNS exfiltration or chaining with other bugs
 - DNS rebinding attacks require external tooling (singularity) and specific DNS TTL conditions
+
+</Accordion>
+
+---
+
+## Benchmark Results
+
+Tested on claude-sonnet-4-6 via Claude Code CLI. Same prompt, same model, same target. The only variable is whether the skill is loaded.
+
+| Metric | Without Skill | With Skill |
+|--------|--------------|------------|
+| Turns to complete | 1 | 1 |
+| Total tokens | ~5,001 | ~1,953 |
+| Time | 107s | 45s |
+| Output quality | False positives | Confirmed exploit |
 
 ---
 

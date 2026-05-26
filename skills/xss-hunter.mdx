@@ -7,6 +7,14 @@ description: Complete XSS testing methodology  reflected, stored, DOM-based, bli
   **Category:** Pentest & security testing
 </Info>
 
+<Tip>
+  **★ Top 5 benchmark result:** -75% time to complete an XSS hunt (8 min → 2 min) with +29% more coverage — same model, same target.
+</Tip>
+
+<video controls playsInline style={{ width: '100%', borderRadius: '8px', marginBottom: '32px' }}>
+  <source src="/medias/videos/xss-hunter.mp4" type="video/mp4" />
+</video>
+
 **Installation**
 
 ```bash
@@ -26,7 +34,9 @@ Execute a complete Cross-Site Scripting (XSS) testing methodology across all att
 
 ---
 
-## SKILL.md
+## SKILL.md file
+
+<Accordion title="Discover skill details">
 
 ### XSS Hunter
 
@@ -129,6 +139,21 @@ Report structure follows: `Title: [Stored/Reflected/DOM] XSS on [endpoint/featur
 - DOM clobbering requires understanding JS variable usage in the target application  read JS source first
 - mXSS effectiveness depends on the browser version and sanitizer version  test in multiple browsers
 - Always use `document.domain` (not `alert(1)`) to prove execution origin in findings
+
+</Accordion>
+
+---
+
+## Benchmark Results
+
+Tested on claude-sonnet-4-6 via Claude Code CLI. Same prompt, same model, same target. The only variable is whether the skill is loaded.
+
+| Metric | Without Skill | With Skill |
+|--------|--------------|------------|
+| Turns to complete | 1 | 1 |
+| Total tokens | ~4,378 | ~1,622 |
+| Time | ~8 min | ~2 min |
+| XSS findings (out of 10) | 7 | 9 |
 
 ---
 

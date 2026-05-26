@@ -29,7 +29,9 @@ Detect and exploit XML External Entity injection across all attack surfaces  fro
 
 ---
 
-## SKILL.md
+## SKILL.md file
+
+<Accordion title="Discover skill details">
 
 ### XXE Phantom  XML External Entity Injection
 
@@ -138,6 +140,8 @@ Use when DOCTYPE is blocked but XML element content is user-controlled.
 - Entity syntax appearing literally in the response (`&xxe;`) means reflection exists but entity expansion is disabled
 - PHP `expect://` RCE is rare  requires the expect extension to be loaded
 - GCP metadata requires `Metadata-Flavor: Google` header  may not work via XXE if parser doesn't forward custom headers
+
+</Accordion>
 
 ---
 

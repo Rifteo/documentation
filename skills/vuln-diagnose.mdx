@@ -27,7 +27,9 @@ A suspected vulnerability is not a finding. Build a deterministic reproduction c
 
 ---
 
-## SKILL.md
+## SKILL.md file
+
+<Accordion title="Discover skill details">
 
 ### Vulnerability Diagnose
 
@@ -123,6 +125,20 @@ A Minimal Reproduction Case document with confirmed impact and evidence, ready f
 - Never report a finding based on tool output alone without manual confirmation
 - If the test is flaky (fails intermittently), investigate root cause before reporting
 - One hypothesis per session  do not stack unconfirmed vulnerabilities
+
+</Accordion>
+
+---
+
+## Benchmark Results
+
+Tested on claude-sonnet-4-6 via Claude Code CLI. Same prompt, same model, same target. The only variable is whether the skill is loaded.
+
+| Metric | Without Skill | With Skill |
+|--------|--------------|------------|
+| Turns to complete | 2 | 1 |
+| Response tokens | ~2,255 | ~1,315 |
+| Total time | 55s | 26s |
 
 ---
 

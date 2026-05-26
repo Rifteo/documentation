@@ -153,6 +153,10 @@
           {
             "group": "Code Review",
             "pages": ["contexts/code-audit"]
+          },
+          {
+            "group": "Bug Bounty",
+            "pages": ["contexts/scope-to-bounty"]
           }
         ]
       },
