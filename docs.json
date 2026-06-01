@@ -70,6 +70,17 @@
           {
             "group": "Community",
             "pages": ["docs/contributing", "docs/style-guide"]
+          },
+          {
+            "group": "Top toolkits",
+            "pages": [
+              "skills/idor-hunter",
+              "skills/xss-hunter",
+              "skills/hexstrike-forge",
+              "skills/cvss-scorer",
+              "skills/scope-grill",
+              "contexts/scope-to-bounty"
+            ]
           }
         ]
       },
