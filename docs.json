@@ -155,11 +155,7 @@
           },
           {
             "group": "Web & API",
-            "pages": ["contexts/web-app-pentest", "contexts/api-security-review"]
-          },
-          {
-            "group": "Mobile",
-            "pages": ["contexts/mobile-pentest"]
+            "pages": ["contexts/web-app-pentest"]
           },
           {
             "group": "Infrastructure",
@@ -211,8 +207,8 @@
       {
         "header": "Resources",
         "items": [
-          { "label": "Scripts", "href": "/scripts/overview" },
           { "label": "Contexts", "href": "/contexts/overview" },
+          { "label": "Scripts", "href": "/scripts/overview" },
           { "label": "Examples", "href": "/usage/examples" }
         ]
       },

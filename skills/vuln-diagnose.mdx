@@ -1,10 +1,13 @@
 ---
 title: Vulnerability Diagnose
-description: Builds a deterministic, reproducible proof-of-concept for a suspected vulnerability before writing a finding  eliminates false positives and produces airtight evidence.
+description: Builds a deterministic, reproducible proof-of-concept for a suspected vulnerability before writing a finding eliminates false positives and produces airtight evidence.
 ---
 
 <Info>
-  **Category:** Pentest & security testing
+  **Status:** Stable
+  **Version:** 1.0.0
+  **Author:** AuditGuard
+  **Tags:** pentest, security
 </Info>
 
 **Installation**
@@ -17,10 +20,10 @@ auditguard-skills add vuln-diagnose
 
 ## Summary
 
-A suspected vulnerability is not a finding. Build a deterministic reproduction case first  if it cannot be reproduced reliably, it cannot be reported.
+A suspected vulnerability is not a finding. Build a deterministic reproduction case first if it cannot be reproduced reliably, it cannot be reported.
 
 - Step 1 forces a single-sentence hypothesis statement: the claim that all subsequent steps confirm or disprove
-- Step 2 builds the minimal test case  reproducible, minimal, unambiguous  that gives a binary YES/NO answer
+- Step 2 builds the minimal test case reproducible, minimal, unambiguous that gives a binary YES/NO answer
 - Step 3 rules out false positives: caching, rate limiting, session dependency, race conditions
 - Step 4 demonstrates the worst-case impact with actual evidence: data from another user, cookie exfiltrated, admin action performed
 - Step 5 produces a **Minimal Reproduction Case** document ready to pass to `finding-writer`
@@ -53,8 +56,8 @@ Use this skill when the user:
 - Impact demonstration with evidence (HTTP request + response, screenshot, extracted data)
 
 **Out of scope:**
-- Writing the final finding  use `finding-writer` after this skill confirms the vulnerability
-- Reporting based on tool output alone  always requires manual confirmation
+- Writing the final finding use `finding-writer` after this skill confirms the vulnerability
+- Reporting based on tool output alone always requires manual confirmation
 
 #### How It Works
 
@@ -72,17 +75,17 @@ Create the minimal test case that produces a binary YES/NO answer:
 - A response that contains data it shouldn't
 
 The test must be:
-- **Reproducible**  same result every time
-- **Minimal**  only the essential input, no noise
-- **Unambiguous**  pass is clearly different from fail
+- **Reproducible** same result every time
+- **Minimal** only the essential input, no noise
+- **Unambiguous** pass is clearly different from fail
 
 **Step 3: Test Alternate Explanations**
 
 Before confirming, rule out:
-- **Caching**  replay the request, is the result fresh?
-- **Rate limiting**  does it fail on the 5th attempt?
-- **Session dependency**  does it work with a fresh session?
-- **Race conditions**  does it fail on a second run?
+- **Caching** replay the request, is the result fresh?
+- **Rate limiting** does it fail on the 5th attempt?
+- **Session dependency** does it work with a fresh session?
+- **Race conditions** does it fail on a second run?
 
 **Step 4: Confirm the Impact**
 
@@ -121,10 +124,10 @@ A Minimal Reproduction Case document with confirmed impact and evidence, ready f
 
 #### Known Limitations
 
-- No exploit, no finding  if you cannot demonstrate impact, downgrade to "suspected" and label it clearly
+- No exploit, no finding if you cannot demonstrate impact, downgrade to "suspected" and label it clearly
 - Never report a finding based on tool output alone without manual confirmation
 - If the test is flaky (fails intermittently), investigate root cause before reporting
-- One hypothesis per session  do not stack unconfirmed vulnerabilities
+- One hypothesis per session do not stack unconfirmed vulnerabilities
 
 </Accordion>
 
@@ -145,19 +148,19 @@ Tested on claude-sonnet-4-6 via Claude Code CLI. Same prompt, same model, same t
 ## Related skills
 
 <CardGroup cols={3}>
-  <Card title="finding-writer" href="/skills/finding-writer">
-    Convert raw pentest notes into structured audit findings ready for reporting
+ <Card title="finding-writer" href="/skills/finding-writer">
+  Convert raw pentest notes into structured audit findings ready for reporting
 
-    
-  </Card>
-  <Card title="bugbounty-reporter" href="/skills/bugbounty-reporter">
-    Converts raw bug bounty findings into a complete, triage-ready report
+  
+ </Card>
+ <Card title="bugbounty-reporter" href="/skills/bugbounty-reporter">
+  Converts raw bug bounty findings into a complete, triage-ready report
 
-    
-  </Card>
-  <Card title="risk-assessor" href="/skills/risk-assessor">
-    Score a vulnerability using likelihood × impact with SLA-bound remediation urgency
+  
+ </Card>
+ <Card title="risk-assessor" href="/skills/risk-assessor">
+  Score a vulnerability using likelihood × impact with SLA-bound remediation urgency
 
-    
-  </Card>
+  
+ </Card>
 </CardGroup>

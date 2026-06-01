@@ -1,10 +1,13 @@
 ---
 title: Redirect Forge
-description: Complete open redirect detection and exploitation methodology  parameter discovery, 30+ bypass techniques, OAuth token theft, SSRF chaining, CSP abuse, phishing escalation, and report structure.
+description: Complete open redirect detection and exploitation methodology parameter discovery, 30+ bypass techniques, OAuth token theft, SSRF chaining, CSP abuse, phishing escalation, and report structure.
 ---
 
 <Info>
-  **Category:** Pentest & security testing
+  **Status:** Stable
+  **Version:** 1.0.0
+  **Author:** AuditGuard
+  **Tags:** pentest, security, web
 </Info>
 
 **Installation**
@@ -22,7 +25,7 @@ Detect and exploit open redirect vulnerabilities across all parameter types, the
 - Phase 1 discovers redirect parameters via passive recon (gau, waybackurls), active crawling (katana), HTTP header abuse, and OAuth/SSO-specific parameters
 - Phase 2 verifies basic open redirect with a canary before reaching for bypasses
 - Phase 3 covers 13 bypass technique categories: protocol substitution, allowlist suffix/prefix bypass, @ operator, URL encoding, double encoding, Unicode/IDN, path traversal, IPv6/IP confusion, parameter pollution, fragment tricks, case sensitivity, and CRLF injection
-- Phase 4 targets OAuth `redirect_uri`  the highest-impact variant  with bypass techniques and token capture setup
+- Phase 4 targets OAuth `redirect_uri` the highest-impact variant with bypass techniques and token capture setup
 - Phase 5 documents escalation chains: redirect → SSRF, redirect → CSP bypass, redirect → phishing, redirect → SAML/SSO token theft
 - Phases 6–8 cover blind open redirect via OOB, automated testing with openredirex/ffuf/nuclei, and a complete report structure with CVSS vectors
 
@@ -32,7 +35,7 @@ Detect and exploit open redirect vulnerabilities across all parameter types, the
 
 <Accordion title="Discover skill details">
 
-### Redirect Forge  Open Redirect
+### Redirect Forge Open Redirect
 
 #### When to Use This Skill
 
@@ -114,7 +117,7 @@ redirect_uri=https://target.com/go?to=https://evil.com
 
 #### Known Limitations
 
-- App that redirects to a fixed list of URLs is not vulnerable  verify redirect destination is truly attacker-controlled
+- App that redirects to a fixed list of URLs is not vulnerable verify redirect destination is truly attacker-controlled
 - `Location` header present but middleware blocks external domains downstream → false positive; test with actual browser or curl -L
 
 </Accordion>
@@ -124,19 +127,19 @@ redirect_uri=https://target.com/go?to=https://evil.com
 ## Related skills
 
 <CardGroup cols={3}>
-  <Card title="ssrf-hunter" href="/skills/ssrf-hunter">
-    Complete SSRF detection and exploitation methodology  cloud metadata, internal network enumeration, and bypass techniques
+ <Card title="ssrf-hunter" href="/skills/ssrf-hunter">
+  Complete SSRF detection and exploitation methodology cloud metadata, internal network enumeration, and bypass techniques
 
-    
-  </Card>
-  <Card title="hpp-hunter" href="/skills/hpp-hunter">
-    Complete HTTP Parameter Pollution methodology  WAF bypass, OAuth abuse, payment manipulation
+  
+ </Card>
+ <Card title="hpp-hunter" href="/skills/hpp-hunter">
+  Complete HTTP Parameter Pollution methodology WAF bypass, OAuth abuse, payment manipulation
 
-    
-  </Card>
-  <Card title="xss-hunter" href="/skills/xss-hunter">
-    Complete XSS testing methodology  reflected, stored, DOM-based, blind, and mutation XSS
+  
+ </Card>
+ <Card title="xss-hunter" href="/skills/xss-hunter">
+  Complete XSS testing methodology reflected, stored, DOM-based, blind, and mutation XSS
 
-    
-  </Card>
+  
+ </Card>
 </CardGroup>
