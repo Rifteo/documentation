@@ -1,10 +1,13 @@
 ---
 title: Bug Bounty Reporter
-description: Converts raw bug bounty findings into a complete, triage-ready report  clear description, numbered reproduction steps, self-contained PoC, risk, and remediation.
+description: Converts raw bug bounty findings into a complete, triage-ready report clear description, numbered reproduction steps, self-contained PoC, risk, and remediation.
 ---
 
 <Info>
-  **Category:** Reporting & documentation
+  **Status:** Stable
+  **Version:** 1.0.0
+  **Author:** AuditGuard
+  **Tags:** reporting, bug-bounty, security
 </Info>
 
 **Installation**
@@ -17,12 +20,12 @@ auditguard-skills add bugbounty-reporter
 
 ## Summary
 
-Turn raw findings into a report that gets triaged, not closed  covering all vulnerability classes and major platforms (HackerOne, Bugcrowd, Intigriti, YesWeHack).
+Turn raw findings into a report that gets triaged, not closed covering all vulnerability classes and major platforms (HackerOne, Bugcrowd, Intigriti, YesWeHack).
 
 - Parses the finding and infers vulnerability class, endpoint, auth state, and observed behavior from raw notes or a request/response
 - Flags likely N/A findings (self-XSS, low-value clickjacking, missing headers with no exploit path) before writing
 - Produces a complete report with title, description, numbered reproduction steps, PoC, risk, remediation, and severity
-- Marks any missing evidence `[TO ADD]`  never invents data
+- Marks any missing evidence `[TO ADD]` never invents data
 
 ---
 
@@ -51,7 +54,7 @@ Use this skill when the user:
 
 **Out of scope:**
 - Reports for active competitions where sharing is prohibited
-- Unconfirmed findings  use `vuln-diagnose` first
+- Unconfirmed findings use `vuln-diagnose` first
 
 #### How It Works
 
@@ -75,7 +78,7 @@ Generate a complete report following this structure:
 - **Description:** 2–4 sentences starting with the finding, no filler
 - **Steps to Reproduce:** numbered, exact, reproducible by someone unfamiliar with the app
 - **Proof of Concept:** HTTP request/response, curl command, or payload + trigger location
-- **Risk:** named outcomes  no vague statements
+- **Risk:** named outcomes no vague statements
 - **Remediation:** specific and actionable
 - **Severity:** CVSS vector and score
 
@@ -100,10 +103,10 @@ Authorization: Bearer <attacker_token>
 
 #### Known Limitations
 
-- Never invents evidence  missing fields are marked `[TO ADD]`
-- Do not overstate impact to chase a higher bounty  it damages credibility
+- Never invents evidence missing fields are marked `[TO ADD]`
+- Do not overstate impact to chase a higher bounty it damages credibility
 - If HttpOnly blocks cookie theft in an XSS, state what's actually achievable
-- Self-XSS with no escalation path is not reportable  the skill will flag it and suggest a chain if one exists
+- Self-XSS with no escalation path is not reportable the skill will flag it and suggest a chain if one exists
 
 </Accordion>
 
@@ -112,19 +115,19 @@ Authorization: Bearer <attacker_token>
 ## Related skills
 
 <CardGroup cols={3}>
-  <Card title="vuln-diagnose" href="/skills/vuln-diagnose">
-    Builds a deterministic, reproducible proof-of-concept for a suspected vulnerability before writing a finding
+ <Card title="vuln-diagnose" href="/skills/vuln-diagnose">
+  Builds a deterministic, reproducible proof-of-concept for a suspected vulnerability before writing a finding
 
-    
-  </Card>
-  <Card title="cvss-scorer" href="/skills/cvss-scorer">
-    Computes an exact CVSS v3.1 base score and vector from a vulnerability description
+  
+ </Card>
+ <Card title="cvss-scorer" href="/skills/cvss-scorer">
+  Computes an exact CVSS v3.1 base score and vector from a vulnerability description
 
-    
-  </Card>
-  <Card title="finding-writer" href="/skills/finding-writer">
-    Convert raw pentest notes into structured audit findings ready for reporting
+  
+ </Card>
+ <Card title="finding-writer" href="/skills/finding-writer">
+  Convert raw pentest notes into structured audit findings ready for reporting
 
-    
-  </Card>
+  
+ </Card>
 </CardGroup>

@@ -1,10 +1,13 @@
 ---
 title: JWT Cracker
-description: Full JWT attack methodology  alg:none, RS256 to HS256 confusion, weak secret brute-force, kid injection, jku/jwk injection, and claim tampering.
+description: Full JWT attack methodology alg:none, RS256 to HS256 confusion, weak secret brute-force, kid injection, jku/jwk injection, and claim tampering.
 ---
 
 <Info>
-  **Category:** Pentest & security testing
+  **Status:** Stable
+  **Version:** 1.0.0
+  **Author:** AuditGuard
+  **Tags:** pentest, security, access
 </Info>
 
 **Installation**
@@ -17,7 +20,7 @@ auditguard-skills add jwt-cracker
 
 ## Summary
 
-Work through a complete 11-attack JWT exploitation methodology  from decoding the token to forging one with admin claims  covering every known attack class against HMAC and asymmetric JWT implementations.
+Work through a complete 11-attack JWT exploitation methodology from decoding the token to forging one with admin claims covering every known attack class against HMAC and asymmetric JWT implementations.
 
 - Decodes and inspects the header (`alg`, `kid`, `jku`, `x5u`, `jwk`) to select the highest-impact attacks first
 - Covers `alg:none`, RS256 → HS256 algorithm confusion, weak HMAC secret brute-force, `kid` SQL injection, `kid` path traversal, `jku`/`x5u` header injection, and embedded `jwk` injection
@@ -47,7 +50,7 @@ Use this skill when the user:
 
 #### What Does It Check?
 
-JWT vulnerabilities occur when the server accepts a token it should reject  because the signature check is weak, skipped, or bypassable. The skill decodes the token header, identifies the algorithm and any key-reference fields, then selects and executes the relevant attacks in priority order.
+JWT vulnerabilities occur when the server accepts a token it should reject because the signature check is weak, skipped, or bypassable. The skill decodes the token header, identifies the algorithm and any key-reference fields, then selects and executes the relevant attacks in priority order.
 
 **In scope:**
 - All HMAC algorithms: HS256, HS384, HS512
@@ -57,8 +60,8 @@ JWT vulnerabilities occur when the server accepts a token it should reject  beca
 - Cross-service token relay (shared key without `aud` validation)
 
 **Out of scope:**
-- OAuth 2.0 flows (authorization code, PKCE)  JWT signing is only one component
-- Refresh token attacks  separate class of vulnerability
+- OAuth 2.0 flows (authorization code, PKCE) JWT signing is only one component
+- Refresh token attacks separate class of vulnerability
 
 #### How It Works
 
@@ -103,7 +106,7 @@ After any successful forgery: tamper with `sub`, `role`, `is_admin`, `org_id`, a
 | Status | Condition |
 |--------|-----------|
 | Attack confirmed | Server accepts forged token and returns data / elevated access |
-| Attack failed | Server rejects forged token  move to next attack |
+| Attack failed | Server rejects forged token move to next attack |
 | Claim tamper result | Modified claim accepted or rejected by target endpoint |
 
 Example confirmation:
@@ -111,17 +114,17 @@ Example confirmation:
 ```bash
 # alg:none attack confirmed
 curl https://target.com/api/admin/users \
-  -H "Authorization: Bearer eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.\
+ -H "Authorization: Bearer eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.\
 eyJzdWIiOiIxIiwicm9sZSI6ImFkbWluIn0."
 # → 200 OK with admin data
 ```
 
 #### Known Limitations
 
-- `jwt_tool` and `hashcat` must be installed separately  see `references/tools.md`
+- `jwt_tool` and `hashcat` must be installed separately see `references/tools.md`
 - `jku`/`x5u` attacks require a publicly reachable server to host the JWKS
 - Algorithm confusion attacks require the public key to be accessible (JWKS endpoint or certificate)
-- This skill is for authorized testing only  always confirm scope before use
+- This skill is for authorized testing only always confirm scope before use
 
 </Accordion>
 
@@ -142,19 +145,19 @@ Tested on claude-sonnet-4-6 via Claude Code CLI. Same prompt, same model, same t
 ## Related skills
 
 <CardGroup cols={3}>
-  <Card title="idor-hunter" href="/skills/idor-hunter">
-    Systematic IDOR/BOLA detection methodology with recon, testing, and bypass techniques
+ <Card title="idor-hunter" href="/skills/idor-hunter">
+  Systematic IDOR/BOLA detection methodology with recon, testing, and bypass techniques
 
-    
-  </Card>
-  <Card title="finding-writer" href="/skills/finding-writer">
-    Convert raw pentest notes into structured audit findings ready for reporting
+  
+ </Card>
+ <Card title="finding-writer" href="/skills/finding-writer">
+  Convert raw pentest notes into structured audit findings ready for reporting
 
-    
-  </Card>
-  <Card title="risk-assessor" href="/skills/risk-assessor">
-    Score a vulnerability using likelihood × impact with SLA-bound remediation urgency
+  
+ </Card>
+ <Card title="risk-assessor" href="/skills/risk-assessor">
+  Score a vulnerability using likelihood × impact with SLA-bound remediation urgency
 
-    
-  </Card>
+  
+ </Card>
 </CardGroup>

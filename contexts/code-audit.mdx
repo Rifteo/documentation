@@ -4,7 +4,7 @@ description: Source code audit covering quality, architecture, maintainability, 
 ---
 
 <Info>
-  **Category:** Audit
+ **Category:** Audit
 </Info>
 
 **Load this context**
@@ -70,7 +70,7 @@ Load this context when:
 - Run automated scanners first, manual review fills the gaps they miss
 
 **Reviewer discipline:**
-- Limit review sessions to 60–90 minutes  attention degrades sharply beyond that
+- Limit review sessions to 60–90 minutes attention degrades sharply beyond that
 - Review no more than 400–500 lines per session
 - Prioritize: authentication, payment, data handling, and public-facing entry points first
 
@@ -108,7 +108,7 @@ Run before detailed code review, especially for authentication, payment, or data
 | Elevation of Privilege | Authorization | Low-privilege user accesses admin functions |
 
 **Steps:**
-1. Draw a data flow diagram  identify all processes, data stores, external entities, and data flows
+1. Draw a data flow diagram identify all processes, data stores, external entities, and data flows
 2. Mark trust boundaries on the DFD
 3. Apply STRIDE to each element
 4. Prioritize threats by likelihood x impact before starting code review
@@ -122,7 +122,7 @@ Run before detailed code review, especially for authentication, payment, or data
 grep -rn "password\s*=" .
 grep -rn "api_key\s*=" .
 grep -rn "BEGIN RSA PRIVATE KEY" .
-grep -rn "AKIA[0-9A-Z]{16}" .   # AWS access keys
+grep -rn "AKIA[0-9A-Z]{16}" .  # AWS access keys
 grep -rn "sk-[a-zA-Z0-9]{32,}" . # OpenAI keys
 
 # Git history
@@ -137,7 +137,7 @@ gitleaks detect --source . --log-opts="--all"
 ### Phase 3: Authentication, Authorization, and Business Logic
 
 **Authentication:**
-- Password hashing using a slow algorithm? (`bcrypt`, `argon2`, `scrypt`  not `md5`, `sha1`, `sha256`)
+- Password hashing using a slow algorithm? (`bcrypt`, `argon2`, `scrypt` not `md5`, `sha1`, `sha256`)
 - Session token generation cryptographically random? (`secrets.token_hex()`, not `Math.random()`)
 - JWT tokens validated? Check that signature is verified, `alg: none` is rejected, expiry is enforced
 - Failed login attempts rate-limited?
@@ -148,16 +148,16 @@ gitleaks detect --source . --log-opts="--all"
 - IDOR: are object IDs validated against the requesting user's ownership?
 
 ```python
-# Red flag  no ownership check
+# Red flag no ownership check
 def get_document(doc_id):
-    return db.query("SELECT * FROM docs WHERE id = ?", doc_id)
+  return db.query("SELECT * FROM docs WHERE id = ?", doc_id)
 
 # Correct
 def get_document(doc_id, user_id):
-    return db.query("SELECT * FROM docs WHERE id = ? AND owner_id = ?", doc_id, user_id)
+  return db.query("SELECT * FROM docs WHERE id = ? AND owner_id = ?", doc_id, user_id)
 ```
 
-**Business logic (manual only  scanners cannot detect these):**
+**Business logic (manual only scanners cannot detect these):**
 - Multi-step workflows completable out of order?
 - Numeric limits enforced server-side (negative quantities, price overrides)?
 - Concurrent requests to the same operation idempotent?
@@ -170,20 +170,20 @@ def get_document(doc_id, user_id):
 Trace user-controlled data from entry points to dangerous sinks.
 
 **Dangerous sinks:**
-- SQL queries  string concatenation instead of parameterized queries
-- Shell commands  `os.system()`, `subprocess(shell=True)`, `exec()`, `eval()`
-- Template rendering  unsanitized user input passed to template engines
-- File paths  user-controlled paths without sanitization (`../` traversal)
-- Deserialization  `pickle.loads()`, `yaml.load()` (not `safe_load`), Java `ObjectInputStream`
+- SQL queries string concatenation instead of parameterized queries
+- Shell commands `os.system()`, `subprocess(shell=True)`, `exec()`, `eval()`
+- Template rendering unsanitized user input passed to template engines
+- File paths user-controlled paths without sanitization (`../` traversal)
+- Deserialization `pickle.loads()`, `yaml.load()` (not `safe_load`), Java `ObjectInputStream`
 
 ```python
-# SQLi  flag
+# SQLi flag
 query = "SELECT * FROM users WHERE name = '" + username + "'"
 
-# Command injection  flag
+# Command injection flag
 os.system("ping " + user_input)
 
-# Unsafe deserialization  flag
+# Unsafe deserialization flag
 obj = pickle.loads(request.body)
 ```
 
@@ -197,10 +197,10 @@ obj = pickle.loads(request.body)
 - Random values for security using a CSPRNG?
 
 ```python
-# Weak  flag
+# Weak flag
 hashlib.md5(password.encode()).hexdigest()
 
-# Insecure random  flag
+# Insecure random flag
 import random; token = random.randint(0, 999999)
 
 # Correct
@@ -216,11 +216,11 @@ import secrets; token = secrets.token_hex(32)
 - Sensitive data (passwords, tokens, PII) written to logs?
 
 ```python
-# Leaks internals  flag
+# Leaks internals flag
 except Exception as e:
-    return {"error": str(e), "traceback": traceback.format_exc()}
+  return {"error": str(e), "traceback": traceback.format_exc()}
 
-# Logs sensitive data  flag
+# Logs sensitive data flag
 logger.info(f"User login: {username} password={password}")
 ```
 
@@ -229,17 +229,17 @@ logger.info(f"User login: {username} password={password}")
 ### Phase 7: Dependency and Supply Chain Review
 
 ```bash
-pip-audit                         # Python
-npm audit --audit-level=high      # Node.js
-grype dir:.                       # Any language
-trivy fs .                        # Any language
+pip-audit             # Python
+npm audit --audit-level=high   # Node.js
+grype dir:.            # Any language
+trivy fs .            # Any language
 
 # SBOM generation
 syft dir:. -o cyclonedx-json > sbom.json
 
 # License compliance
-pip install liccheck && liccheck   # Python
-npx license-checker --summary      # Node.js
+pip install liccheck && liccheck  # Python
+npx license-checker --summary   # Node.js
 ```
 
 **Flag:** known CVEs with reachable code paths, floating version ranges (`>=1.0`), packages from non-registry sources, GPL/AGPL/SSPL licenses in commercial codebases, unlicensed dependencies.
@@ -253,9 +253,9 @@ npx license-checker --summary      # Node.js
 - Financial or inventory operations protected against concurrent modification?
 
 ```python
-# TOCTOU  flag
-if not os.path.exists(filename):   # check
-    open(filename, 'w').write(data) # use  race window here
+# TOCTOU flag
+if not os.path.exists(filename):  # check
+  open(filename, 'w').write(data) # use race window here
 ```
 
 ---
@@ -271,17 +271,17 @@ if not os.path.exists(filename):   # check
 
 ```bash
 # Python
-radon cc -s -n B .    # functions with grade B or worse
-radon mi -s .         # maintainability index
+radon cc -s -n B .  # functions with grade B or worse
+radon mi -s .     # maintainability index
 
 # Circular dependencies
-npx madge --circular src/   # Node.js
-pydeps src/ --max-bacon=3   # Python
+npx madge --circular src/  # Node.js
+pydeps src/ --max-bacon=3  # Python
 ```
 
 **Coupling metrics:**
-- Afferent coupling (Ca): modules that depend on this one  high Ca means high change impact
-- Efferent coupling (Ce): modules this one depends on  high Ce means fragile and hard to test
+- Afferent coupling (Ca): modules that depend on this one high Ca means high change impact
+- Efferent coupling (Ce): modules this one depends on high Ce means fragile and hard to test
 - Instability = Ce / (Ca + Ce). Flag modules that are both unstable and heavily depended upon
 
 ---
@@ -354,7 +354,7 @@ Do not report without further investigation:
 
 **Type:** Code Security | Code Quality | Code Architecture | Code Maintainability
 **Severity:** Critical | High | Medium | Low | Info
-**CVSS Score:** (Code Security only) score  CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+**CVSS Score:** (Code Security only) score CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
 **Location:** `path/to/file.py:42`
 
 **Evidence:**
@@ -379,16 +379,16 @@ Use `finding-writer` skill to structure raw notes into a complete finding.
 ## Related contexts
 
 <CardGroup cols={3}>
-  <Card title="web-app-pentest" href="/contexts/web-app-pentest">
-    Full web application pentest methodology, recon through reporting
+ <Card title="web-app-pentest" href="/contexts/web-app-pentest">
+  Full web application pentest methodology, recon through reporting
 
-  </Card>
-  <Card title="api-security-review" href="/contexts/api-security-review">
-    REST and GraphQL API security, authentication, BOLA, input validation, and rate limiting
+ </Card>
+ <Card title="ad-pentest-unauthenticated" href="/contexts/ad-pentest-unauthenticated">
+  Unauthenticated infra pentest with AD focus: host discovery, SMB null sessions, AS-REP roasting
 
-  </Card>
-  <Card title="cloud-audit" href="/contexts/cloud-audit">
-    AWS, Azure, and GCP security audit, IAM, storage, networking, secrets, and logging
+ </Card>
+ <Card title="cloud-audit" href="/contexts/cloud-audit">
+  AWS, Azure, and GCP security audit, IAM, storage, networking, secrets, and logging
 
-  </Card>
+ </Card>
 </CardGroup>

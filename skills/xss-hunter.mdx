@@ -1,18 +1,21 @@
 ---
 title: XSS Hunter ★
-description: Complete XSS testing methodology  reflected, stored, DOM-based, blind, and mutation XSS, CSP bypass, DOM clobbering, filter/WAF evasion, and impact escalation.
+description: Complete XSS testing methodology reflected, stored, DOM-based, blind, and mutation XSS, CSP bypass, DOM clobbering, filter/WAF evasion, and impact escalation.
 ---
 
 <Info>
-  **Category:** Pentest & security testing
+  **Status:** Stable
+  **Version:** 1.0.0
+  **Author:** AuditGuard
+  **Tags:** pentest, security, web
 </Info>
 
 <Tip>
-  **★ Top 5 benchmark result:** -75% time to complete an XSS hunt (8 min → 2 min) with +29% more coverage — same model, same target.
+ **★ Top 5 benchmark result:** -75% time to complete an XSS hunt (8 min → 2 min) with +29% more coverage — same model, same target.
 </Tip>
 
 <video controls playsInline style={{ width: '100%', borderRadius: '8px', marginBottom: '32px' }}>
-  <source src="/medias/videos/xss-hunter.mp4" type="video/mp4" />
+ <source src="/medias/videos/xss.mp4" type="video/mp4" />
 </video>
 
 **Installation**
@@ -25,7 +28,7 @@ auditguard-skills add xss-hunter
 
 ## Summary
 
-Execute a complete Cross-Site Scripting (XSS) testing methodology across all attack types  from reconnaissance to impact escalation.
+Execute a complete Cross-Site Scripting (XSS) testing methodology across all attack types from reconnaissance to impact escalation.
 
 - Covers 9 attack types: reflected XSS, stored XSS, DOM-based XSS, blind XSS, filter and WAF evasion, CSP bypass, mutation XSS (mXSS), DOM clobbering, and impact escalation
 - Identifies the injection context (HTML body, attribute, JS string, template literal, href, CSS) before selecting the right payload
@@ -40,7 +43,7 @@ Execute a complete Cross-Site Scripting (XSS) testing methodology across all att
 
 ### XSS Hunter
 
-Complete XSS testing methodology  reflected, stored, DOM-based, blind, mutation XSS, CSP bypass, DOM clobbering, filter/WAF evasion, and impact escalation.
+Complete XSS testing methodology reflected, stored, DOM-based, blind, mutation XSS, CSP bypass, DOM clobbering, filter/WAF evasion, and impact escalation.
 
 #### When to Use This Skill
 
@@ -65,8 +68,8 @@ XSS occurs when user-controlled input is rendered in a browser without proper sa
 - Impact escalation: cookie theft, credential harvesting, keylogging, CSRF, account takeover, internal network scanning
 
 **Out of scope:**
-- SQL injection, SSTI, or other vulnerability classes  use dedicated skills
-- Automated mass scanning  this is a guided methodology
+- SQL injection, SSTI, or other vulnerability classes use dedicated skills
+- Automated mass scanning this is a guided methodology
 
 #### How It Works
 
@@ -79,11 +82,11 @@ Map all input surfaces: URL parameters, form fields, HTTP headers (Referer, User
 Always inject a canary string (`xsstest123`) and view source to locate where it appears before selecting a payload:
 
 ```
-HTML body:       → <script> or <img onerror>
-HTML attribute:  → " onmouseover= or ">
-JS string:       → ";alert(1)//
-JS template:     → ${alert(1)}
-URL/href:        → javascript:alert(1)
+HTML body:    → <script> or <img onerror>
+HTML attribute: → " onmouseover= or ">
+JS string:    → ";alert(1)//
+JS template:   → ${alert(1)}
+URL/href:    → javascript:alert(1)
 ```
 
 **Attack 1: Reflected XSS**
@@ -136,8 +139,8 @@ Report structure follows: `Title: [Stored/Reflected/DOM] XSS on [endpoint/featur
 #### Known Limitations
 
 - Blind XSS requires an OOB server (XSS Hunter, Burp Collaborator, or interactsh) to receive callbacks
-- DOM clobbering requires understanding JS variable usage in the target application  read JS source first
-- mXSS effectiveness depends on the browser version and sanitizer version  test in multiple browsers
+- DOM clobbering requires understanding JS variable usage in the target application read JS source first
+- mXSS effectiveness depends on the browser version and sanitizer version test in multiple browsers
 - Always use `document.domain` (not `alert(1)`) to prove execution origin in findings
 
 </Accordion>
@@ -160,19 +163,19 @@ Tested on claude-sonnet-4-6 via Claude Code CLI. Same prompt, same model, same t
 ## Related skills
 
 <CardGroup cols={3}>
-  <Card title="ssti-hunter" href="/skills/ssti-hunter">
-    Complete SSTI detection and exploitation methodology across all major template engines
+ <Card title="ssti-hunter" href="/skills/ssti-hunter">
+  Complete SSTI detection and exploitation methodology across all major template engines
 
-    
-  </Card>
-  <Card title="idor-hunter" href="/skills/idor-hunter">
-    Systematic IDOR/BOLA detection methodology with recon, testing, and bypass techniques
+  
+ </Card>
+ <Card title="idor-hunter" href="/skills/idor-hunter">
+  Systematic IDOR/BOLA detection methodology with recon, testing, and bypass techniques
 
-    
-  </Card>
-  <Card title="nuclei-template-writer" href="/skills/nuclei-template-writer">
-    Convert a vulnerability into a ready-to-run Nuclei YAML template for large-scale detection
+  
+ </Card>
+ <Card title="nuclei-template-writer" href="/skills/nuclei-template-writer">
+  Convert a vulnerability into a ready-to-run Nuclei YAML template for large-scale detection
 
-    
-  </Card>
+  
+ </Card>
 </CardGroup>

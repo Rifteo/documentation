@@ -1,10 +1,13 @@
 ---
 title: JS Analyzer
-description: Full JavaScript analysis methodology for pentesting and bug bounty  JS file discovery, secret extraction, endpoint mapping, DOM XSS, prototype pollution, postMessage abuse, client-side logic flaws, source map extraction, and hardcoded credential hunting.
+description: Full JavaScript analysis methodology for pentesting and bug bounty JS file discovery, secret extraction, endpoint mapping, DOM XSS, prototype pollution, postMessage abuse, client-side logic flaws, source map extraction, and hardcoded credential hunting.
 ---
 
 <Info>
-  **Category:** Pentest & security testing
+  **Status:** Stable
+  **Version:** 1.0.0
+  **Author:** AuditGuard
+  **Tags:** pentest, security, web
 </Info>
 
 **Installation**
@@ -17,7 +20,7 @@ auditguard-skills add js-analyzer
 
 ## Summary
 
-JS files are often the most information-rich attack surface in a web application  a thorough review routinely yields hidden API endpoints, hardcoded secrets, client-side authorization logic to bypass, and vulnerable third-party libraries.
+JS files are often the most information-rich attack surface in a web application a thorough review routinely yields hidden API endpoints, hardcoded secrets, client-side authorization logic to bypass, and vulnerable third-party libraries.
 
 - Phase 1 discovers all JS files via automated crawling (katana, gau, waybackurls) and framework-specific paths (React, Next.js, Angular, Vue, Vite)
 - Phase 2 extracts source maps from minified bundles to recover the original unminified source code
@@ -32,7 +35,7 @@ JS files are often the most information-rich attack surface in a web application
 
 <Accordion title="Discover skill details">
 
-### JS Analyzer  JavaScript Security Analysis
+### JS Analyzer JavaScript Security Analysis
 
 #### When to Use This Skill
 
@@ -62,8 +65,8 @@ Use this skill when the user:
 - JSONP endpoints, WebSocket analysis, CSP bypass techniques
 
 **Out of scope:**
-- Server-side vulnerabilities  JS analysis is client-side focused
-- Automated mass scanning  this is a guided methodology
+- Server-side vulnerabilities JS analysis is client-side focused
+- Automated mass scanning this is a guided methodology
 
 #### How It Works
 
@@ -125,9 +128,9 @@ Priority triage order:
 
 #### Known Limitations
 
-- Minified JS without source maps requires manual deobfuscation  results depend on obfuscation complexity
+- Minified JS without source maps requires manual deobfuscation results depend on obfuscation complexity
 - Prototype pollution gadget chains are framework-specific and require manual verification
-- DOM XSS source-to-sink tracing can be complex in bundled/transpiled code  use Burp DOM Invader for browser-assisted tracing
+- DOM XSS source-to-sink tracing can be complex in bundled/transpiled code use Burp DOM Invader for browser-assisted tracing
 
 </Accordion>
 
@@ -136,19 +139,19 @@ Priority triage order:
 ## Related skills
 
 <CardGroup cols={3}>
-  <Card title="xss-hunter" href="/skills/xss-hunter">
-    Complete XSS testing methodology  reflected, stored, DOM-based, blind, and mutation XSS
+ <Card title="xss-hunter" href="/skills/xss-hunter">
+  Complete XSS testing methodology reflected, stored, DOM-based, blind, and mutation XSS
 
-    
-  </Card>
-  <Card title="attack-surface" href="/skills/attack-surface">
-    Maps every entry point, component, and trust boundary of a target before testing begins
+  
+ </Card>
+ <Card title="attack-surface" href="/skills/attack-surface">
+  Maps every entry point, component, and trust boundary of a target before testing begins
 
-    
-  </Card>
-  <Card title="ssrf-hunter" href="/skills/ssrf-hunter">
-    Complete SSRF detection and exploitation methodology  cloud metadata, internal network enumeration, and bypass techniques
+  
+ </Card>
+ <Card title="ssrf-hunter" href="/skills/ssrf-hunter">
+  Complete SSRF detection and exploitation methodology cloud metadata, internal network enumeration, and bypass techniques
 
-    
-  </Card>
+  
+ </Card>
 </CardGroup>

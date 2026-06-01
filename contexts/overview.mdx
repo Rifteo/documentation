@@ -33,7 +33,7 @@ auditguard-context install --agent cursor
 auditguard-context install --agent gemini-cli
 ```
 
-Supports 10 agents: Claude Code, Cursor, Windsurf, Gemini CLI, Cline, Kiro, Codex, OpenCode, Amp, Continue.
+Supports 15 agents: Claude Code, Cursor, Windsurf, Gemini CLI, Cline, Kiro, Codex, OpenCode, Amp, Continue, GitHub Copilot, Aider Desk, Roo Code, OpenHands, Goose.
 
 ## Using a context
 
@@ -54,9 +54,7 @@ The agent automatically loads the right level (L1 for an overview, L2 when it ne
 | Context | What it covers |
 |---------|---------------|
 | [Web App Pentest](/contexts/web-app-pentest) | Full web app pentest methodology: recon, auth, injection, business logic |
-| [API Security Review](/contexts/api-security-review) | REST and GraphQL API security: BOLA, auth, rate limiting, data exposure |
 | [Cloud Audit](/contexts/cloud-audit) | AWS/Azure/GCP: IAM, storage exposure, networking, logging, secrets |
-| [Mobile Pentest](/contexts/mobile-pentest) | Android and iOS: static analysis, traffic interception, storage, auth |
 | [Code Audit](/contexts/code-audit) | Source code security review: secrets, auth logic, injection sinks, crypto, dependencies |
 | [AD Pentest (Unauthenticated)](/contexts/ad-pentest-unauthenticated) | Unauthenticated infra pentest with AD focus: host discovery, SMB null sessions, AS-REP roasting, Kerberoasting |
 
@@ -67,7 +65,7 @@ Every context lives in its own directory with a single required file:
 ```
 contexts/
 └── web-app-pentest/
-    └── CONTEXT.md
+  └── CONTEXT.md
 ```
 
 ### `CONTEXT.md`
@@ -80,13 +78,13 @@ name: my-context
 l0: One sentence describing what this context covers.
 ---
 
-## L1  Overview
+## L1 Overview
 
 When to use this context and what it covers at a high level.
 
 ---
 
-## L2  Full Methodology
+## L2 Full Methodology
 
 Complete detailed content the agent uses during the engagement.
 ```

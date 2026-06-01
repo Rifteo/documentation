@@ -3,123 +3,87 @@ title: Examples
 description: Common AuditGuard usage patterns and real-world scenarios.
 ---
 
-## Run a single skill
-
-The simplest use case: run one skill against a local project:
+## Install your first skill
 
 ```bash
-auditguard run --skill check-access-control --target ./my-project
+auditguard-skills add finding-writer
 ```
 
-Expected output:
-```
-[AuditGuard] Running skill: check-access-control
-[AuditGuard] Target: ./my-project
-[AuditGuard] Status: PASS
-[AuditGuard] Report written to: ./audit-reports/report_20260512_1430.json
+The CLI detects your installed agents automatically and installs the skill in the right place.
+
+---
+
+## Install a skill for a specific agent
+
+```bash
+auditguard-skills add bugbounty-reporter --agent claude-code
+auditguard-skills add bugbounty-reporter --agent gemini-cli
 ```
 
 ---
 
-## Run a full workflow
+## Find the right skill for a task
 
-Run all skills defined in `auditguard.yml`:
-
-```bash
-auditguard run
-```
-
-To override the target at runtime:
-```bash
-auditguard run --target ./other-project
-```
-
----
-
-## Generate an HTML report
-
-By default, reports are written as JSON. To generate an HTML report instead:
+Install `find-skills` once and it will always recommend the right skill for your task:
 
 ```bash
-auditguard run --output-format html
+auditguard-skills add find-skills
 ```
 
-The report will be saved at `./audit-reports/report_<timestamp>.html`.
+Then in your agent:
 
----
-
-## Enable strict mode
-
-In strict mode, any `warning` result is treated as a failure. Useful for CI pipelines:
-
-```bash
-auditguard run --strict
 ```
-
-If any skill returns `warning` or `fail`, the exit code will be non-zero, allowing your CI system to block on it.
-
----
-
-## Use in a CI pipeline (GitHub Actions)
-
-```yaml
-name: AuditGuard
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-
-jobs:
-  audit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install AuditGuard
-        run: pip install -r requirements.txt
-
-      - name: Run audit
-        run: auditguard run --strict
+I need to write a pentest report for this engagement
 ```
 
 ---
 
-## Run with verbose logging
-
-To see detailed output during a run, use `--verbose`:
+## Set up context-mcp
 
 ```bash
-auditguard run --verbose
+pip install auditguard-context-mcp
+auditguard-context install
 ```
 
-To debug skill execution step by step:
+Then in your agent:
 
-```bash
-auditguard run --verbose --log-level debug
 ```
-
----
-
-## List available skills
-
-Show all skills installed and available in the current environment:
-
-```bash
-auditguard skills list
+get the web-app-pentest context
+list all available security contexts
 ```
 
 ---
 
-## Validate your configuration
-
-Check that `auditguard.yml` is valid before running:
+## Connect a bug bounty platform
 
 ```bash
-auditguard configure --validate
+auditguard-context auth hackerone
+```
+
+Then in your agent:
+
+```
+get the scope for hackerone program "security"
+search hacktivity for SSRF vulnerabilities
+```
+
+---
+
+## Keep skills up to date
+
+```bash
+# See what has a newer version
+auditguard-skills outdated
+
+# Update everything
+auditguard-skills update
+```
+
+---
+
+## Check which agents are detected
+
+```bash
+auditguard-skills agents
+auditguard-context agents
 ```

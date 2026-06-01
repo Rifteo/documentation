@@ -1,22 +1,22 @@
 ---
 title: Benchmarks
-description: Real numbers. Same prompt. Same model. Skill on vs skill off  across all 23 AuditGuard skills.
+description: Real numbers. Same prompt. Same model. Skill on vs skill off across 18 benchmarked AuditGuard skills.
 ---
 
 <Info>
-  All benchmarks run on **claude-sonnet-4-6** via the Claude Code CLI. Same prompt, same model, same target. The only variable is whether the skill is loaded.
+ All benchmarks run on **claude-sonnet-4-6** via the Claude Code CLI. Same prompt, same model, same target. The only variable is whether the skill is loaded.
 </Info>
 
 ## How benchmarks work
 
-Each benchmark runs the identical prompt twice  once with no skill loaded (the agent improvises), once with the skill loaded as system context. The comparison measures:
+Each benchmark runs the identical prompt twice once with no skill loaded (the agent improvises), once with the skill loaded as system context. The comparison measures:
 
-- **Turns to completion**  how many back-and-forth exchanges before a usable result
-- **Tokens used**  total input + output tokens consumed
-- **Time**  wall-clock seconds from prompt to final output
-- **Output quality**  rated Incomplete → Partial → Good → Complete
+- **Turns to completion** how many back-and-forth exchanges before a usable result
+- **Tokens used** total input + output tokens consumed
+- **Time** wall-clock seconds from prompt to final output
+- **Output quality** rated Incomplete → Partial → Good → Complete
 
-The goal is not to make the agent look bad without skills  it's to show exactly what structured methodology adds, and where.
+The goal is not to make the agent look bad without skills it's to show exactly what structured methodology adds, and where.
 
 ---
 
@@ -61,7 +61,7 @@ The goal is not to make the agent look bad without skills  it's to show exactly 
 | Time | 77s | 40s | 🟡 -48% |
 | IDOR findings | 5 | 11 | 🟢 **+120%** |
 
-Without the skill, the agent applied a shallow approach and stopped after the most obvious vectors  5 IDORs found. With `idor-hunter`, it followed a complete enumeration across path params, query strings, JSON bodies, and headers  finding 11 IDORs on the same target. 6 vulnerabilities that would have been missed in a real engagement.
+Without the skill, the agent applied a shallow approach and stopped after the most obvious vectors 5 IDORs found. With `idor-hunter`, it followed a complete enumeration across path params, query strings, JSON bodies, and headers finding 11 IDORs on the same target. 6 vulnerabilities that would have been missed in a real engagement.
 
 ---
 
@@ -76,7 +76,7 @@ Without the skill, the agent applied a shallow approach and stopped after the mo
 | Total time | 185s | 5s | 🟢 **-97%** |
 | Output quality | Incomplete | Complete | 🟢 +3 levels |
 
-Without the skill, the agent didn't know what skills exist  it improvised a Python script suggestion and confused the user. With `find-skills`, it immediately identified `finding-writer` as the right skill and provided the install command. One turn, 5 seconds.
+Without the skill, the agent didn't know what skills exist it improvised a Python script suggestion and confused the user. With `find-skills`, it immediately identified `finding-writer` as the right skill and provided the install command. One turn, 5 seconds.
 
 ---
 
@@ -93,7 +93,7 @@ Without the skill, the agent didn't know what skills exist  it improvised a Pyth
 | False positives discarded | unmeasured | 6 of 8 flags | 🟢 clean triage |
 | Engagement completeness | Partial | Full | 🟢 |
 
-Prompt: *"pentest scanme.nmap.org"*  four words, same target, same MCP server. Without the skill, the agent ran 7 tools ad hoc, hit the same tool bug twice without recovering, misunderstood the workflow tool, and produced zero deliverables  just raw JSON output. With `hexstrike-forge`, it ran 5 structured phases, recovered from 3 tool failures, discarded 6 false positives, and produced 2 report-ready findings.
+Prompt: *"pentest scanme.nmap.org"* four words, same target, same MCP server. Without the skill, the agent ran 7 tools ad hoc, hit the same tool bug twice without recovering, misunderstood the workflow tool, and produced zero deliverables just raw JSON output. With `hexstrike-forge`, it ran 5 structured phases, recovered from 3 tool failures, discarded 6 false positives, and produced 2 report-ready findings.
 
 > HexStrike without the skill is a toolbox. HexStrike with the skill is an engagement.
 
@@ -101,7 +101,7 @@ Prompt: *"pentest scanme.nmap.org"*  four words, same target, same MCP server. W
 
 ### ssrf-hunter
 
-**False positives vs a confirmed exploit  the most critical delta.**
+**False positives vs a confirmed exploit the most critical delta.**
 
 | Metric | Without Skill | With Skill | Improvement |
 |---|---|---|---|
@@ -110,7 +110,7 @@ Prompt: *"pentest scanme.nmap.org"*  four words, same target, same MCP server. W
 | Time | 107s | 45s | 🟢 -58% |
 | Output quality | False positives | Confirmed exploit | 🟢 Critical |
 
-Without the skill, the agent reported likely SSRF without verification  a result that fails triage and wastes the program's time. With `ssrf-hunter`, it followed a structured confirmation sequence (OOB callback → loopback → cloud metadata) and produced a verified working payload. The skill is the difference between a rejected report and a valid critical finding.
+Without the skill, the agent reported likely SSRF without verification a result that fails triage and wastes the program's time. With `ssrf-hunter`, it followed a structured confirmation sequence (OOB callback → loopback → cloud metadata) and produced a verified working payload. The skill is the difference between a rejected report and a valid critical finding.
 
 ---
 
@@ -125,7 +125,7 @@ Without the skill, the agent reported likely SSRF without verification  a result
 | Time | ~8 min | ~2 min | 🟢 -75% |
 | XSS findings (out of 10) | 7 | 9 | 🟢 +29% |
 
-Custom lab with 10 planted XSS vulnerabilities. Without the skill, the agent missed 3  including DOM-based and stored variants  due to an incomplete coverage strategy and redundant recon steps. With `xss-hunter`, the pre-ordered test sequence (reflected → stored → DOM-based) eliminated redundancy and improved coverage.
+Custom lab with 10 planted XSS vulnerabilities. Without the skill, the agent missed 3 including DOM-based and stored variants due to an incomplete coverage strategy and redundant recon steps. With `xss-hunter`, the pre-ordered test sequence (reflected → stored → DOM-based) eliminated redundancy and improved coverage.
 
 ---
 
@@ -139,7 +139,7 @@ Custom lab with 10 planted XSS vulnerabilities. Without the skill, the agent mis
 | Total tokens | ~14,458 | ~4,866 | 🟢 -66% |
 | Time | 355s | 87s | 🟢 -75% |
 
-Without the skill, the agent needed 2 correction prompts before producing a usable JWT test. With `jwt-cracker`, complete structured output on the first turn  phases, expected outputs, and interpretation annotated.
+Without the skill, the agent needed 2 correction prompts before producing a usable JWT test. With `jwt-cracker`, complete structured output on the first turn phases, expected outputs, and interpretation annotated.
 
 ---
 
@@ -154,7 +154,7 @@ Without the skill, the agent needed 2 correction prompts before producing a usab
 | Total time | 63s | 51s | 🟢 -19% |
 | User effort | High | Low | 🟢 |
 
-Without the skill, the agent's first response claimed it had already answered (it hadn't)  2 more correction prompts needed. With `control-lookup`, it immediately produced the correct control card with cross-framework mappings to NIST CSF and PCI-DSS in a single turn.
+Without the skill, the agent's first response claimed it had already answered (it hadn't) 2 more correction prompts needed. With `control-lookup`, it immediately produced the correct control card with cross-framework mappings to NIST CSF and PCI-DSS in a single turn.
 
 ---
 
@@ -168,7 +168,7 @@ Without the skill, the agent's first response claimed it had already answered (i
 | Response tokens | ~539 | ~201 | 🟢 -63% |
 | Total time | 18s | 6s | 🟢 -68% |
 
-Both produce the correct CVSS vector. The skill version is 3 lines  vector, score, one contextual note. Without it, the agent writes 500 tokens of explanation around the same answer. Fast scoring for a busy pentest workflow.
+Both produce the correct CVSS vector. The skill version is 3 lines vector, score, one contextual note. Without it, the agent writes 500 tokens of explanation around the same answer. Fast scoring for a busy pentest workflow.
 
 ---
 
@@ -182,7 +182,7 @@ Both produce the correct CVSS vector. The skill version is 3 lines  vector, scor
 | Response tokens | ~2,332 | ~165 | 🟢 **-93%** |
 | Total time | 43s | 4s | 🟢 **-90%** |
 
-Without the skill, the agent dumped a full legal disclaimer and engagement template  overwhelming and not actionable. With `scope-grill`, it asked the first of 10 structured scoping questions and collected information one step at a time. Complete in 1 turn.
+Without the skill, the agent dumped a full legal disclaimer and engagement template overwhelming and not actionable. With `scope-grill`, it asked the first of 10 structured scoping questions and collected information one step at a time. Complete in 1 turn.
 
 ---
 
@@ -282,7 +282,7 @@ Without the skill, the agent dumped a full legal disclaimer and engagement templ
 | Total tokens | ~3,475 | ~2,241 | 🟡 -36% |
 | Time | 105s | 65s | 🟡 -38% |
 
-Both runs found and exploited the SSTI. The difference is speed: without the skill, the agent spent extra turns guessing the template engine before picking payloads. With `ssti-hunter`, a deterministic polyglot detection sequence reached confirmed exploitation faster  no engine guessing, no wasted turns.
+Both runs found and exploited the SSTI. The difference is speed: without the skill, the agent spent extra turns guessing the template engine before picking payloads. With `ssti-hunter`, a deterministic polyglot detection sequence reached confirmed exploitation faster no engine guessing, no wasted turns.
 
 ---
 
@@ -304,7 +304,7 @@ Both runs found and exploited the SSTI. The difference is speed: without the ski
 |---|---|
 | 🟢 | Improvement |
 | 🟡 | Moderate improvement |
-| 🔴 | Trade-off  more tokens/time for better quality |
+| 🔴 | Trade-off more tokens/time for better quality |
 | ⚪ | No change |
 
 Red is not always bad. Skills like `bugbounty-reporter`, `js-analyzer`, and `check-exploit` use more tokens because they produce more complete output. The benchmark shows the trade-off explicitly so you can decide whether it's worth it for your workflow.

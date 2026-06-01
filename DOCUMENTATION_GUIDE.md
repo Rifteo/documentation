@@ -42,7 +42,7 @@ The docs will be available at `http://localhost:3000`.
 ## Adding a skill
 
 1. Create a new `.mdx` file in `skills/`
-2. Follow the template in [skills/skill-template.mdx](skills/skill-template.mdx)
+2. Follow the [Style Guide](docs/style-guide.mdx) for required sections and Info block format
 3. Add the page path to `docs.json` under the `Skills` group
 4. Open a pull request
 

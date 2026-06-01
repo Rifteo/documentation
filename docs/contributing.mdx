@@ -19,61 +19,62 @@ AuditGuard is a community-driven project. Contributions (new skills, bug fixes, 
 ## Process for contributing a skill
 
 <Steps>
-  <Step title="Open an issue first">
-    Before writing code, open a GitHub issue describing:
-    - What the skill checks
-    - Which compliance framework or requirement it covers
-    - Any known edge cases or limitations
+ <Step title="Open an issue first">
+  Before writing code, open a GitHub issue describing:
+  - What the skill checks
+  - Which compliance framework or requirement it covers
+  - Any known edge cases or limitations
 
-    This avoids duplicate work and lets the team give early feedback.
-  </Step>
+  This avoids duplicate work and lets the team give early feedback.
+ </Step>
 
-  <Step title="Fork and branch">
-    ```bash
-    git clone https://github.com/AuditGuard-Community/skills
-    cd skills
-    git checkout -b skill/your-skill-name
-    ```
-  </Step>
+ <Step title="Fork and branch">
+  ```bash
+  git clone https://github.com/AuditGuard-Community/skills
+  cd skills
+  git checkout -b skill/your-skill-name
+  ```
+ </Step>
 
-  <Step title="Build the skill">
-    Follow the structure defined in [Skills Overview](/skills/overview):
-    ```
-    skills/
-    └── your-skill-name/
-        ├── SKILL.md
-        ├── references/   (optional)
-        └── scripts/      (optional)
-    ```
-  </Step>
+ <Step title="Build the skill">
+  Follow the structure defined in [Skills Overview](/skills/overview):
+  ```
+  skills/
+  └── your-skill-name/
+    ├── SKILL.md
+    ├── references/  (optional)
+    └── scripts/   (optional)
+  ```
+ </Step>
 
-  <Step title="Write documentation">
-    Create `skills/your-skill-name.mdx` following the [Style Guide](/docs/style-guide). No skill ships without documentation.
-  </Step>
+ <Step title="Write documentation">
+  Create `skills/your-skill-name.mdx` following the [Style Guide](/docs/style-guide). No skill ships without documentation.
+ </Step>
 
-  <Step title="Add to docs.json">
-    Add your skill page to the appropriate group in `docs.json` under the Skills tab. Place it in the group that matches the skill category (Vulnerability Testing, Reporting, Recon, etc.):
-    ```json
-    {
-      "group": "Vulnerability Testing",
-      "pages": [
-        "skills/existing-skill",
-        "skills/your-skill-name"
-      ]
-    }
-    ```
-  </Step>
+ <Step title="Add to docs.json">
+  Add your skill page to the appropriate group in `docs.json` under the Skills tab. Place it in the group that matches the skill category:
+  ```json
+  {
+   "group": "Web Application",
+   "pages": [
+    "skills/existing-skill",
+    "skills/your-skill-name"
+   ]
+  }
+  ```
+  Available groups: Web Application, API Security, Infrastructure, Reconnaissance, Reporting, Compliance, Workflow, Integrations.
+ </Step>
 
-  <Step title="Submit a pull request">
-    Open a PR against `main`. The PR description should include:
-    - What the skill does
-    - How to test it
-    - A link to the open issue
-  </Step>
+ <Step title="Submit a pull request">
+  Open a PR against `main`. The PR description should include:
+  - What the skill does
+  - How to test it
+  - A link to the open issue
+ </Step>
 
-  <Step title="Review and approval">
-    A team member will review both the code and the documentation. All feedback must be addressed before merge. No skill merges without at least one approval.
-  </Step>
+ <Step title="Review and approval">
+  A team member will review both the code and the documentation. All feedback must be addressed before merge. No skill merges without at least one approval.
+ </Step>
 </Steps>
 
 ## Review checklist
