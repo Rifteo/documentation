@@ -1,0 +1,195 @@
+---
+title: Less Aggressive Attack
+description: Offensive engagement without damage — safety first, read-only where possible, no uncontrollable actions.
+---
+
+<Info>
+  **Status:** Stable
+  **Version:** 1.0.0
+  **Author:** AuditGuard
+  **Tags:** red-team, pentest, offensive-security, safe-testing, non-destructive, engagement-safety
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add less-aggressive-attack
+```
+
+---
+
+## Summary
+
+Conduct offensive engagements on production or sensitive environments without causing damage — prove vulnerabilities exist through observation and minimal interaction, never through destruction.
+
+- Activates only when the user explicitly signals safety as a constraint ("don't break anything", "read-only", "non-destructive testing", "careful with production")
+- Defines a Safety Risk Budget: five action categories from "proceed freely" to "never — not permitted under this skill"
+- Applies a reversibility framework before every state-changing action: guaranteed reversible → proceed; irreversible → escalate to engagement owner first
+- Establishes unconditional non-destruction lines that hold regardless of scope, authorization, or objective
+
+---
+
+## SKILL.md file
+
+<Accordion title="Discover skill details">
+
+### Less Aggressive Attack — Safety-First Offensive Operations
+
+#### When to Use This Skill
+
+This skill is **not the default**. Do not apply it to every offensive engagement. Only activate it when the user explicitly signals that safety and non-destruction are the priority.
+
+**Activate when the user says things like:**
+- "don't break anything", "be careful", "safety first", "non-destructive testing"
+- "don't affect real users", "keep it clean", "read-only where possible"
+- "don't alter any data", "no damage", "safe engagement", "careful with production"
+- "just prove the finding, don't exploit it fully", "confirm access, don't use it"
+- Any explicit instruction to prioritize not causing harm over achieving maximum coverage or impact
+
+**Do not activate for:**
+- Standard engagements where the user has not flagged safety as a constraint
+- Lab environments, isolated sandboxes, or CTF challenges where destruction is acceptable and expected
+- Engagements where the user explicitly wants to test the full blast radius of a vulnerability
+- Any situation where the user has clearly accepted the risk of destructive interaction
+
+**When in doubt:** ask the user whether impact safety matters for this engagement before proceeding.
+
+#### The Core Discipline
+
+- The goal is to prove that a vulnerability exists — not to demonstrate how much damage it could do
+- Access confirmed is a finding. Access exercised destructively is a liability
+- If an action cannot be undone, it requires explicit justification and authorization before it happens
+- Read the state of the target. Do not change it unless change is the only way to prove the finding
+- An engagement that causes unintended damage is not a successful engagement — it is an incident
+
+The question driving every decision: *can I prove this finding without causing an impact that the target cannot absorb?*
+
+#### Phase 1 — Confirm Access, Not Damage
+
+Before performing any action that changes state, causes load, or introduces risk, exhaust what observation alone can confirm.
+
+**What observation alone can establish:**
+- Whether access exists — reading a resource confirms access without altering it
+- Whether a vulnerability is reachable — confirming a path, parameter, or surface is sufficient
+- Whether credentials or tokens are valid — a single authentication attempt confirms validity
+- Whether a misconfiguration is present — reviewing configuration reveals exposure without triggering it
+- Whether a trust boundary is crossable — confirming the condition under which it can be crossed does not require crossing it destructively
+- Whether data is accessible — confirming that data can be read is a finding; extracting the full dataset is not required
+
+**Before acting, ask:** *does observation alone confirm this finding?* If yes, stop there.
+
+#### Phase 2 — Gate to State-Changing Action
+
+Only escalate to actions that change state when:
+
+- Observation cannot confirm the finding and direct interaction is the only path
+- The engagement scope explicitly authorizes the action type being considered
+- The action is targeted, bounded, and reversible — or the scope accepts it as irreversible
+- The impact if the action behaves unexpectedly has been assessed and is acceptable
+
+**When you act on a live or production-adjacent system, go minimal:**
+- One confirmation, not a full exploitation chain
+- One data point proven, not the full blast radius demonstrated
+- One account tested, not the full scope of affected users verified at scale
+- One state change made, documented, and if possible reverted — not an unrecoverable alteration
+
+#### Safety Risk Budget
+
+| Action Category | Safety Risk | Guideline |
+|---|---|---|
+| Passive observation, configuration review, reading state | None | Proceed freely |
+| Single read-only access confirmation | Very Low | Proceed — document the finding and stop |
+| Non-destructive proof of vulnerability existence | Low | Proceed with care — confirm, document, do not expand |
+| Interaction generating temporary, bounded, recoverable load | Low–Medium | Requires explicit scope clarity — assess reversibility first |
+| Modifying data in a way that can be fully reverted | Medium | Requires explicit authorization — revert immediately after confirmation |
+| Triggering resource exhaustion, availability impact, or cascading failure | Critical | Never — not permitted under this skill |
+| Altering, corrupting, or permanently destroying any data state | Critical | Never — regardless of the target environment |
+| Deploying a payload that propagates, self-replicates, or cannot be stopped | Critical | Never — the blast radius is not in your control |
+| Testing at a scale that affects real users or operations | Critical | Never without explicit engagement authorization and safeguards |
+
+**Principle:** never take an action whose consequences you cannot bound, reverse, or contain.
+
+#### The Non-Destruction Lines
+
+These are unconditional. They do not depend on scope, authorization, or objective.
+
+**Never:**
+- Alter, delete, corrupt, or overwrite data that was not created specifically for the engagement
+- Cause an availability impact — resource exhaustion, service disruption, cascading failure, account lockout at scale
+- Deploy any payload that can propagate, escalate, or execute beyond your ability to stop it
+- Take an irreversible action without explicit, documented authorization from the engagement owner
+- Touch systems, accounts, or data outside the defined engagement scope — regardless of whether access is technically possible
+- Demonstrate the full exploitation chain when the existence of the vulnerability is already confirmed
+- Take an action whose behavior changes depending on environment state in ways you cannot predict
+
+**When a finding would require crossing one of these lines to prove:**
+- Document what was confirmed through safe means
+- State clearly that the full impact was not exercised and why
+- Recommend controlled testing conditions under which it could be safely validated
+- Deliver the finding as confirmed with a clear confidence level — do not fabricate confirmation
+
+#### Action Reversibility Framework
+
+Before any state-changing action, classify it:
+
+```
+Is the action reversible without engagement owner intervention?
+    YES → Is the reversal guaranteed, or only likely?
+        GUARANTEED → Proceed if in scope
+        ONLY LIKELY → Requires explicit authorization; have a reversal plan ready
+    NO  ↓
+Is the action irreversible?
+    → Who has authorized this specific action type?
+    → What is the impact if it behaves unexpectedly?
+    → Is the finding provable any other way?
+        YES → Use the reversible path instead
+        NO  → Escalate to engagement owner before proceeding
+```
+
+#### What Safe Proof Looks Like
+
+A finding does not require maximum exploitation to be valid. Safe proof is complete proof.
+
+**Access to a sensitive resource:** Confirm that the access is possible. Do not extract, copy, or exfiltrate the full content — access confirmed is enough.
+
+**Privilege escalation:** Confirm that the higher privilege level is reachable. Observe something only accessible at that level to prove the escalation — do not alter, persist, or act destructively from elevated privilege.
+
+**Authentication or trust bypass:** Confirm that the conditions for bypass exist and are triggerable. Trigger it once to confirm — do not use the bypassed access to further pivot, create persistent footholds, or modify anything.
+
+**Availability or load-based findings:** Document what the conditions for an availability impact are, based on what was observed. Do not generate the availability impact itself.
+
+#### Escalation and Stop Conditions
+
+Immediately stop the current action and notify the engagement owner when:
+
+- An action produces an unexpected response suggesting broader impact than anticipated
+- A system behaves in a way that suggests the action may have triggered something outside the planned scope
+- A finding reveals that continuing requires crossing a safety line that was not anticipated
+- Any data or system state has been altered in a way that was not planned and authorized
+- Real user behavior, operations, or data is affected in any way
+
+**Stopping is not failure.** An engagement that stops cleanly at a safety boundary is a well-executed engagement.
+
+</Accordion>
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="less-noise-attack" href="/skills/less-noise-attack">
+    Operate below SOC detection thresholds with minimal footprint
+
+    
+  </Card>
+  <Card title="redmind" href="/skills/redmind">
+    Red team mindset that shifts the agent to offensive security thinking
+
+    
+  </Card>
+  <Card title="scope-grill" href="/skills/scope-grill">
+    Validate and clarify engagement scope before any testing begins
+
+    
+  </Card>
+</CardGroup>

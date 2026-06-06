@@ -1,0 +1,216 @@
+---
+title: Less Noise Attack
+description: Operate below SOC detection thresholds, passive recon first, minimal footprint, targeted action only.
+---
+
+<Info>
+  **Status:** Stable
+  **Version:** 1.0.0
+  **Author:** AuditGuard
+  **Tags:** red-team, pentest, offensive-security, opsec, low-noise, stealth, passive-recon, detection-avoidance
+</Info>
+
+**Installation**
+
+```bash
+auditguard-skills add less-noise-attack
+```
+
+---
+
+## Summary
+
+Run offensive engagements that stay below SOC detection thresholds — passive recon first, active interaction only when necessary, and every active step justified before it is taken.
+
+- Activates only when the user explicitly signals stealth as the priority ("stay under the radar", "avoid the SOC", "be stealthy", "ghost mode", "don't trigger alerts")
+- Defines a Noise Budget: action categories from "zero cost" to "critical — triggers simultaneous detections"
+- Enforces a gated escalation flow: passive → passive exhausted? → minimal targeted active only
+- Applies SOC perspective to every proposed action: would a legitimate actor in this environment do this? Would this stand out in a normal day's logs?
+
+---
+
+## SKILL.md file
+
+<Accordion title="Discover skill details">
+
+### Less Noise Attack — Low-Noise Offensive Operations
+
+#### When to Use This Skill
+
+This skill is **not the default**. Do not apply it to every offensive engagement. Only activate it when the user explicitly signals that stealth is the priority.
+
+**Activate when the user says things like:**
+- "stay under the radar", "don't get caught", "be stealthy", "go quiet", "less noise"
+- "avoid the SOC", "don't trigger alerts", "ghost mode", "fly under the radar"
+- "slow and steady", "don't make noise", "be careful not to be detected"
+- "simulate a real attacker", "act like a real threat actor" (when stealth is implied)
+- Any explicit instruction to prioritize staying undetected over speed or coverage
+
+**Do not activate for:**
+- Standard scans or assessments where the user has not asked for stealth
+- Engagements where speed and coverage are the priority
+- CTF challenges, lab environments, or isolated testing where detection is not a concern
+- Any situation where the user wants maximum coverage and is not worried about noise
+
+**When in doubt:** ask the user whether stealth matters for this engagement before applying this mindset.
+
+#### The Core Discipline
+
+- Noise is evidence of presence. Presence without results is pure loss
+- Every action you take is a signal. Signals accumulate. Accumulated signals become detections
+- The goal is not to be fast — it is to reach the objective without being noticed doing it
+- Passive first. Active only when passive is exhausted or insufficient. Targeted active only
+- Do exactly what is needed. Never touch what does not need touching. Never scan what can be inferred
+
+The question driving every decision: *what is the lowest-visibility path to the information or access I actually need right now?*
+
+#### Phase 1 — Passive Only
+
+Exhaust passive sources before generating any active signal against the target.
+
+**What passive recon covers across all engagement types:**
+- Public records: DNS, WHOIS, certificate transparency, ASN/BGP/IP range data
+- Infrastructure visibility: passive fingerprinting services that aggregate data without touching the target
+- Organizational intelligence: employee enumeration, org structure, technology signals from public job postings, conference talks, public repositories
+- Leaked material: public repositories, paste sites, breach data, exposed config files, archived documentation
+- Cached intelligence: search engine caches, historical snapshots — endpoints, credentials, internal references, and technology versions that were once publicly accessible
+- Relationship mapping: third-party integrations, vendor relationships, supply chain exposure, trust boundaries inferable without active probing
+
+The target does not know you exist yet. That is the optimal state. Stay there as long as possible.
+
+**Before moving to active, ask:** *do I have enough to build a targeted attack plan?* If yes, stay passive.
+
+#### Phase 2 — Gate to Active
+
+Only escalate to active interaction when:
+
+- Passive sources do not resolve a specific question the attack plan depends on
+- A target has been confirmed and needs validation that passive data cannot provide
+- A specific vulnerability hypothesis requires direct interaction to test
+- The passive phase has surfaced a high-value target that justifies the exposure cost of touching it
+
+**When you go active, go narrow:**
+- One target, not a sweep
+- One question, not a coverage pass
+- One confirmation, not a carpet-bomb of the surface
+
+Active interaction is not a mode — it is a series of deliberate, justified, individual decisions.
+
+#### Noise Budget
+
+| Action Category | Noise Level | Notes |
+|---|---|---|
+| Passive intelligence gathering (no target contact) | Zero | Spend freely |
+| Single targeted interaction with a known surface | Very Low | Indistinguishable from ambient legitimate activity |
+| Targeted enumeration against a specific known target | Low–Medium | Controlled, narrow, justified |
+| Broad enumeration or sweeping across a range | High | Volume itself is a detection signature |
+| Full automated scan across a target or range | Critical | Triggers network, host, and behavioral detections simultaneously |
+| Repeated failed interaction attempts at scale | Critical | Lockout, anomaly alert, behavioral flag |
+| Known offensive tool with default configuration | Critical | Tool signatures exist in virtually every modern detection stack |
+| Manual, deliberate, targeted action | Low | Hard to distinguish from legitimate operational behavior |
+
+**Principle:** never upgrade the noise level when the current level can produce the answer.
+
+#### Action Minimalism
+
+Do only what is needed to reach the next decision point.
+
+- If one action answers the question, take one action. Not five
+- If passive data already resolves something, do not re-confirm it with an active probe
+- If a target has been confirmed, interact with what is relevant to the objective — not everything that is exposed
+- If a finding is confirmed, document it and move — do not repeat the technique across every adjacent surface looking for more instances
+- If a surface yields nothing after a targeted approach, log it and redirect — do not broaden the probe to compensate
+
+The instinct to "test more to be sure" is the instinct that gets operators detected.
+
+#### Operational Behavior Discipline
+
+When active interaction is unavoidable, control how it looks.
+
+**Timing:**
+- Introduce natural, variable delays between actions — uniform timing is a machine signature
+- Avoid burst patterns — concentrated activity in a short window is statistically anomalous
+- Spread enumeration across time when the engagement timeline allows
+- Match activity cadence to the target environment's expected operational rhythm
+
+**Appearance:**
+- Behave the way a legitimate entity in that environment would behave
+- Use tooling configured to match normal operational patterns, not default scanner behavior
+- Follow the expected interaction flow — skipping steps a real actor would not skip is anomalous
+
+**Volume:**
+- Any enumeration is rate-limited against what normal operational load looks like in that environment
+- Target sets are focused and derived from gathered intelligence — not generic maximum-coverage lists
+
+#### SOC Perspective — Know What You Look Like
+
+**What gets detected first across all domains:**
+- Sweep and scan signatures — high-volume, sequential, or range-based activity
+- Repeated failure patterns — failed authentications, failed connections, failed lookups at volume
+- Known offensive tool fingerprints — default configurations, timing patterns, known payload signatures
+- Behavioral anomalies — activity that does not match the normal operational profile of the environment
+- Temporal and geographic anomalies — timing, origin, or access patterns that deviate from baseline
+- Lateral movement signatures — access to resources not historically touched together
+
+**What blends:**
+- Single, deliberate, targeted actions consistent with what a legitimate actor would do
+- Activity that follows the expected timing and flow of the environment
+- Volume and frequency consistent with normal operational load
+
+Every action, before it is taken: *would a legitimate actor in this environment do this? Would this stand out in a normal day's logs?*
+
+#### Escalation Logic
+
+```
+PASSIVE RECON
+    ↓
+Does passive data answer the question?
+    YES → Use it. Do not go active.
+    NO  ↓
+Is the question required to advance the objective?
+    NO  → Defer. Move to the next required question.
+    YES ↓
+What is the minimal active action that answers it?
+    → Execute that action only.
+    → Analyze the result before authorizing the next step.
+    → Return to passive analysis of what was revealed.
+```
+
+Each active step is followed by analysis before the next step is authorized.
+
+#### Detection Recovery
+
+If detection is suspected — an action was blocked, a session was reset, a response was anomalous:
+
+- Stop the current action immediately
+- Do not retry the same action — repeating a detected action confirms the signature and escalates the response
+- Do not pivot to a louder technique to overcome the block
+- Analyze what the response reveals about the defensive posture — it is intelligence
+- Reassess the approach from a different angle or access path before continuing
+- Log what triggered the response — understanding the detection boundary has operational value
+
+A detection event is information. Treat it as data, not as an obstacle to push through.
+
+</Accordion>
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+  <Card title="less-aggressive-attack" href="/skills/less-aggressive-attack">
+    Offensive engagement without damage — safety first, read-only where possible
+
+    
+  </Card>
+  <Card title="redmind" href="/skills/redmind">
+    Red team mindset that shifts the agent to offensive security thinking
+
+    
+  </Card>
+  <Card title="attack-surface" href="/skills/attack-surface">
+    Map the full attack surface of a target before testing begins
+
+    
+  </Card>
+</CardGroup>
