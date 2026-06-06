@@ -141,6 +141,16 @@
             ]
           },
           {
+            "group": "Attack Mindset",
+            "pages": [
+              "skills/redmind",
+              "skills/economist-attack",
+              "skills/deadangle",
+              "skills/less-noise-attack",
+              "skills/less-aggressive-attack"
+            ]
+          },
+          {
             "group": "Integrations",
             "pages": ["skills/hexstrike-forge"]
           }
