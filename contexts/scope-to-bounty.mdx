@@ -1,6 +1,6 @@
 ---
 title: Scope to Bounty ★
-description: MCP server that gives AI agents live bug bounty program scope from HackerOne, Intigriti, YesWeHack, Bugcrowd, and Immunefi — plus access to all AuditGuard security contexts.
+description: MCP server that gives AI agents live bug bounty program scope from HackerOne, Intigriti, YesWeHack, Bugcrowd, and Immunefi — plus access to all Rifteo security contexts.
 ---
 
 <Info>
@@ -14,11 +14,11 @@ description: MCP server that gives AI agents live bug bounty program scope from 
 
 ## Summary
 
-Stop copying scope tables by hand. The AuditGuard Context MCP server gives your AI agent live access to bug bounty program scope directly from the platform — in-scope assets, out-of-scope exclusions, bounty eligibility, and policy — before a single test is run.
+Stop copying scope tables by hand. The Rifteo Context MCP server gives your AI agent live access to bug bounty program scope directly from the platform — in-scope assets, out-of-scope exclusions, bounty eligibility, and policy — before a single test is run.
 
 - Fetches live scope from HackerOne, Intigriti, YesWeHack, Bugcrowd, and Immunefi
 - Searches publicly disclosed HackerOne reports by vulnerability type, technology, or keyword
-- Loads AuditGuard security contexts (L1 overview or L2 full methodology) on demand
+- Loads Rifteo security contexts (L1 overview or L2 full methodology) on demand
 - Registers automatically with Claude Code, Cursor, Windsurf, Gemini CLI, and 7 other agents
 
 ---
@@ -26,7 +26,7 @@ Stop copying scope tables by hand. The AuditGuard Context MCP server gives your 
 ## Installation
 
 ```bash
-git clone https://github.com/AuditGuard-Community/context-mcp
+git clone https://github.com/Rifteo-Community/context-mcp
 cd context-mcp
 pip install -e .
 ```
@@ -38,21 +38,21 @@ pip install -e .
 **Auto-install — detects all installed agents:**
 
 ```bash
-auditguard-context install
+rifteo-context install
 ```
 
 **Single agent:**
 
 ```bash
-auditguard-context install --agent claude-code
-auditguard-context install --agent cursor
-auditguard-context install --agent gemini-cli
+rifteo-context install --agent claude-code
+rifteo-context install --agent cursor
+rifteo-context install --agent gemini-cli
 ```
 
 **Project-level only:**
 
 ```bash
-auditguard-context install --agent claude-code --project
+rifteo-context install --agent claude-code --project
 ```
 
 **Supported agents:**
@@ -104,7 +104,7 @@ search hacktivity for SSRF in cloud environments
 
 | Tool | What it does |
 |---|---|
-| `list_contexts` | List all available AuditGuard contexts with one-line summaries |
+| `list_contexts` | List all available Rifteo contexts with one-line summaries |
 | `get_context` | Load a context by name — L1 overview or L2 full methodology |
 | `search_contexts` | Search contexts by keyword |
 
@@ -129,7 +129,7 @@ search contexts for jwt
 **HackerOne** — get your token at `hackerone.com/settings/api_token/edit`
 
 ```bash
-auditguard-context auth hackerone
+rifteo-context auth hackerone
 # HackerOne username: yourname
 # HackerOne API token: ****
 ```
@@ -137,7 +137,7 @@ auditguard-context auth hackerone
 **Intigriti** — get your token at `app.intigriti.com/settings/api`
 
 ```bash
-auditguard-context auth intigriti
+rifteo-context auth intigriti
 # Intigriti API token: ****
 ```
 
@@ -146,8 +146,8 @@ YesWeHack and `search_hacktivity` work without credentials.
 **Manage connected platforms:**
 
 ```bash
-auditguard-context auth --list
-auditguard-context auth --remove hackerone
+rifteo-context auth --list
+rifteo-context auth --remove hackerone
 ```
 
 ---

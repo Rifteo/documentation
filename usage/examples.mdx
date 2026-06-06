@@ -1,12 +1,12 @@
 ---
 title: Examples
-description: Common AuditGuard usage patterns and real-world scenarios.
+description: Common Rifteo usage patterns and real-world scenarios.
 ---
 
 ## Install your first skill
 
 ```bash
-auditguard-skills add finding-writer
+rifteo-skills add finding-writer
 ```
 
 The CLI detects your installed agents automatically and installs the skill in the right place.
@@ -16,8 +16,8 @@ The CLI detects your installed agents automatically and installs the skill in th
 ## Install a skill for a specific agent
 
 ```bash
-auditguard-skills add bugbounty-reporter --agent claude-code
-auditguard-skills add bugbounty-reporter --agent gemini-cli
+rifteo-skills add bugbounty-reporter --agent claude-code
+rifteo-skills add bugbounty-reporter --agent gemini-cli
 ```
 
 ---
@@ -27,7 +27,7 @@ auditguard-skills add bugbounty-reporter --agent gemini-cli
 Install `find-skills` once and it will always recommend the right skill for your task:
 
 ```bash
-auditguard-skills add find-skills
+rifteo-skills add find-skills
 ```
 
 Then in your agent:
@@ -41,8 +41,8 @@ I need to write a pentest report for this engagement
 ## Set up context-mcp
 
 ```bash
-pip install auditguard-context-mcp
-auditguard-context install
+pip install rifteo-context-mcp
+rifteo-context install
 ```
 
 Then in your agent:
@@ -57,7 +57,7 @@ list all available security contexts
 ## Connect a bug bounty platform
 
 ```bash
-auditguard-context auth hackerone
+rifteo-context auth hackerone
 ```
 
 Then in your agent:
@@ -73,10 +73,10 @@ search hacktivity for SSRF vulnerabilities
 
 ```bash
 # See what has a newer version
-auditguard-skills outdated
+rifteo-skills outdated
 
 # Update everything
-auditguard-skills update
+rifteo-skills update
 ```
 
 ---
@@ -84,6 +84,6 @@ auditguard-skills update
 ## Check which agents are detected
 
 ```bash
-auditguard-skills agents
-auditguard-context agents
+rifteo-skills agents
+rifteo-context agents
 ```

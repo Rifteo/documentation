@@ -1,20 +1,20 @@
 ---
 title: Contexts Overview
-description: What AuditGuard contexts are, how the 3-tier loading system works, and how to install one.
+description: What Rifteo contexts are, how the 3-tier loading system works, and how to install one.
 ---
 
 ## What is a context?
 
 A **context** is a security knowledge bundle the agent loads before starting an engagement. It gives the agent domain expertise: methodology, techniques, tools, and reporting guidance for a specific type of security work.
 
-Contexts are served via the `auditguard-context-mcp` MCP server and retrieved on demand through natural language.
+Contexts are served via the `rifteo-context-mcp` MCP server and retrieved on demand through natural language.
 
 Unlike skills (which define a specific technique), contexts define the **full engagement methodology**: the phases to follow, what to test, how to validate findings, and how to report.
 
 ## Install the MCP server
 
 ```bash
-git clone https://github.com/AuditGuard-Community/context-mcp
+git clone https://github.com/Rifteo-Community/context-mcp
 cd context-mcp
 pip install -e .
 ```
@@ -22,15 +22,15 @@ pip install -e .
 Register with all detected agents at once:
 
 ```bash
-auditguard-context install
+rifteo-context install
 ```
 
 Or register with a specific agent:
 
 ```bash
-auditguard-context install --agent claude-code
-auditguard-context install --agent cursor
-auditguard-context install --agent gemini-cli
+rifteo-context install --agent claude-code
+rifteo-context install --agent cursor
+rifteo-context install --agent gemini-cli
 ```
 
 Supports 15 agents: Claude Code, Cursor, Windsurf, Gemini CLI, Cline, Kiro, Codex, OpenCode, Amp, Continue, GitHub Copilot, Aider Desk, Roo Code, OpenHands, Goose.
@@ -89,7 +89,7 @@ When to use this context and what it covers at a high level.
 Complete detailed content the agent uses during the engagement.
 ```
 
-See [CONTEXT_GUIDE.md](https://github.com/AuditGuard-Community/context-mcp/blob/main/CONTEXT_GUIDE.md) for the full format reference including optional fields.
+See [CONTEXT_GUIDE.md](https://github.com/Rifteo-Community/context-mcp/blob/main/CONTEXT_GUIDE.md) for the full format reference including optional fields.
 
 ## The 3-tier loading system
 
@@ -122,4 +122,4 @@ Contexts and skills work together: a context defines the engagement methodology 
 
 ## Next step
 
-Ready to write a context? Follow the [CONTEXT_GUIDE.md](https://github.com/AuditGuard-Community/context-mcp/blob/main/CONTEXT_GUIDE.md) in the community repo.
+Ready to write a context? Follow the [CONTEXT_GUIDE.md](https://github.com/Rifteo-Community/context-mcp/blob/main/CONTEXT_GUIDE.md) in the community repo.

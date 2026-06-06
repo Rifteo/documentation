@@ -1,6 +1,6 @@
-# AuditGuard Documentation  Developer Guide
+# Rifteo Documentation  Developer Guide
 
-This repo hosts the official AuditGuard community documentation, built with [Mintlify](https://mintlify.com).
+This repo hosts the official Rifteo community documentation, built with [Mintlify](https://mintlify.com).
 It contains structured guides, reusable skill templates, and script references for contributors.
 
 ---
@@ -8,7 +8,7 @@ It contains structured guides, reusable skill templates, and script references f
 ## Structure
 
 ```
-auditguard-documentation/
+rifteo-documentation/
 ├── docs.json           # Mintlify config (navigation, theme, URLs)
 ├── package.json        # Dev scripts
 ├── docs/               # Core docs: introduction, quickstart, contributing, style guide
@@ -25,8 +25,8 @@ auditguard-documentation/
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/AuditGuard-Community/auditguard-documentation.git
-cd auditguard-documentation
+git clone https://github.com/Rifteo-Community/rifteo-documentation.git
+cd rifteo-documentation
 
 # 2. Install Mintlify CLI
 npm install -g mintlify

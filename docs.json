@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "AuditGuard",
-  "description": "The open community hub for AuditGuard skills, scripts, and compliance workflows.",
+  "name": "Rifteo",
+  "description": "The open community hub for Rifteo skills, scripts, and compliance workflows.",
   "theme": "aspen",
   "colors": {
     "primary": "#EEC12A",
@@ -45,17 +45,17 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:support@auditguard.fr"
+        "href": "mailto:support@rifteo.fr"
       },
       {
         "label": "GitHub",
-        "href": "https://github.com/AuditGuard-Community",
+        "href": "https://github.com/Rifteo-Community",
         "icon": "github"
       }
     ]
   },
   "banner": {
-    "content": "AuditGuard Community Hub is now live  [explore skills →](/skills/overview)",
+    "content": "Rifteo Community Hub is now live  [explore skills →](/skills/overview)",
     "dismissible": true
   },
   "navigation": {
@@ -203,7 +203,7 @@
   },
   "footer": {
     "socials": {
-      "github": "https://github.com/AuditGuard-Community"
+      "github": "https://github.com/Rifteo-Community"
     },
     "links": [
       {
@@ -227,7 +227,7 @@
         "items": [
           { "label": "Contributing", "href": "/docs/contributing" },
           { "label": "Style Guide", "href": "/docs/style-guide" },
-          { "label": "Support", "href": "mailto:support@auditguard.fr" }
+          { "label": "Support", "href": "mailto:support@rifteo.fr" }
         ]
       }
     ]
@@ -239,13 +239,13 @@
     "drilldown": false
   },
   "search": {
-    "prompt": "Search or ask AuditGuard AI..."
+    "prompt": "Search or ask Rifteo AI..."
   },
   "seo": {
     "indexHiddenPages": false
   },
   "metadata": {
-    "og:site_name": "AuditGuard Community",
+    "og:site_name": "Rifteo Community",
     "og:locale": "en_US"
   },
   "errors": {

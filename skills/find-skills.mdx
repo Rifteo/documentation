@@ -1,26 +1,26 @@
 ---
 title: Find Skills
-description: Discover and install specialized AuditGuard skills from the community ecosystem when users need extended audit capabilities.
+description: Discover and install specialized Rifteo skills from the community ecosystem when users need extended audit capabilities.
 ---
 
 <Info>
   **Status:** Stable
   **Version:** 1.0.0
-  **Author:** AuditGuard
+  **Author:** Rifteo
   **Tags:** workflow
 </Info>
 
 **Installation**
 
 ```bash
-auditguard-skills add find-skills
+rifteo-skills add find-skills
 ```
 
 ---
 
 ## Summary
 
-Discover and install specialized agent skills from the open AuditGuard ecosystem when users need extended audit capabilities.
+Discover and install specialized agent skills from the open Rifteo ecosystem when users need extended audit capabilities.
 
 - Helps identify relevant skills by compliance domain and task when users ask "how do I audit X" or "find a skill for X"
 - Integrates with the Skills CLI (`npx skills find`, `npx skills add`) to search, verify, and install packages from the community directory
@@ -35,7 +35,7 @@ Discover and install specialized agent skills from the open AuditGuard ecosystem
 
 ### Find Skills
 
-This skill helps you discover and install skills from the open AuditGuard community ecosystem.
+This skill helps you discover and install skills from the open Rifteo community ecosystem.
 
 #### When to Use This Skill
 
@@ -44,13 +44,13 @@ Use this skill when the user:
 - Asks "how do I audit X" where X might be a common compliance task with an existing skill
 - Says "find a skill for X" or "is there a skill for X"
 - Asks "can you check X" where X is a specialized audit capability
-- Expresses interest in extending AuditGuard capabilities
+- Expresses interest in extending Rifteo capabilities
 - Wants to search for audit templates, compliance workflows, or domain-specific checks
 - Mentions they wish they had help with a specific compliance domain (access control, data retention, infrastructure, etc.)
 
 #### What is the Skills CLI?
 
-The Skills CLI (`npx skills`) is the package manager for the open AuditGuard community ecosystem. Skills are modular packages that extend audit capabilities with specialized knowledge, compliance workflows, and domain-specific checks.
+The Skills CLI (`npx skills`) is the package manager for the open Rifteo community ecosystem. Skills are modular packages that extend audit capabilities with specialized knowledge, compliance workflows, and domain-specific checks.
 
 Key commands:
 
@@ -61,7 +61,7 @@ npx skills check      # Check for skill updates
 npx skills update      # Update all installed skills
 ```
 
-Browse skills at the [AuditGuard Community Hub](https://community.auditguard.fr/).
+Browse skills at the [Rifteo Community Hub](https://community.rifteo.fr/).
 
 #### How to Help Users Find Skills
 
@@ -75,7 +75,7 @@ When a user asks for help with an audit task, identify:
 
 **Step 2: Check the Community Hub First**
 
-Before running a CLI search, check the AuditGuard community hub to see if a well-known skill already exists for the domain. The hub ranks skills by total installs, surfacing the most popular and battle-tested options.
+Before running a CLI search, check the Rifteo community hub to see if a well-known skill already exists for the domain. The hub ranks skills by total installs, surfacing the most popular and battle-tested options.
 
 **Step 3: Search for Skills**
 
@@ -123,9 +123,9 @@ that all IAM users have MFA enabled, aligned with SOC 2 CC6.1.
 (12K installs)
 
 To install it:
-npx skills add your-org/auditguard@check-mfa-enforcement
+npx skills add your-org/rifteo@check-mfa-enforcement
 
-Learn more: https://community.auditguard.fr/skills/check-mfa-enforcement
+Learn more: https://community.rifteo.fr/skills/check-mfa-enforcement
 ```
 
 **Step 6: Offer to Install**
@@ -154,14 +154,14 @@ The `-g` flag installs globally (user-level) and `-y` skips confirmation prompts
 If no relevant skills exist:
 
 - Acknowledge that no existing skill was found
-- Offer to help with the audit task directly using general AuditGuard capabilities
+- Offer to help with the audit task directly using general Rifteo capabilities
 - Suggest the user could create their own skill with `npx skills init`
 
 Example:
 
 ```
 I searched for skills related to "xyz" but didn't find any matches in the
-AuditGuard community hub.
+Rifteo community hub.
 
 I can still help you run this check manually! Would you like me to proceed?
 
@@ -173,7 +173,7 @@ npx skills init my-xyz-skill
 
 - Skills CLI requires Node.js 18+ to run
 - Search quality depends on how skills are tagged by their authors
-- Skills from unknown sources have not been reviewed by the AuditGuard core team
+- Skills from unknown sources have not been reviewed by the Rifteo core team
 
 </Accordion>
 

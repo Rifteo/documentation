@@ -14,7 +14,7 @@ description: Install a skill and run your first security methodology in under 2 
 Until the npm package is published, install via git:
 
 ```bash
-git clone https://github.com/AuditGuard-Community/skills-cli
+git clone https://github.com/Rifteo-Community/skills-cli
 cd skills-cli
 npm link
 ```
@@ -22,7 +22,7 @@ npm link
 ## Add your first skill
 
 ```bash
-auditguard-skills add bugbounty-reporter
+rifteo-skills add bugbounty-reporter
 ```
 
 The CLI detects your installed agents automatically and puts the skill in the right place. No account. No configuration.
@@ -30,13 +30,13 @@ The CLI detects your installed agents automatically and puts the skill in the ri
 Not sure which skill to use? Install `find-skills` first it reads your task description and loads the right skill automatically:
 
 ```bash
-auditguard-skills add find-skills
+rifteo-skills add find-skills
 ```
 
 ## Verify the installation
 
 ```bash
-auditguard-skills list
+rifteo-skills list
 ```
 
 ## Activate a skill
@@ -65,17 +65,17 @@ When installing for Claude Code, the CLI offers to add six slash commands that w
 
 | Command | What it does |
 |---------|-------------|
-| `/auditguard:triage` | 7-question pre-submission gate — GO, KILL, or DOWNGRADE with evidence |
-| `/auditguard:chain` | Given a confirmed finding, checks for companion bugs to escalate severity |
-| `/auditguard:report` | Writes a submission-ready bug bounty report |
-| `/auditguard:hunt` | Launches a 7-phase structured engagement workflow |
-| `/auditguard:intel` | Pulls CVEs, GitHub advisories, and HackerOne hacktivity for any technology |
-| `/auditguard:setup` | Audits your install and gives exact fix steps for anything missing |
+| `/rifteo:triage` | 7-question pre-submission gate — GO, KILL, or DOWNGRADE with evidence |
+| `/rifteo:chain` | Given a confirmed finding, checks for companion bugs to escalate severity |
+| `/rifteo:report` | Writes a submission-ready bug bounty report |
+| `/rifteo:hunt` | Launches a 7-phase structured engagement workflow |
+| `/rifteo:intel` | Pulls CVEs, GitHub advisories, and HackerOne hacktivity for any technology |
+| `/rifteo:setup` | Audits your install and gives exact fix steps for anything missing |
 
 Accept the prompt when it appears, or install slash commands manually:
 
 ```bash
-auditguard-skills add bugbounty-reporter --agent claude-code
+rifteo-skills add bugbounty-reporter --agent claude-code
 ```
 
 ## Next steps

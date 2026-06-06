@@ -65,7 +65,7 @@ The best-performing skills and context in the hub — ranked by real benchmark d
 
 | Context | What it gives your agent | Install |
 |---------|--------------------------|---------|
-| [Scope to Bounty ★](/contexts/scope-to-bounty) | Live scope from HackerOne, Intigriti, YesWeHack, Bugcrowd, Immunefi + disclosed reports | `auditguard-context install` |
+| [Scope to Bounty ★](/contexts/scope-to-bounty) | Live scope from HackerOne, Intigriti, YesWeHack, Bugcrowd, Immunefi + disclosed reports | `rifteo-context install` |
 
 > ★ = benchmarked top performer. [See all results →](/skills/benchmarks)
 
@@ -92,7 +92,7 @@ Ask an agent to hunt for IDOR bugs. It improvises. It misses verb inconsistency 
 ## One command away
 
 ```bash
-auditguard-skills add idor-hunter
+rifteo-skills add idor-hunter
 ```
 
 No account. No configuration. The CLI detects your installed agents automatically.
@@ -113,16 +113,16 @@ Install any skill for Claude Code and get six slash commands that work in every 
 
 | Command | What it does |
 |---------|-------------|
-| `/auditguard:triage` | 7-question pre-submission gate — outputs GO, KILL, or DOWNGRADE with evidence |
-| `/auditguard:chain` | Given a confirmed finding, checks for companion bugs to escalate severity |
-| `/auditguard:report` | Writes a submission-ready bug bounty report: title, steps, PoC, impact, remediation |
-| `/auditguard:hunt` | Launches a structured 7-phase engagement workflow on a target |
-| `/auditguard:intel` | Pulls CVEs, GitHub advisories, and HackerOne hacktivity for any named technology |
-| `/auditguard:setup` | Audits your AuditGuard install and gives exact setup steps for anything missing |
+| `/rifteo:triage` | 7-question pre-submission gate — outputs GO, KILL, or DOWNGRADE with evidence |
+| `/rifteo:chain` | Given a confirmed finding, checks for companion bugs to escalate severity |
+| `/rifteo:report` | Writes a submission-ready bug bounty report: title, steps, PoC, impact, remediation |
+| `/rifteo:hunt` | Launches a structured 7-phase engagement workflow on a target |
+| `/rifteo:intel` | Pulls CVEs, GitHub advisories, and HackerOne hacktivity for any named technology |
+| `/rifteo:setup` | Audits your Rifteo install and gives exact setup steps for anything missing |
 
 ```bash
-auditguard-skills add bugbounty-reporter --agent claude-code
-# Install AuditGuard slash commands for Claude Code? [Y/n/never]
+rifteo-skills add bugbounty-reporter --agent claude-code
+# Install Rifteo slash commands for Claude Code? [Y/n/never]
 ```
 
 ---
@@ -131,7 +131,7 @@ auditguard-skills add bugbounty-reporter --agent claude-code
 
 <CardGroup cols={2}>
  <Card title="Add your first skill" icon="rocket" href="/docs/quickstart">
-  Set up AuditGuard and run your first skill in under 5 minutes
+  Set up Rifteo and run your first skill in under 5 minutes
  </Card>
  <Card title="Browse all 29 skills" icon="puzzle-piece" href="/skills/overview">
   Explore the full library across 8 categories
