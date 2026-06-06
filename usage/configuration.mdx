@@ -1,6 +1,6 @@
 ---
 title: Configuration
-description: Environment variables and agent config options for auditguard-context-mcp.
+description: Environment variables and agent config options for rifteo-context-mcp.
 ---
 
 ## Skills CLI
@@ -10,14 +10,14 @@ No configuration file required. The CLI auto-detects installed agents on your ma
 To target a specific agent:
 
 ```bash
-auditguard-skills add finding-writer --agent claude-code
-auditguard-skills add finding-writer --agent gemini-cli
+rifteo-skills add finding-writer --agent claude-code
+rifteo-skills add finding-writer --agent gemini-cli
 ```
 
 To install globally instead of project-level:
 
 ```bash
-auditguard-skills add finding-writer --global
+rifteo-skills add finding-writer --global
 ```
 
 ---
@@ -28,38 +28,38 @@ auditguard-skills add finding-writer --global
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `AUDITGUARD_CONTEXTS_PATH` | Path to a local contexts repo clone | GitHub API (remote) |
-| `AUDITGUARD_LOG_LEVEL` | Log verbosity: `DEBUG`, `INFO`, `WARNING`, `ERROR` | `INFO` |
-| `AUDITGUARD_LOG_FILE` | Path to write logs to a file | stderr only |
+| `RIFTEO_CONTEXTS_PATH` | Path to a local contexts repo clone | GitHub API (remote) |
+| `RIFTEO_LOG_LEVEL` | Log verbosity: `DEBUG`, `INFO`, `WARNING`, `ERROR` | `INFO` |
+| `RIFTEO_LOG_FILE` | Path to write logs to a file | stderr only |
 
 ### Use a local contexts clone
 
 Point the server at a local clone instead of fetching from GitHub:
 
 ```bash
-AUDITGUARD_CONTEXTS_PATH=/path/to/contexts auditguard-context-mcp
+RIFTEO_CONTEXTS_PATH=/path/to/contexts rifteo-context-mcp
 ```
 
 Or set it in your agent's MCP config:
 
 ```json
 {
- "command": "auditguard-context-mcp",
+ "command": "rifteo-context-mcp",
  "args": [],
  "env": {
-  "AUDITGUARD_CONTEXTS_PATH": "/path/to/contexts"
+  "RIFTEO_CONTEXTS_PATH": "/path/to/contexts"
  }
 }
 ```
 
 ### Bug bounty credentials
 
-Credentials are stored in `~/.auditguard/credentials.json` and managed via the CLI:
+Credentials are stored in `~/.rifteo/credentials.json` and managed via the CLI:
 
 ```bash
-auditguard-context auth hackerone
-auditguard-context auth --list
-auditguard-context auth --remove hackerone
+rifteo-context auth hackerone
+rifteo-context auth --list
+rifteo-context auth --remove hackerone
 ```
 
 See [Commands](/usage/commands) for the full reference.

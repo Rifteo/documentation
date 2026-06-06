@@ -1,6 +1,6 @@
 ---
 title: Commands
-description: Full reference for all auditguard-skills CLI commands and flags.
+description: Full reference for all rifteo-skills CLI commands and flags.
 ---
 
 ## `add`
@@ -8,7 +8,7 @@ description: Full reference for all auditguard-skills CLI commands and flags.
 Install a skill into all detected agents.
 
 ```bash
-auditguard-skills add <skill-name>
+rifteo-skills add <skill-name>
 ```
 
 | Option | Description |
@@ -18,13 +18,13 @@ auditguard-skills add <skill-name>
 
 ```bash
 # Install for all detected agents
-auditguard-skills add bugbounty-reporter
+rifteo-skills add bugbounty-reporter
 
 # Install into a specific agent
-auditguard-skills add bugbounty-reporter --agent claude-code
+rifteo-skills add bugbounty-reporter --agent claude-code
 
 # Install globally across all projects
-auditguard-skills add bugbounty-reporter --global
+rifteo-skills add bugbounty-reporter --global
 ```
 
 ---
@@ -34,7 +34,7 @@ auditguard-skills add bugbounty-reporter --global
 Remove an installed skill.
 
 ```bash
-auditguard-skills remove <skill-name>
+rifteo-skills remove <skill-name>
 ```
 
 ---
@@ -44,7 +44,7 @@ auditguard-skills remove <skill-name>
 Show all installed skills with their version and status.
 
 ```bash
-auditguard-skills list
+rifteo-skills list
 ```
 
 ---
@@ -54,7 +54,7 @@ auditguard-skills list
 Browse all skills available to install.
 
 ```bash
-auditguard-skills available
+rifteo-skills available
 ```
 
 ---
@@ -64,7 +64,7 @@ auditguard-skills available
 Check which installed skills have a newer version available.
 
 ```bash
-auditguard-skills outdated
+rifteo-skills outdated
 ```
 
 ---
@@ -74,7 +74,7 @@ auditguard-skills outdated
 Update all installed skills to their latest version.
 
 ```bash
-auditguard-skills update
+rifteo-skills update
 ```
 
 ---
@@ -84,7 +84,7 @@ auditguard-skills update
 See which agents were detected on this machine.
 
 ```bash
-auditguard-skills agents
+rifteo-skills agents
 ```
 
 ---
@@ -95,16 +95,16 @@ Install any skill for Claude Code and you get five slash commands that work in e
 
 | Command | What it does |
 |---------|-------------|
-| `/auditguard:triage` | 7-question pre-submission gate. Outputs GO, KILL, or DOWNGRADE with evidence |
-| `/auditguard:chain` | Given a confirmed finding, checks the signal table for companion bugs to escalate severity |
-| `/auditguard:report` | Writes a submission-ready bug bounty report: title, steps, PoC, impact, remediation |
-| `/auditguard:hunt` | Launches a structured 7-phase engagement workflow on a target |
-| `/auditguard:intel` | Pulls CVEs, GitHub advisories, and HackerOne hacktivity for any named technology |
-| `/auditguard:setup` | Audits your AuditGuard install: shows installed skills and commands, checks context-mcp config, and gives exact setup steps for anything missing |
+| `/rifteo:triage` | 7-question pre-submission gate. Outputs GO, KILL, or DOWNGRADE with evidence |
+| `/rifteo:chain` | Given a confirmed finding, checks the signal table for companion bugs to escalate severity |
+| `/rifteo:report` | Writes a submission-ready bug bounty report: title, steps, PoC, impact, remediation |
+| `/rifteo:hunt` | Launches a structured 7-phase engagement workflow on a target |
+| `/rifteo:intel` | Pulls CVEs, GitHub advisories, and HackerOne hacktivity for any named technology |
+| `/rifteo:setup` | Audits your Rifteo install: shows installed skills and commands, checks context-mcp config, and gives exact setup steps for anything missing |
 
 ```bash
-auditguard-skills add bugbounty-reporter --agent claude-code
-# Install AuditGuard slash commands for Claude Code? [Y/n/never]
+rifteo-skills add bugbounty-reporter --agent claude-code
+# Install Rifteo slash commands for Claude Code? [Y/n/never]
 ```
 
 ---
@@ -129,4 +129,4 @@ auditguard-skills add bugbounty-reporter --agent claude-code
 | Augment | `augment` |
 | Amp | `amp` |
 
-Run `auditguard-skills agents` to see the full list of 50+ supported agents.
+Run `rifteo-skills agents` to see the full list of 50+ supported agents.

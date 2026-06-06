@@ -1,8 +1,8 @@
 <div align="center">
 
-# AuditGuard Documentation
+# Rifteo Documentation
 
-Source for the [AuditGuard Community Hub](https://community.auditguard.fr) documentation, built with Mintlify.
+Source for the [Rifteo Community Hub](https://community.rifteo.fr) documentation, built with Mintlify.
 
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](docs/contributing.mdx)
@@ -13,7 +13,7 @@ Source for the [AuditGuard Community Hub](https://community.auditguard.fr) docum
 
 ## What is this repo?
 
-This repo contains the documentation source for the AuditGuard Community Hub. All pages are `.mdx` files built and deployed via Mintlify.
+This repo contains the documentation source for the Rifteo Community Hub. All pages are `.mdx` files built and deployed via Mintlify.
 
 ---
 
@@ -48,5 +48,5 @@ To add or update a page, edit the relevant `.mdx` file and open a pull request. 
 ---
 
 <div align="center">
-  <sub>Built by the <a href="https://github.com/AuditGuard-Community">AuditGuard Community</a>. MIT License</sub>
+  <sub>Built by the <a href="https://github.com/Rifteo-Community">Rifteo Community</a>. MIT License</sub>
 </div>
