@@ -93,7 +93,7 @@ Validate with `mintlify dev` — errors show at startup if `docs.json` is broken
 
 ## Style rules (every `.mdx`)
 
-- Frontmatter: `title` (sentence case, <60 chars) + `description` (specific, not generic)
+- Frontmatter: `title` (sentence case, under 60 characters) + `description` (specific, not generic)
 - `<Info>` block right after frontmatter: Status, Version, Author, Tags
 - Headings: sentence case, no skipped levels
 - Code blocks: always specify language, use realistic values
