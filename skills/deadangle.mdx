@@ -1,6 +1,6 @@
 ---
 title: Dead Angle
-description: Offensive output integrity skill that re-examines every conclusion from multiple angles before delivery so what reaches the user actually holds up.
+description: A final accuracy check for offensive security work — it re-tests each conclusion against the evidence and labels every part confirmed, inferred, or assumed, so an unverified result never goes out as if it were proven.
 ---
 
 <Info>
@@ -170,6 +170,24 @@ What changes in the output:
 - Operational viability reflects the defender's reality, not a best-case scenario
 
 </Accordion>
+
+---
+
+## Benchmark Results
+
+Tested on claude-sonnet-4-6 via Claude Code CLI. Same findings, same prompt, same model — the only variable is whether the skill is loaded. The input was four findings from a cloud infrastructure engagement, a mix of confirmed and inferred conclusions ready for delivery.
+
+| Metric | Without Skill | With Skill |
+|--------|--------------|------------|
+| Confidence labels match evidence | No — all delivered as confirmed | Yes — each at its actual evidence tier |
+| Inferred conclusions surfaced | No | Yes — 2 of 4 findings re-tiered |
+| Assumptions identified before delivery | No | Yes — 1 critical assumption flagged |
+| Attack chain stress-tested | No | Yes — broken link identified |
+| Coverage gaps acknowledged | No | Yes — one untested surface noted |
+| Counter-position considered | No | Yes — strongest objection surfaced |
+| Output length vs. information gain | Longer (padded with unverified detail) | Shorter and more precise |
+
+Without the skill, every finding shipped as CONFIRMED — two stacked inferences became a confirmed critical chain, a version-inferred CVE was called confirmed RCE, and a logging conclusion rested on an untested assumption. With the skill each finding was labeled at the tier the evidence actually held: the findings did not get weaker, they got precise — the kind of precision that survives triage.
 
 ---
 

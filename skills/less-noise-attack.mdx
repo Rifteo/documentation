@@ -1,6 +1,6 @@
 ---
 title: Less Noise Attack
-description: Operate below SOC detection thresholds, passive recon first, minimal footprint, targeted action only.
+description: Runs offensive work in a low-noise mode — passive recon first, minimal footprint, and only deliberate, targeted active actions that blend with legitimate traffic, so the engagement stays below detection thresholds.
 ---
 
 <Info>
@@ -192,6 +192,24 @@ If detection is suspected — an action was blocked, a session was reset, a resp
 A detection event is information. Treat it as data, not as an obstacle to push through.
 
 </Accordion>
+
+---
+
+## Benchmark Results
+
+Tested on claude-sonnet-4-6 via Claude Code CLI. Same engagement brief, same prompt, same model — the only variable is whether the skill is loaded. The brief: a 5-day authorized pentest on a monitored fintech web app with live payment flows, asking for a day-by-day plan that stays under detection.
+
+| Metric | Without Skill | With Skill |
+|--------|--------------|------------|
+| Day 1 generates active traffic | Yes (spidering the live target) | No — fully passive |
+| Noise profile attached per phase | Implicit | Explicit and reasoned |
+| IDOR enumeration scope | Unbounded "sweep" | Bounded (5–10 IDs) |
+| Admin panel brute force | Permitted with caveat | Avoided; lower-noise path first |
+| Automated scanner handling | One-line "noisy" note | Formally prohibited and justified |
+| Critical-finding stop-and-notify | Absent | Present |
+| Every active action defensible as legit traffic | No | Yes |
+
+Without the skill the plan was organized around coverage — it opened by spidering the live target and planned an unbounded IDOR sweep, either of which can trip a fintech's monitoring on Day 2 and end the engagement. With the skill it was organized around signal-to-noise: passive intelligence first, every active action individually defensible as something a legitimate user would do, enumeration bounded to what proves the pattern, and the noisiest paths replaced or dropped with reasoning.
 
 ---
 
