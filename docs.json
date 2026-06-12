@@ -45,11 +45,11 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:support@rifteo.fr"
+        "href": "mailto:support@rifteo.com"
       },
       {
         "label": "GitHub",
-        "href": "https://github.com/Rifteo-Community",
+        "href": "https://github.com/Rifteo",
         "icon": "github"
       }
     ]
@@ -65,11 +65,11 @@
         "groups": [
           {
             "group": "Overview",
-            "pages": ["docs/introduction", "docs/quickstart"]
+            "pages": ["getting_started/introduction", "getting_started/quickstart"]
           },
           {
             "group": "Community",
-            "pages": ["docs/contributing", "docs/style-guide"]
+            "pages": ["getting_started/contributing"]
           },
           {
             "group": "Top toolkits",
@@ -203,7 +203,7 @@
   },
   "footer": {
     "socials": {
-      "github": "https://github.com/Rifteo-Community"
+      "github": "https://github.com/Rifteo"
     },
     "links": [
       {
@@ -227,7 +227,7 @@
         "items": [
           { "label": "Contributing", "href": "/docs/contributing" },
           { "label": "Style Guide", "href": "/docs/style-guide" },
-          { "label": "Support", "href": "mailto:support@rifteo.fr" }
+          { "label": "Support", "href": "mailto:support@rifteo.com" }
         ]
       }
     ]
