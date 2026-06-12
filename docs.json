@@ -9,8 +9,8 @@
     "dark": "#EEC12A"
   },
   "logo": {
-    "light": "/medias/images/black.png",
-    "dark": "/medias/images/white.png",
+    "light": "/medias/images/light_mode.png",
+    "dark": "/medias/images/dark_mode.png",
     "href": "/"
   },
   "favicon": "/medias/images/favicon.png",
