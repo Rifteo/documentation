@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "name": "Rifteo",
-  "description": "The open community hub for Rifteo skills, scripts, and compliance workflows.",
+  "description": "The open community hub for Rifteo skills, tools, and compliance workflows.",
   "theme": "aspen",
   "colors": {
     "primary": "#EEC12A",
@@ -92,6 +92,16 @@
             "pages": ["skills/overview", "skills/benchmarks"]
           },
           {
+            "group": "Attack Mindset",
+            "pages": [
+              "skills/redmind",
+              "skills/economist-attack",
+              "skills/deadangle",
+              "skills/less-noise-attack",
+              "skills/less-aggressive-attack"
+            ]
+          },
+          {
             "group": "Web Application",
             "pages": [
               "skills/xss-hunter",
@@ -141,16 +151,6 @@
             ]
           },
           {
-            "group": "Attack Mindset",
-            "pages": [
-              "skills/redmind",
-              "skills/economist-attack",
-              "skills/deadangle",
-              "skills/less-noise-attack",
-              "skills/less-aggressive-attack"
-            ]
-          },
-          {
             "group": "Integrations",
             "pages": ["skills/hexstrike-forge"]
           }
@@ -182,7 +182,7 @@
         ]
       },
       {
-        "tab": "Scripts",
+        "tab": "Tools",
         "groups": [
           {
             "group": "Overview",
