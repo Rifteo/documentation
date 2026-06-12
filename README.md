@@ -8,15 +8,9 @@ Source for the [Rifteo Community Hub documentation](https://community.rifteo.fr)
 
 ---
 
-## Guides for the team
+## Contributing
 
-| Guide | Content |
-|-------|---------|
-| [TEAM-SETUP.md](TEAM-SETUP.md) | Set up the environment, understand the repo structure |
-| [TEAM-SKILLS.md](TEAM-SKILLS.md) | Add or edit a skill |
-| [TEAM-CONTEXTS.md](TEAM-CONTEXTS.md) | Add or edit a context |
-| [TEAM-NAVIGATION.md](TEAM-NAVIGATION.md) | Edit the menu, rename pages, create a group |
-| [TEAM-REDACTION.md](TEAM-REDACTION.md) | Style rules and pre-PR checklist |
+See [AGENTS.md](AGENTS.md) — task recipes for adding/editing skills, contexts, and navigation.
 
 ---
 
@@ -41,6 +35,3 @@ contexts/       one .mdx page per context
 scripts/        one .mdx page per script
 usage/          CLI reference, configuration, examples
 ```
-<div align="center">
-  <sub>Built by the <a href="https://github.com/Rifteo-Community">Rifteo Community</a>. MIT License</sub>
-</div>
