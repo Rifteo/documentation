@@ -207,8 +207,8 @@
       {
         "header": "Documentation",
         "items": [
-          { "label": "Introduction", "href": "/docs/introduction" },
-          { "label": "Quickstart", "href": "/docs/quickstart" },
+          { "label": "Introduction", "href": "/getting_started/introduction" },
+          { "label": "Quickstart", "href": "/getting_started/quickstart" },
           { "label": "Skills Overview", "href": "/skills/overview" }
         ]
       },
