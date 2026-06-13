@@ -78,7 +78,8 @@
               "skills/xss-hunter",
               "skills/hexstrike-forge",
               "skills/cvss-scorer",
-              "contexts/scope-to-bounty"            ]
+              "contexts/scope-to-bounty"
+            ]
           }
         ]
       },
@@ -176,6 +177,10 @@
           {
             "group": "Bug Bounty",
             "pages": ["contexts/scope-to-bounty"]
+          },
+          {
+            "group": "Integrations",
+            "pages": ["contexts/burp-mcp"]
           }
         ]
       },

