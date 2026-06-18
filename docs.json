@@ -76,8 +76,8 @@
             "pages": [
               "skills/idor-hunter",
               "skills/xss-hunter",
-              "skills/hexstrike-forge",
               "skills/cvss-scorer",
+              "skills/hexstrike-forge",
               "contexts/scope-to-bounty"
             ]
           }
