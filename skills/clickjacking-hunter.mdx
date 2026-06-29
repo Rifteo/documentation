@@ -1,6 +1,6 @@
 ---
 title: Clickjacking Hunter
-description: Complete clickjacking (UI redressing) methodology framing protection detection, single-click and multi-step PoC construction, JS frame-busting bypass, drag-and-drop and OAuth consent variants, and report structure.
+description: Complete clickjacking (UI redressing) methodology framing protection detection, single-click and multi-step PoC construction, JS frame-busting bypass, drag-and-drop and OAuth consent variants, and report structure. Trigger when the user asks to test for clickjacking or UI redressing, wants to check if a sensitive endpoint (account delete, 2FA disable, OAuth consent) is frameable, needs to build a clickjacking PoC for a report, or wants to bypass JavaScript frame-busting protections.
 ---
 
 <Info>
@@ -37,15 +37,6 @@ Detect and exploit UI redressing vulnerabilities across sensitive endpoints from
 ### Clickjacking Hunter
 
 Clickjacking (UI redressing) tricks a victim into clicking elements on a hidden target page by overlaying invisible iframes on top of decoy content. Impact ranges from account deletion and fund transfer to OAuth authorization and 2FA disable any one-click sensitive action is a candidate.
-
-#### When to Use This Skill
-
-Use this skill when the user:
-
-- Asks to test for clickjacking or UI redressing vulnerabilities
-- Wants to check if a sensitive endpoint (account delete, 2FA disable, OAuth consent) is frameable
-- Needs to build a clickjacking PoC for a report
-- Wants to bypass JavaScript frame-busting protections
 
 #### What Does It Check?
 

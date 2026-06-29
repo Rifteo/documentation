@@ -1,6 +1,6 @@
 ---
 title: Vulnerability Diagnose
-description: Builds a deterministic, reproducible proof-of-concept for a suspected vulnerability before writing a finding eliminates false positives and produces airtight evidence.
+description: Builds deterministic, reproducible proof-of-concepts to validate suspected or partially-confirmed vulnerabilities (e.g., XSS, IDOR) and eliminate false positives. Triggered when tool outputs flag potential issues, or when manual confirmation of exploitability is required before documenting a finding.
 ---
 
 <Info>
@@ -37,15 +37,6 @@ A suspected vulnerability is not a finding. Build a deterministic reproduction c
 ### Vulnerability Diagnose
 
 A suspected vulnerability is not a finding. Before writing anything, build a deterministic reproduction case. If you cannot reproduce it reliably, you cannot report it.
-
-#### When to Use This Skill
-
-Use this skill when the user:
-
-- Has a hunch or a partially-confirmed vulnerability
-- Tool output flagged something that needs manual validation
-- Wants to confirm a finding before writing it up
-- Says "I think there's an IDOR here", "this looks like XSS", "not sure if this is exploitable"
 
 #### What Does It Check?
 

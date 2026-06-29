@@ -1,6 +1,6 @@
 ---
 title: Risk Assessor
-description: Scores a vulnerability using likelihood × impact, CIA triad analysis, CVSS correlation, and SLA-bound remediation urgency.
+description: Scores a vulnerability using likelihood × impact, CIA triad analysis, CVSS correlation, and SLA-bound remediation urgency. Trigger when the user describes a vulnerability and wants to know how serious it is, asks "what's the risk level?" or "how urgent is this to fix?", has a CVSS score but wants it contextualized with compensating controls and business impact, needs to assign a remediation SLA, or wants to document risk treatment (mitigate, accept, transfer, avoid).
 ---
 
 <Info>
@@ -36,16 +36,6 @@ Produce a structured, defensible risk assessment for any described vulnerability
 ### Risk Assessor
 
 Score a vulnerability's likelihood and impact, calculate inherent and residual risk, and produce an SLA-bound treatment recommendation.
-
-#### When to Use This Skill
-
-Use this skill when the user:
-
-- Describes a vulnerability and wants to know how serious it is
-- Asks "what's the risk level?" or "how urgent is this to fix?"
-- Has a CVSS score but wants it contextualized with compensating controls and business impact
-- Needs to assign a remediation SLA (24h / 7 days / 30 days / next cycle) to a finding
-- Wants to document risk treatment (mitigate, accept, transfer, avoid) with justification
 
 #### What Does It Check?
 
