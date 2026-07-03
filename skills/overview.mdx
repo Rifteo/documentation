@@ -51,6 +51,27 @@ Skills are not code modules they are structured prompts that encode expert knowl
 
 ---
 
+## Installing a skill
+
+```bash
+# Install the CLI (one-time)
+npm install -g @rifteo/skills
+
+# Install a skill
+rifteo-skills add <skill-name>
+
+# Install globally (available in all projects)
+rifteo-skills add <skill-name> --global
+
+# List installed skills
+rifteo-skills list
+
+# List all available skills
+rifteo-skills available
+```
+
+---
+
 ## Available skills
 
 **Web Application**
@@ -134,27 +155,6 @@ Skills that orchestrate external MCP tool servers into structured engagements.
 | Skill | MCP Server | What it does |
 |-------|-----------|-------------|
 | [HexStrike Forge ★](/skills/hexstrike-forge) | HexStrike | Full pentest engagement: 5-phase workflow, parallel execution, triage gates, and report-ready findings from a single prompt |
-
----
-
-## Installing a skill
-
-```bash
-# Install the CLI (one-time)
-npm install -g @rifteo/skills
-
-# Install a skill
-rifteo-skills add <skill-name>
-
-# Install globally (available in all projects)
-rifteo-skills add <skill-name> --global
-
-# List installed skills
-rifteo-skills list
-
-# List all available skills
-rifteo-skills available
-```
 
 ---
 

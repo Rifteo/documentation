@@ -1,8 +1,5 @@
 {
   "scripts": {
-    "dev": "mintlify dev --port 3333"
-  },
-  "devDependencies": {
-    "mintlify": "^4.2.666"
+    "dev": "mintlify dev --port 6000"
   }
 }
