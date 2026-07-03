@@ -76,8 +76,11 @@
             "pages": [
               "skills/idor-hunter",
               "skills/xss-hunter",
+              "skills/ssrf-hunter",
               "skills/cvss-scorer",
               "skills/hexstrike-forge",
+              "skills/redmind",
+              "skills/economist-attack",
               "contexts/scope-to-bounty"
             ]
           }
