@@ -1,6 +1,6 @@
 ---
 title: XXE Phantom
-description: Complete XXE (XML External Entity) detection and exploitation methodology classic file read, blind OOB exfiltration, XInclude, SVG/DOCX/SAML vectors, WAF bypass, SSRF chaining, and report structure.
+description: An XXE detection and exploitation methodology engine. Triggered when testing for XML injection, interacting with XML content-types/endpoints, or processing XML-based file uploads (SVG, DOCX, SAML, SOAP). Facilitates classic file reads, blind OOB exfiltration, WAF bypasses, and SSRF chaining. Includes report structuring.
 ---
 
 <Info>
@@ -37,17 +37,6 @@ Detect and exploit XML External Entity injection across all attack surfaces from
 <Accordion title="Discover skill details">
 
 ### XXE Phantom XML External Entity Injection
-
-#### When to Use This Skill
-
-Use this skill when the user:
-
-- Asks to test for XXE, XML injection, or external entity injection
-- Sees a request with `Content-Type: application/xml`, `text/xml`, or `application/soap+xml`
-- Identifies an endpoint that accepts XML in the body
-- Uploads SVG, DOCX, XLSX, ODT, PDF, or any XML-based file format
-- Sees a SAML assertion, SOAP request, RSS feed, or WebDAV request
-- Wants to read local files, probe internal services, or escalate XXE to SSRF or RCE
 
 #### What Does It Check?
 

@@ -1,6 +1,6 @@
 ---
 title: SSTI Hunter
-description: Complete SSTI detection and exploitation methodology engine fingerprinting, RCE payloads per engine, sandbox escapes, blind detection, and report structure.
+description: An SSTI detection, fingerprinting, and exploitation engine. Triggered by suspected server-side evaluation (e.g., {{7*7}} = 49) or stack traces referencing a template engine (Jinja2, Twig, FreeMarker, etc.). Facilitates blind detection, sandbox escapes, and escalation to RCE. Includes report structuring (severity, CWE, remediation).
 ---
 
 <Info>
@@ -36,18 +36,6 @@ Execute a complete Server-Side Template Injection (SSTI) methodology from findin
 ### SSTI Hunter
 
 Complete SSTI detection and exploitation methodology engine fingerprinting, RCE payloads per engine, sandbox escapes, blind detection, and report structure.
-
-#### When to Use This Skill
-
-Use this skill when the user:
-
-- Asks to test for SSTI, server-side template injection, or template injection
-- Identifies a parameter that reflects input and suspects it may be evaluated server-side
-- Sees `{{7*7}}`, `${7*7}`, or `<%= 7*7 %>` return `49` in a response
-- Gets a stack trace mentioning Jinja2, Twig, FreeMarker, Velocity, Mako, ERB, EJS, Pebble, Thymeleaf, Smarty, Pug, Handlebars, or Nunjucks
-- Wants to escalate an SSTI to RCE, file read, or credential theft
-- Needs to fingerprint which template engine is running
-- Is writing an SSTI finding and needs severity, CWE, or remediation guidance
 
 #### What Does It Check?
 

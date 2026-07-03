@@ -1,6 +1,6 @@
 ---
 title: HPP Hunter
-description: Complete HTTP Parameter Pollution methodology server behavior fingerprinting, server-side and client-side HPP, WAF bypass via parameter splitting, OAuth/payment/access-control abuse, header and JSON body pollution, and report structure.
+description: Complete HTTP Parameter Pollution methodology server behavior fingerprinting, server-side and client-side HPP, WAF bypass via parameter splitting, OAuth/payment/access-control abuse, header and JSON body pollution, and report structure. Trigger when the user wants to test for HTTP Parameter Pollution, is trying to bypass a WAF with a known-blocked payload, sees a payment/role/redirect parameter and wants to test override attacks, or is testing OAuth flows for redirect_uri manipulation.
 ---
 
 <Info>
@@ -38,15 +38,6 @@ Exploit inconsistencies in how different server technologies handle duplicate HT
 ### HPP Hunter
 
 HTTP Parameter Pollution (HPP) exploits how different server technologies handle duplicate HTTP parameters in inconsistent ways. The same request can be interpreted differently by a WAF, a front-end proxy, and a back-end application creating bypasses, logic flaws, and privilege escalation paths.
-
-#### When to Use This Skill
-
-Use this skill when the user:
-
-- Wants to test for HTTP Parameter Pollution
-- Is trying to bypass a WAF with a known-blocked payload
-- Sees a payment, role, or redirect parameter and wants to test override attacks
-- Is testing OAuth flows for redirect_uri manipulation
 
 #### What Does It Check?
 
