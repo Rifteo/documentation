@@ -116,6 +116,10 @@
             ]
           },
           {
+            "group": "AI / LLM Security",
+            "pages": ["skills/ai-llm-hunter"]
+          },
+          {
             "group": "API Security",
             "pages": ["skills/idor-hunter", "skills/jwt-cracker"]
           },

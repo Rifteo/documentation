@@ -1,0 +1,203 @@
+---
+title: AI / LLM Hunter
+description: Systematic LLM/AI security testing methodology — prompt injection (direct & indirect), system prompt leakage, exfiltration, agentic trust-boundary abuse, and cross-tenant IDOR in AI-backed systems. Use when testing any product powered by an LLM, AI agent, or agentic framework.
+---
+
+<Info>
+  **Status:** Stable
+  **Version:** 1.0.0
+  **Author:** Rifteo
+  **Tags:** ai, llm, prompt-injection, agentic, bug-bounty, pentest, owasp-llm
+</Info>
+
+**Installation**
+
+```bash
+rifteo-skills add ai-llm-hunter
+```
+
+---
+
+
+
+## Summary
+
+Apply a structured, eight-phase methodology to discover and confirm LLM/AI-specific vulnerabilities across all trust boundaries in AI-backed applications.
+
+- Phase 1 maps every LLM-backed feature, accessible tool, data source, and injection vector (direct, indirect via document/web/email/database)
+- Phases 2–3 run direct and indirect prompt injection — from system prompt extraction to document upload payloads, invisible Unicode Tags block smuggling, and web-page injection
+- Phase 4 tests all exfiltration channels (markdown image leak, SSRF via agent tools, DNS base32 exfiltration) with mandatory OOB confirmation via Burp Collaborator
+- Phase 5 covers agentic systems (OWASP ASI01–ASI10): goal hijacking, identity spoofing, tool misuse/SSRF, memory poisoning, sandbox escape, and inter-agent trust abuse
+- Phase 6 tests cross-tenant IDOR in RAG retrieval layers using planted canary strings across separate tenant sessions
+- Phase 7 enforces a five-check false-positive gate before any finding reaches a report — reproducibility, known-secret anchoring, cross-tenant artifact verification, OOB confirmation, and impact beyond refusal
+- Phase 8 produces a structured, submittable report with OWASP LLM/ASI category, CWE mapping, reproduction steps, and remediation guidance
+
+---
+
+## SKILL.md file
+
+<Accordion title="Discover skill details">
+
+### AI / LLM Hunter
+
+Systematically detect and confirm LLM/AI-specific vulnerabilities across all trust boundaries — prompt injection, system prompt leakage, exfiltration, agentic tool abuse, and cross-tenant IDOR in retrieval layers.
+
+#### What Does It Check?
+
+LLM-backed applications introduce a new class of trust-boundary vulnerabilities that differ fundamentally from traditional web bugs. The model itself is not the target — the target is the **data, tools, and actions** the model can reach. A jailbreak that makes the model say something rude is not a bug. A payload that causes the model to exfiltrate another tenant's data, invoke a privileged tool, or execute code on a worker is.
+
+**In scope:**
+- Direct prompt injection: system prompt extraction, tool invocation bypass, context window pollution
+- Indirect prompt injection: document/PDF upload, web page injection, email injection, Unicode Tags block (invisible payload smuggling)
+- Data exfiltration: markdown image leak (zero-click), SSRF via agent tools, DNS base32 exfiltration — all require OOB confirmation
+- Agentic system testing (OWASP ASI01–ASI10): goal hijacking, identity spoofing, tool misuse/SSRF, memory poisoning, sandbox escape, inter-agent trust abuse
+- Cross-tenant IDOR in RAG/retrieval layers: canary-string methodology across separate accounts
+
+**Out of scope:**
+- Content policy violations — model refusing or saying something offensive is not a bug
+- Traditional web vulnerabilities (XSS, SQLi) — use dedicated skills for those
+- Automated scanning — this is a guided manual methodology
+
+#### How It Works
+
+**Phase 1: Reconnaissance — Map the AI Attack Surface**
+
+Identify LLM-backed features (streaming responses, `/api/chat`, `choices`/`message` in JSON), accessible tools (function_call, tool_use in responses, RAG/knowledge base, code execution, external integrations), and map all injection surfaces (direct via chat, indirect via document upload, web fetch, email, or database fields).
+
+**Phase 2: Direct Prompt Injection**
+
+Attempt system prompt extraction via role overrides, continuation tricks, format injection, and model-specific token boundary exploits. Test tool invocation bypass to invoke restricted functions. Attempt context window pollution via many-shot overrides.
+
+**Phase 3: Indirect Prompt Injection**
+
+Plant payloads in documents the model reads (PDF/DOCX with invisible text, HTML hidden elements), web pages it summarizes (HTML comment injection, meta tag injection), and emails it processes. Use Unicode Tags block (U+E0000–U+E007F) to smuggle instructions past human reviewers while remaining fully effective against the model.
+
+**Phase 4: Data Exfiltration**
+
+Test all outbound channels the model controls:
+- Markdown image leak: if the model renders markdown and auto-fetches images, inject an image URL pointing to Burp Collaborator
+- SSRF via agent tools: ask the model to fetch your Collaborator URL using HTTP/fetch tools
+- DNS exfiltration: encode secrets as base32 subdomain labels and trigger DNS resolution
+
+All exfiltration findings require a live Collaborator/webhook hit with actual data — on-screen rendering alone is never sufficient.
+
+**Phase 5: Agentic System Testing (OWASP ASI01–ASI10)**
+
+| ASI Category | Test |
+|---|---|
+| ASI01 Goal Hijacking | Inject an alternative goal into the planning context |
+| ASI02 Identity Spoofing | Spoof orchestrator, admin, or supervisor identity |
+| ASI03 Tool Misuse / SSRF | Fetch cloud metadata, internal APIs, or attacker infrastructure via agent tools |
+| ASI05 Memory Poisoning | Plant false facts in long-term memory; verify they persist in a new session |
+| ASI06 Inter-Agent Trust Abuse | Spoof worker agent output to the orchestrator |
+| ASI09 Sandbox Escape | Test code interpreter for OS command execution and network reach |
+
+**Phase 6: Cross-Tenant IDOR in LLM Systems**
+
+Plant a non-guessable canary string as Account A. Switch to Account B. Ask the AI to search for the canary. If Account B retrieves Account A's canary from the RAG layer — confirmed cross-tenant IDOR. Requires reproducibility across fresh sessions.
+
+**Phase 7: False-Positive Gate (run before every report)**
+
+| Check | Requirement |
+|---|---|
+| Reproducibility | Same payload produces identical result in 2+ fresh sessions |
+| Known-secret anchoring | Extracted content contains application-specific non-guessable values |
+| Cross-tenant verification | Canary is independently confirmed to belong to the other tenant |
+| OOB confirmation | For exfiltration: Collaborator/webhook received actual data, not just a ping |
+| Impact beyond refusal | A tool was invoked or data was leaked — not just a policy bypass |
+
+Fail any single check = do not report the finding.
+
+**Phase 8: Report Structure**
+
+```
+Title: [Attack Type] in [Feature/Component] allows [Impact] — [Target]
+
+Severity: Critical / High / Medium / Low / Informational
+OWASP Category: LLM01 / LLM07 / ASI03 / (etc.)
+CWE: CWE-77 (Prompt Injection), CWE-200 (Info Exposure), CWE-918 (SSRF)
+
+Affected feature: [chat interface / document upload / email assistant / etc.]
+
+Summary:
+[2–3 sentences: what was found, how it was triggered, what trust boundary it crossed]
+
+Steps to reproduce:
+1. [Setup: account(s) needed, any prerequisites]
+2. [Exact payload — copy-pasteable]
+3. [Where to send it / how to trigger it]
+4. [What to observe — Collaborator hit, data returned, action taken]
+
+Evidence:
+- Payload used (exact text)
+- Raw HTTP request if applicable
+- Collaborator / webhook screenshot with timestamp
+- Model response or tool invocation log
+
+Impact:
+[Concrete attacker capability — not "the model can say X" — yes "attacker can read any tenant's documents"]
+
+Remediation:
+- Input validation at the retrieval layer, not just at the prompt layer
+- Scoped tool permissions — agent should only access the calling user's data
+- Output filtering for exfiltration channels (restrict image URLs, external fetches)
+- Deny-by-default tool invocation — require explicit allowlisting per action
+```
+
+#### Quick-Reference: Priority Triage Order
+
+Test in this order when time is limited — highest-impact first:
+
+1. **Agentic tool access** — can you invoke HTTP fetch, code exec, file write, or email send?
+2. **Cross-tenant IDOR in retrieval** — does the model return data from other tenants?
+3. **Indirect injection surface** — what external content does the model read (docs, web, email, DB fields)?
+4. **System prompt leakage** — extract via direct injection; anchor to non-guessable values before reporting
+5. **Exfiltration channels** — identify all outbound channels (image rendering, tool calls, webhooks)
+6. **Sandbox escape** — test code interpreter for OS command execution and network reach
+7. **Memory/session persistence** — poison long-term memory and verify it carries across sessions
+8. **Direct injection** — only payable if chained to real impact
+
+#### Known Limitations
+
+- Exfiltration findings require an OOB server (Burp Collaborator, interactsh, or a webhook) — on-screen rendering is never sufficient for a payable finding
+- Cross-tenant IDOR testing requires two separate accounts with independent sessions
+- Memory poisoning tests require the application to expose long-term memory persistence — not all LLM systems have this
+- Sandbox escape techniques vary by sandbox implementation; OS command execution results depend on the specific container configuration
+
+</Accordion>
+
+---
+
+## Benchmark Results
+
+Tested on claude-sonnet-4-6 via Claude Code CLI. Same prompt, same model, same target. The only variable is whether the skill is loaded.
+
+| Metric | Without Skill | With Skill | Improvement |
+|--------|--------------|------------|-------------|
+| Turns to complete | 3 | 1 | **-67%** |
+| Total tokens | ~8,742 | ~2,981 | **-66%** |
+| Time | 214s | 58s | **-73%** |
+| Attack vectors covered | 2/8 | 8/8 | **+300%** |
+| Output quality | False positives | Verified findings | **Critical** |
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+ <Card title="idor-hunter" href="/skills/idor-hunter">
+  Systematic IDOR/BOLA detection methodology — the same cross-tenant access control testing that applies to LLM retrieval layers
+
+  
+ </Card>
+ <Card title="ssrf-hunter" href="/skills/ssrf-hunter">
+  Full SSRF methodology for exploiting agentic tool calls that reach internal infrastructure or cloud metadata endpoints
+
+  
+ </Card>
+ <Card title="js-analyzer" href="/skills/js-analyzer">
+  JavaScript analysis for uncovering AI API endpoints, tool definitions, and hardcoded keys in LLM-backed frontends
+
+  
+ </Card>
+</CardGroup>
