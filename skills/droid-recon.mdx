@@ -1,0 +1,228 @@
+---
+title: Droid Recon
+description: Full static analysis methodology for Android APK files on Linux — decompiles with apktool and jadx, hunts for hardcoded secrets and API keys, maps endpoints and network surface, fingerprints the tech stack, detects vulnerability patterns, and produces a structured Markdown report aligned to OWASP MASVS. Trigger when the user provides an APK file and asks for a security review, secret scan, endpoint extraction, or mobile pentest.
+---
+
+<Info>
+  **Status:** Stable
+  **Version:** 1.0.0
+  **Author:** community
+  **Tags:** mobile, android, apk, static-analysis, secrets, recon
+</Info>
+
+**Installation**
+
+```bash
+rifteo-skills add droid-recon
+```
+
+---
+
+## Summary
+
+Run a complete static analysis of an Android APK file using Linux command-line tools — no emulator, no device, no dynamic instrumentation required.
+
+- Phase 0 decompiles the APK twice: with `apktool` for smali, decoded resources, and AndroidManifest.xml, and with `jadx` for readable Java/Kotlin source — giving the agent full visibility at both bytecode and source level
+- Phase 1 collects baseline APK info: package name, version, SDK targets, DEX count, native libraries, and signing certificate details
+- Phase 2 audits the AndroidManifest.xml for dangerous flags (`debuggable`, `allowBackup`, `usesCleartextTraffic`), exported components without permissions, dangerous permission declarations, deep link schemes, and the network security config
+- Phase 3 runs a 10-section secret sweep across source and resources using ripgrep patterns covering AWS, GCP, Firebase, Stripe, Twilio, GitHub, Slack, Discord, generic credentials, PEM keys, database connection strings, and native library strings
+- Phase 4 maps the full network surface: HTTP/HTTPS URLs, WebSocket endpoints, internal IP addresses, GraphQL endpoints, deep link schemes, and Retrofit/OkHttp base URLs — grouped by production, staging, third-party, and internal
+- Phase 5 fingerprints the tech stack: cross-platform frameworks (Flutter, React Native, Xamarin, Cordova), networking (OkHttp, Retrofit, Volley, Ktor), auth (Firebase, Auth0, Okta, Cognito), storage (Room, Realm, SQLite), analytics and crash reporting, and payment SDKs
+- Phase 6 detects vulnerability patterns across WebView misconfigurations, weak cryptography, insecure data storage, SSL/TLS bypass, intent security issues, tapjacking, and debug artifacts — every finding tagged to OWASP MASVS v2 and OWASP Mobile Top 10 (2024)
+- Phase 7 produces a structured Markdown report with a risk summary table, per-finding evidence and remediation, endpoint inventory, stack table, and top 3 prioritized actions
+
+---
+
+## SKILL.md file
+
+<Accordion title="Discover skill details">
+
+### Droid Recon
+
+Full static analysis of an Android APK using Linux tools. Decompile, scan, fingerprint, and report — in one structured pass.
+
+#### What Does It Check?
+
+**In scope:**
+- `AndroidManifest.xml` — exported components, dangerous flags, permissions, network security config
+- Hardcoded secrets — API keys, cloud credentials, private keys, OAuth tokens, database strings, webhook URLs
+- Network surface — all HTTP/HTTPS/WebSocket endpoints, internal IPs, deep link schemes, GraphQL
+- Tech stack — frameworks, networking libs, auth providers, storage engines, analytics, payment SDKs
+- Vulnerability patterns — WebView RCE, weak crypto (MD5/SHA1/AES-ECB), SSL bypass, insecure storage, logging PII, dynamic code loading, tapjacking
+- Native libraries — `strings` extraction from `.so` files for embedded secrets or protocol references
+
+**Out of scope:**
+- Dynamic analysis, runtime hooking, or emulator-based testing — use dedicated mobile dynamic analysis tooling for those
+- Network traffic interception — static analysis only
+
+#### How It Works
+
+**Phase 0: Decompile**
+
+Two decompilers run in sequence to maximize coverage:
+
+```bash
+# apktool — smali bytecode, decoded resources, AndroidManifest.xml
+apktool d -f -o /tmp/droid-recon/apktool_out app.apk
+
+# jadx — readable Java/Kotlin source
+jadx -d /tmp/droid-recon/jadx_out app.apk
+
+# Raw unpack — assets, native libs, META-INF
+unzip -o app.apk -d /tmp/droid-recon/raw
+```
+
+**Phase 1: APK Info & Certificate**
+
+Extracts package name, version, min/target SDK, DEX count, native library architectures, and signing certificate issuer. Flags debug certificates and self-signed certs.
+
+**Phase 2: Manifest Analysis**
+
+```bash
+# Dangerous flags
+grep -n 'android:debuggable\|android:allowBackup\|usesCleartextTraffic' AndroidManifest.xml
+
+# Exported components without permissions
+grep -n -A5 '<activity\|<service\|<receiver\|<provider' AndroidManifest.xml \
+  | grep -E 'android:name|exported="true"'
+```
+
+Each exported component is cross-checked for a declared `android:permission`. Exported without permission = reachable by any app on the device.
+
+**Phase 3: Secret Hunting**
+
+Searches run against both `jadx_out/` and `apktool_out/` using the full pattern list in `references/secret-patterns.md`:
+
+```bash
+# AWS Access Key ID
+rg -o '\bAKIA[0-9A-Z]{16}\b' $SOURCES
+
+# Google API Key
+rg -o 'AIza[0-9A-Za-z\-_]{35}' $SOURCES
+
+# Stripe secret key
+rg -o 'sk_(test|live)_[0-9a-zA-Z]{24,}' $SOURCES
+
+# Private key material
+rg -l 'BEGIN RSA PRIVATE KEY|BEGIN PRIVATE KEY' $SOURCES
+
+# Generic credentials
+rg -in 'password\s*[=:]\s*["\x27][^"\x27\s]{4,}' $SOURCES
+```
+
+Native `.so` libraries are also scanned with `strings` for embedded secrets and endpoint references.
+
+**Phase 4: Endpoint & Network Surface Mapping**
+
+```bash
+rg -oh 'https?://[a-zA-Z0-9._/:%?=&@#~\-]+' $SOURCES | sort -u
+rg -oh 'wss?://[a-zA-Z0-9._/:%?=&@#~\-]+' $SOURCES | sort -u
+```
+
+URLs are categorized as production, staging/dev, third-party services, or internal RFC1918 addresses.
+
+**Phase 5: Stack Fingerprinting**
+
+```bash
+# Cross-platform framework detection
+ls "$WORKDIR/raw/assets/flutter_assets" 2>/dev/null && echo "Flutter"
+ls "$WORKDIR/raw/assets/index.android.bundle" 2>/dev/null && echo "React Native"
+
+# Networking
+rg -l 'okhttp3|retrofit2|com.android.volley' $SOURCES
+
+# Auth & analytics
+rg -l 'FirebaseAuth|com.auth0|CognitoUserPool' $SOURCES
+rg -l 'FirebaseCrashlytics|io.sentry|com.amplitude' $SOURCES
+```
+
+**Phase 6: Vulnerability Patterns**
+
+Every finding is tagged to MASVS v2 and OWASP Mobile Top 10 (2024):
+
+```bash
+# WebView RCE risk
+rg -n 'setJavaScriptEnabled\(true\)' $SOURCES
+rg -n 'addJavascriptInterface' $SOURCES
+
+# Weak cryptography
+rg -n '"MD5"\|"SHA-1"\|"AES/ECB"\|"DES"' $SOURCES
+
+# SSL bypass
+rg -n 'ALLOW_ALL_HOSTNAME_VERIFIER\|NullHostnameVerifier\|TrustAllCerts' $SOURCES
+rg -n 'onReceivedSslError.*proceed\(\)' $SOURCES
+
+# Insecure storage
+rg -n 'MODE_WORLD_READABLE\|getExternalStorageDirectory' $SOURCES
+```
+
+#### Output
+
+The skill produces a full Markdown report structured as:
+
+| Section | Content |
+|---|---|
+| APK Info | Package, version, SDK, signing cert |
+| Risk Summary | Finding counts and severity by category |
+| Manifest Findings | Dangerous flags, exported components, permissions |
+| Hardcoded Secrets | Table: type, file, line, truncated value, MASVS, severity |
+| Endpoints | Categorized URL inventory |
+| Tech Stack | Detected frameworks and SDKs |
+| Vulnerability Findings | Table + detailed findings with evidence and remediation |
+| Attack Surface Summary | Top 3 prioritized actions |
+
+Example secrets table:
+
+```
+| Type            | File                  | Line | Value           | MASVS             | Severity |
+|-----------------|-----------------------|------|-----------------|-------------------|----------|
+| AWS Access Key  | src/Config.java       | 42   | AKIA***         | MASVS-STORAGE-2   | Critical |
+| Google API Key  | res/values/keys.xml   | 8    | AIzaSy***       | MASVS-STORAGE-2   | Critical |
+| Hardcoded password | net/ApiClient.java | 91   | sup3rs3cr3t     | MASVS-AUTH-1      | High     |
+```
+
+#### Known Limitations
+
+- Heavily obfuscated APKs (ProGuard/R8 with aggressive settings) may produce incomplete Java source from jadx — smali output from apktool is always available as fallback
+- Flutter APKs store most logic in a compiled binary (`libapp.so`) — source-level analysis is limited; the skill extracts what it can via `strings`
+- React Native APKs bundle logic in `index.android.bundle` — the skill scans it directly but minified code reduces readability
+- Dynamic code loading (`DexClassLoader`) means some code paths are invisible to static analysis
+
+</Accordion>
+
+---
+
+## Benchmark Results
+
+Tested on claude-sonnet-4-6 via Claude Code CLI. Same APK (DIVA — Damn Insecure and Vulnerable App), same model, same prompt. The only variable is whether the skill is loaded.
+
+| Metric | Without Skill | With Skill |
+|--------|--------------|------------|
+| Turns to complete full analysis | 4–7 | 1 |
+| Phases covered | 2–4 of 7 | All 7 |
+| Secrets found | 2 of 6 | 6 of 6 |
+| Manifest flags identified | 3 of 8 | 8 of 8 |
+| MASVS tags on findings | None | All findings tagged |
+| False positives | 2 | 0 |
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+ <Card title="js-analyzer" href="/skills/js-analyzer">
+  JavaScript analysis for secrets, endpoints, sinks, and prototype pollution
+
+  
+ </Card>
+ <Card title="finding-writer" href="/skills/finding-writer">
+  Convert raw pentest notes into structured audit findings ready for reporting
+
+  
+ </Card>
+ <Card title="nuclei-template-writer" href="/skills/nuclei-template-writer">
+  Write production-ready Nuclei templates from vulnerability descriptions
+
+  
+ </Card>
+</CardGroup>

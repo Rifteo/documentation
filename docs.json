@@ -129,6 +129,10 @@
             "pages": ["skills/ssrf-hunter", "skills/nuclei-template-writer", "skills/check-exploit"]
           },
           {
+            "group": "Mobile",
+            "pages": ["skills/droid-recon"]
+          },
+          {
             "group": "Reconnaissance",
             "pages": ["skills/scope-grill", "skills/attack-surface", "skills/vuln-diagnose"]
           },
