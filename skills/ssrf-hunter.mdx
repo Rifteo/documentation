@@ -1,6 +1,6 @@
 ---
 title: SSRF Hunter ★
-description: Complete SSRF detection and exploitation methodology injection point discovery, cloud metadata theft (AWS/GCP/Azure), internal network enumeration, protocol handler abuse, filter bypass techniques, blind SSRF via OOB, and report structure.
+description: Complete SSRF detection and exploitation methodology injection point discovery, cloud metadata theft (AWS/GCP/Azure), internal network enumeration, protocol handler abuse, filter bypass techniques, blind SSRF via OOB, and report structure. Trigger when the user sees any parameter that accepts a URL, hostname, IP, or path, wants to check if a server fetches external resources, is testing cloud-hosted applications for metadata endpoint access, or wants to probe internal services through a compromised SSRF point.
 ---
 
 <Info>
@@ -43,15 +43,6 @@ Detect and exploit Server-Side Request Forgery from injection point discovery th
 ### SSRF Hunter
 
 Server-Side Request Forgery occurs when a server fetches a user-controlled URL, allowing attackers to reach internal services, cloud metadata, and resources behind firewalls that are otherwise inaccessible.
-
-#### When to Use This Skill
-
-Use this skill when the user:
-
-- Sees any parameter that accepts a URL, hostname, IP, or path
-- Wants to check if a server fetches external resources
-- Is testing cloud-hosted applications for metadata endpoint access
-- Wants to probe internal services through a compromised SSRF point
 
 #### What Does It Check?
 

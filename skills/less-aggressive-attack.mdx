@@ -1,6 +1,6 @@
 ---
 title: Less Aggressive Attack
-description: Tests for vulnerabilities less aggressively — read-only where possible, confirming a flaw without exercising its full impact or causing damage, under a strict set of safety rules.
+description: Tests for vulnerabilities less aggressively — read-only where possible, confirming a flaw without exercising its full impact or causing damage, under a strict set of safety rules. Not the default; activate only when the user explicitly signals safety as a constraint, e.g. "don't break anything", "read-only", "non-destructive testing", "careful with production", "keep it clean", or "just prove the finding, don't exploit it fully".
 ---
 
 <Info>
@@ -34,25 +34,6 @@ Conduct offensive engagements on production or sensitive environments without ca
 <Accordion title="Discover skill details">
 
 ### Less Aggressive Attack — Safety-First Offensive Operations
-
-#### When to Use This Skill
-
-This skill is **not the default**. Do not apply it to every offensive engagement. Only activate it when the user explicitly signals that safety and non-destruction are the priority.
-
-**Activate when the user says things like:**
-- "don't break anything", "be careful", "safety first", "non-destructive testing"
-- "don't affect real users", "keep it clean", "read-only where possible"
-- "don't alter any data", "no damage", "safe engagement", "careful with production"
-- "just prove the finding, don't exploit it fully", "confirm access, don't use it"
-- Any explicit instruction to prioritize not causing harm over achieving maximum coverage or impact
-
-**Do not activate for:**
-- Standard engagements where the user has not flagged safety as a constraint
-- Lab environments, isolated sandboxes, or CTF challenges where destruction is acceptable and expected
-- Engagements where the user explicitly wants to test the full blast radius of a vulnerability
-- Any situation where the user has clearly accepted the risk of destructive interaction
-
-**When in doubt:** ask the user whether impact safety matters for this engagement before proceeding.
 
 #### The Core Discipline
 

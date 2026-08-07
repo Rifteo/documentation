@@ -1,6 +1,6 @@
 ---
 title: Redirect Forge
-description: Complete open redirect detection and exploitation methodology parameter discovery, 30+ bypass techniques, OAuth token theft, SSRF chaining, CSP abuse, phishing escalation, and report structure.
+description: Complete open redirect detection and exploitation methodology parameter discovery, 30+ bypass techniques, OAuth token theft, SSRF chaining, CSP abuse, phishing escalation, and report structure. Trigger when the user asks to test for open redirect or unvalidated redirect/forward, sees a parameter like ?next=/?url=/?redirect=/?return=/?goto= in a URL, wants to steal OAuth tokens via redirect_uri manipulation, needs to chain open redirect into SSRF/CSP bypass/account takeover, sees a 30x response with a controllable Location header, or wants to bypass a redirect allowlist.
 ---
 
 <Info>
@@ -36,17 +36,6 @@ Detect and exploit open redirect vulnerabilities across all parameter types, the
 <Accordion title="Discover skill details">
 
 ### Redirect Forge Open Redirect
-
-#### When to Use This Skill
-
-Use this skill when the user:
-
-- Asks to test for open redirect, URL redirection, or unvalidated redirect/forward
-- Sees a parameter like `?next=`, `?url=`, `?redirect=`, `?return=`, `?goto=`, `?destination=` in a URL
-- Wants to steal OAuth tokens or authorization codes via `redirect_uri` manipulation
-- Needs to chain open redirect → SSRF, open redirect → CSP bypass, or open redirect → account takeover
-- Sees a 301/302/307/308 response and wants to know if the `Location` header is controllable
-- Wants to bypass a redirect allowlist or whitelist
 
 #### What Does It Check?
 
