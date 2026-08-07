@@ -32,6 +32,9 @@
     "library": "fontawesome"
   },
   "background": {
+     "color": {
+      "light": "#f9f9fa"
+    },
     "decoration": "grid"
   },
   "styling": {
