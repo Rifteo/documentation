@@ -136,6 +136,10 @@
             "pages": ["skills/droid-recon"]
           },
           {
+            "group": "Active Directory",
+            "pages": ["skills/ad-recon"]
+          },
+          {
             "group": "Reconnaissance",
             "pages": ["skills/scope-grill", "skills/attack-surface", "skills/vuln-diagnose"]
           },
