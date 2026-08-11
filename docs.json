@@ -137,7 +137,7 @@
           },
           {
             "group": "Active Directory",
-            "pages": ["skills/ad-recon"]
+            "pages": ["skills/ad-breach"]
           },
           {
             "group": "Reconnaissance",
